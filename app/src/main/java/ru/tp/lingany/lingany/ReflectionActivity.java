@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,10 @@ public class ReflectionActivity extends AppCompatActivity {
 
         List<String> items = new ArrayList<>();
         fillItems(items);
+
+        String size = String.valueOf(items.size());
+        String msg = "len: " + size;
+        Log.i("tag", msg);
 
         RecyclerView recyclerView = findViewById(R.id.native_lang_rv_id);
         ReflectionAdapter adapter = new ReflectionAdapter(items);

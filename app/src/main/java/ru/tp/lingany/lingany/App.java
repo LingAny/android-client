@@ -15,7 +15,7 @@ public class App extends Application {
         super.onCreate();
         Log.i("App", "onCreate");
 
-        Intent intent = new Intent(getApplicationContext(), ReflectionActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
