@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="ru.tp.lingany.lingany.MainActivity">
 
     <Button
@@ -13,4 +14,13 @@
         android:text="get supported languages"
         tools:layout_editor_absoluteX="84dp"
         tools:layout_editor_absoluteY="231dp" />
-</android.support.constraint.ConstraintLayout>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CheckBox"
+        tools:layout_editor_absoluteX="145dp"
+        tools:layout_editor_absoluteY="331dp" />
+
+</LinearLayout>

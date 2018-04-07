@@ -6,4 +6,5 @@
     <string name="api_languages">/languages</string>
     <string name="api_reflection">/reflection</string>
     <string name="api_training">/training</string>
+    <string name="isInitRef">isInitRef</string>
 </resources>

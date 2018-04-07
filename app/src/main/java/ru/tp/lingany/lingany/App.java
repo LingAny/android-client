@@ -6,9 +6,6 @@ import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 
-/**
- * Created by anton on 22.03.18.
- */
 
 public class App extends Application {
 
@@ -20,7 +17,7 @@ public class App extends Application {
         AndroidNetworking.initialize(getApplicationContext());
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
     }
 }
