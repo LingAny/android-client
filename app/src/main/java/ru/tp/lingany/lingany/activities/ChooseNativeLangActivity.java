@@ -26,12 +26,23 @@ public class ChooseNativeLangActivity extends AppCompatActivity {
     private RecyclerView langRecyclerView;
     private TextView title;
 
+    private List<Language> supportedLanguages;
+
+    private class LangClickListener implements ChooseNativeLanguagesAdapter.ItemClickListener {
+
+        @Override
+        public void onClick(View view, int position) {
+            Log.i("tag", "[LangClickListener.onClick]");
+        }
+    }
+
     private final ParsedRequestListener<List<Language>> listener = new ParsedRequestListener<List<Language>>() {
         @Override
         public void onResponse(List<Language> languages) {
+            supportedLanguages = languages;
             title.setText(getString(R.string.chooseNativeLang));
             progress.setVisibility(View.INVISIBLE);
-            langRecyclerView.setAdapter(new ChooseNativeLanguagesAdapter(languages));
+            langRecyclerView.setAdapter(new ChooseNativeLanguagesAdapter(languages, new LangClickListener()));
         }
 
         @Override
@@ -43,7 +54,6 @@ public class ChooseNativeLangActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_lang);
         progress = findViewById(R.id.progress);
