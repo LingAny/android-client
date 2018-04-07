@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
@@ -19,6 +20,8 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
     private RecyclerView langRecyclerView;
     private TextView title;
 
+    private List<Language> languages;
+
     public static final String EXTRA_SUPPORTED_LANG = "EXTRA_SUPPORTED_LANG";
     public static final String EXTRA_EXCLUDED_LANG = "EXTRA_EXCLUDED_LANG";
 
@@ -26,9 +29,14 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        String s = getIntent().getStringExtra("EXTRA_SESSION_ID");
         Intent intent = getIntent();
-        List<Language> languages = (List<Language>) intent.getSerializableExtra(EXTRA_SUPPORTED_LANG);
+        List<Language> supportedLanguages = (List<Language>) intent.getSerializableExtra(EXTRA_SUPPORTED_LANG);
+        int excluded = intent.getIntExtra(EXTRA_EXCLUDED_LANG, -1);
+
+        languages = new ArrayList<>(supportedLanguages);
+        languages.remove(excluded);
+
+        languages = supportedLanguages;
 
         setContentView(R.layout.activity_lang);
 

@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.activities;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
@@ -33,6 +35,10 @@ public class ChooseNativeLangActivity extends AppCompatActivity {
         @Override
         public void onClick(View view, int position) {
             Log.i("tag", "[LangClickListener.onClick]");
+            Intent intent = new Intent(ChooseNativeLangActivity.this, ChooseForeignLangActivity.class);
+            intent.putExtra(ChooseForeignLangActivity.EXTRA_SUPPORTED_LANG, (Serializable) supportedLanguages);
+            intent.putExtra(ChooseForeignLangActivity.EXTRA_EXCLUDED_LANG, position);
+            startActivity(intent);
         }
     }
 
