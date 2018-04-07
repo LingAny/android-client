@@ -9,8 +9,6 @@ import com.androidnetworking.AndroidNetworking;
 
 public class App extends Application {
 
-    private static final String IS_INIT_REF_KEY = "isInitRefKey";
-
     @Override
     public void onCreate() {
         super.onCreate();
