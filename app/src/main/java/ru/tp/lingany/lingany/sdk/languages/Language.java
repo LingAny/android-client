@@ -2,9 +2,6 @@ package ru.tp.lingany.lingany.sdk.languages;
 
 import java.util.UUID;
 
-/**
- * Created by anton on 29.03.18.
- */
 
 public class Language {
 
@@ -24,23 +21,11 @@ public class Language {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getHref() {
         return href;
     }
 
-    public void setHref(String href) {
-        this.href = href;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

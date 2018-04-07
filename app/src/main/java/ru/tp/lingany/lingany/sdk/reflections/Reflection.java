@@ -4,9 +4,6 @@ import java.util.UUID;
 
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
-/**
- * Created by anton on 07.04.18.
- */
 
 public class Reflection {
 
@@ -31,39 +28,19 @@ public class Reflection {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getHref() {
         return href;
-    }
-
-    public void setHref(String href) {
-        this.href = href;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Language getNativeLanguage() {
         return nativeLanguage;
     }
 
-    public void setNativeLanguage(Language nativeLanguage) {
-        this.nativeLanguage = nativeLanguage;
-    }
-
     public Language getForeignLanguage() {
         return foreignLanguage;
-    }
-
-    public void setForeignLanguage(Language foreignLanguage) {
-        this.foreignLanguage = foreignLanguage;
     }
 }
