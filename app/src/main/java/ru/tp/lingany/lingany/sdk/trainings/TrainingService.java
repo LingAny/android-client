@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.categories;
+package ru.tp.lingany.lingany.sdk.trainings;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -8,36 +8,37 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class CategoryService {
+public class TrainingService {
+
     private final String url;
 
-    public CategoryService(String url) {
+    public TrainingService(String url) {
         this.url = url;
     }
 
-    public void getAll(ParsedRequestListener<List<Category>> listener) {
+    public void getAll(ParsedRequestListener<List<Training>> listener) {
         AndroidNetworking.get(url)
                 .setTag(this)
                 .setPriority(Priority.HIGH)
                 .build()
-                .getAsObjectList(Category.class, listener);
+                .getAsObjectList(Training.class, listener);
     }
 
-    public void getById(UUID uid, ParsedRequestListener<Category> listener) {
+    public void getById(UUID uid, ParsedRequestListener<Training> listener) {
         AndroidNetworking.get(url + "{uid}")
                 .addPathParameter("uid", uid.toString())
                 .setTag(this)
                 .setPriority(Priority.HIGH)
                 .build()
-                .getAsObject(Category.class, listener);
+                .getAsObject(Training.class, listener);
     }
 
-    public void getForReflection(UUID refId, ParsedRequestListener<List<Category>> listener) {
-        AndroidNetworking.get(url + "reflection/{uid}")
-                .addPathParameter("uid", refId.toString())
+    public void getForCategory(UUID catId, ParsedRequestListener<List<Training>> listener) {
+        AndroidNetworking.get(url + "category/{uid}")
+                .addPathParameter("uid", catId.toString())
                 .setTag(this)
                 .setPriority(Priority.HIGH)
                 .build()
-                .getAsObjectList(Category.class, listener);
+                .getAsObjectList(Training.class, listener);
     }
 }
