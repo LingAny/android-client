@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -8,11 +9,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.models.Language;
+import ru.tp.lingany.lingany.sdk.models.Language;
 
-/**
- * Created by anton on 29.03.18.
- */
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {
 
@@ -24,17 +22,19 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
     @Override
     public LanguageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lang, parent, false);
+        return new LanguageViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
-
+        Language lang = data.get(position);
+        holder.title.setText(lang.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return data.size();
     }
 
     public static class LanguageViewHolder extends RecyclerView.ViewHolder {
@@ -42,7 +42,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
         LanguageViewHolder(View itemView){
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.lang_title);
+            title = itemView.findViewById(R.id.lang_title);
         }
     }
 }

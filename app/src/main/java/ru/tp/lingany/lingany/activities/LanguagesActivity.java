@@ -5,41 +5,43 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.managers.JsonManager;
-import ru.tp.lingany.lingany.managers.NetworkManager;
-import ru.tp.lingany.lingany.models.Language;
+import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
+import ru.tp.lingany.lingany.sdk.Api;
+import ru.tp.lingany.lingany.sdk.models.Language;
 
 public class LanguagesActivity extends AppCompatActivity {
 
     private ProgressBar progress;
     private RecyclerView langRecyclerView;
 
-    private final NetworkManager.OnRequestCompleteListener listener =
-            new NetworkManager.OnRequestCompleteListener() {
-                @Override
-                public void onRequestComplete(final String body) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JsonManager<Language> manager = new JsonManager<>(body);
-                            List<Language> languages = manager.toObjectList(Language[].class);
-                            progress.setVisibility(View.INVISIBLE);
-                            categoryAdapter = new LanguageAdapter(categories);
-                            categoryRecyclerView.setAdapter(categoryAdapter);
-                        }
-                    });
-                }
-            };
+    private final ParsedRequestListener<List<Language>> listener = new ParsedRequestListener<List<Language>>() {
+        @Override
+        public void onResponse(List<Language> languages) {
+            progress.setVisibility(View.INVISIBLE);
+            langRecyclerView.setAdapter(new LanguagesAdapter(languages));
+        }
+
+        @Override
+        public void onError(ANError anError) {
+            Log.e("tag", anError.toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_lang);
         progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
@@ -49,6 +51,9 @@ public class LanguagesActivity extends AppCompatActivity {
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(this);
         langRecyclerView.setLayoutManager(categoryLayoutManager);
 
-        NetworkManager.getInstance().get("http://185.143.172.57/api/v1/lingany-da/languages/", listener);
+        Api.getInstance().languages().getAll(listener);
+
+
+//        NetworkManager.getInstance().get("http://185.143.172.57/api/v1/lingany-da/languages/", listener);
     }
 }

@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.models;
+package ru.tp.lingany.lingany.sdk.models;
 
 /**
  * Created by anton on 29.03.18.
