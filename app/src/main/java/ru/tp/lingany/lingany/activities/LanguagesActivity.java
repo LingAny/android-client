@@ -15,7 +15,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
+import ru.tp.lingany.lingany.adapters.ChooseNativeLanguagesAdapter;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
@@ -29,7 +29,7 @@ public class LanguagesActivity extends AppCompatActivity {
         @Override
         public void onResponse(List<Language> languages) {
             progress.setVisibility(View.INVISIBLE);
-            langRecyclerView.setAdapter(new LanguagesAdapter(languages));
+            langRecyclerView.setAdapter(new ChooseNativeLanguagesAdapter(languages));
         }
 
         @Override

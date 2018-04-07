@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,11 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
 
-public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {
+public class ChooseNativeLanguagesAdapter extends RecyclerView.Adapter<ChooseNativeLanguagesAdapter.LanguageViewHolder> {
 
     private List<Language> data;
 
-    public LanguagesAdapter(List<Language> data) {
+    public ChooseNativeLanguagesAdapter(List<Language> data) {
         this.data = data;
     }
 
@@ -37,12 +38,18 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
         return data.size();
     }
 
-    public static class LanguageViewHolder extends RecyclerView.ViewHolder {
+    public static class LanguageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView title;
 
         LanguageViewHolder(View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
             title = itemView.findViewById(R.id.lang_title);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.i("tag", "onClick");
         }
     }
 }
