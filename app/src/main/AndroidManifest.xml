@@ -22,9 +22,9 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activities.LanguagesActivity" />
         <activity android:name=".activities.ChooseNativeLangActivity" />
         <activity android:name=".activities.ChooseForeignLangActivity" />
+        <activity android:name=".activities.GetReflectionActivity" />
     </application>
 
 

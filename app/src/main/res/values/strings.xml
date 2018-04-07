@@ -12,4 +12,6 @@
     <string name="chooseNativeLang">Choose native language</string>
     <string name="chooseForeignLang">Choose foreign language</string>
 
+    <string name="pleaseWait">Please wait</string>
+
 </resources>

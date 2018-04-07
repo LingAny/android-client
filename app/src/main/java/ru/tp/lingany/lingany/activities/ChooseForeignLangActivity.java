@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
     private TextView title;
 
     private List<Language> languages;
+    private Language nativeLang;
 
     public static final String EXTRA_SUPPORTED_LANG = "EXTRA_SUPPORTED_LANG";
     public static final String EXTRA_EXCLUDED_LANG = "EXTRA_EXCLUDED_LANG";
@@ -31,10 +33,13 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
         @Override
         public void onClick(View view, int position) {
             Log.i("tag", "[LangClickListener.onClick]");
-//            Intent intent = new Intent(ChooseForeignLangActivity.this, ChooseForeignLangActivity.class);
-//            intent.putExtra(ChooseForeignLangActivity.EXTRA_SUPPORTED_LANG, (Serializable) languages);
-//            intent.putExtra(ChooseForeignLangActivity.EXTRA_EXCLUDED_LANG, position);
-//            startActivity(intent);
+
+            Language foreignLang = languages.get(position);
+
+            Intent intent = new Intent(ChooseForeignLangActivity.this, GetReflectionActivity.class);
+            intent.putExtra(GetReflectionActivity.EXTRA_NATIVE_LANG, (Serializable) nativeLang);
+            intent.putExtra(GetReflectionActivity.EXTRA_FOREIGN_LANG, (Serializable) foreignLang);
+            startActivity(intent);
         }
     }
 
@@ -48,6 +53,7 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
         int excluded = intent.getIntExtra(EXTRA_EXCLUDED_LANG, -1);
 
         languages = new ArrayList<>(supportedLanguages);
+        nativeLang = supportedLanguages.get(excluded);
         languages.remove(excluded);
 
 

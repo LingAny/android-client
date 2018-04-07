@@ -8,6 +8,8 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 import java.util.UUID;
 
+import ru.tp.lingany.lingany.sdk.languages.Language;
+
 public class ReflectionService {
 
     private final String url;
@@ -38,6 +40,17 @@ public class ReflectionService {
         AndroidNetworking.get(url + "languages/{n_id}/{f_id}")
                 .addPathParameter("n_id", nativeLangId.toString())
                 .addPathParameter("f_id", foreignLangId.toString())
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(Reflection.class, listener);
+    }
+
+    public void getByLanguages(Language nativeLang, Language foreignLang,
+                               ParsedRequestListener<Reflection> listener) {
+        AndroidNetworking.get(url + "languages/{n_id}/{f_id}")
+                .addPathParameter("n_id", nativeLang.getId().toString())
+                .addPathParameter("f_id", foreignLang.getId().toString())
                 .setTag(this)
                 .setPriority(Priority.HIGH)
                 .build()
