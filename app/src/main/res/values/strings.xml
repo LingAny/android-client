@@ -10,5 +10,6 @@
 
     <string name="loadSupportedLang">Loading languages</string>
     <string name="chooseNativeLang">Choose native language</string>
+    <string name="chooseForeignLang">Choose foreign language</string>
 
 </resources>

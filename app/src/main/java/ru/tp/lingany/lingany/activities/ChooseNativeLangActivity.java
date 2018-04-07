@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.adapters.ChooseNativeLanguagesAdapter;
+import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
@@ -30,7 +30,7 @@ public class ChooseNativeLangActivity extends AppCompatActivity {
 
     private List<Language> supportedLanguages;
 
-    private class LangClickListener implements ChooseNativeLanguagesAdapter.ItemClickListener {
+    private class LangClickListener implements LanguagesAdapter.ItemClickListener {
 
         @Override
         public void onClick(View view, int position) {
@@ -48,7 +48,7 @@ public class ChooseNativeLangActivity extends AppCompatActivity {
             supportedLanguages = languages;
             title.setText(getString(R.string.chooseNativeLang));
             progress.setVisibility(View.INVISIBLE);
-            langRecyclerView.setAdapter(new ChooseNativeLanguagesAdapter(languages, new LangClickListener()));
+            langRecyclerView.setAdapter(new LanguagesAdapter(languages, new LangClickListener()));
         }
 
         @Override

@@ -13,14 +13,14 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
 
-public class ChooseNativeLanguagesAdapter extends RecyclerView.Adapter<ChooseNativeLanguagesAdapter.LanguageViewHolder> {
+public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {
 
     private List<Language> data;
     ItemClickListener itemClickListener;
 
 
 
-    public ChooseNativeLanguagesAdapter(List<Language> data, ItemClickListener listener) {
+    public LanguagesAdapter(List<Language> data, ItemClickListener listener) {
         this.data = data;
         this.itemClickListener = listener;
     }
