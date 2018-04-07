@@ -7,6 +7,7 @@
     <string name="api_reflection">/reflection</string>
     <string name="api_training">/training</string>
     <string name="isInitRef">isInitRef</string>
+    <string name="reflectionId">reflectionId</string>
 
     <string name="loadSupportedLang">Loading languages</string>
     <string name="chooseNativeLang">Choose native language</string>

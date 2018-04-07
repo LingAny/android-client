@@ -10,7 +10,6 @@ import ru.tp.lingany.lingany.activities.ChooseNativeLangActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String IS_INIT_REF_KEY = "isInitRefKey";
     private static final String TAG = "MainActivity";
 
     @Override
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-        boolean isInitRef = prefs.getBoolean(IS_INIT_REF_KEY, false);
+        boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
 
         if (!isInitRef) {
             startActivity(new Intent(MainActivity.this, ChooseNativeLangActivity.class));

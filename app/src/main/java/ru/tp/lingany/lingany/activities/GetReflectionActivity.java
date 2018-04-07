@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,19 +20,18 @@ import ru.tp.lingany.lingany.sdk.reflections.Reflection;
 
 public class GetReflectionActivity extends AppCompatActivity {
 
-    private ProgressBar progress;
-
     public static final String EXTRA_NATIVE_LANG = "EXTRA_NATIVE_LANG";
     public static final String EXTRA_FOREIGN_LANG = "EXTRA_FOREIGN_LANG";
 
-    private Language nativeLang;
-
-    private Language foreignLang;
-
     private final ParsedRequestListener<Reflection> getByLangListener = new ParsedRequestListener<Reflection>() {
         @Override
-        public void onResponse(Reflection languages) {
+        public void onResponse(Reflection reflection) {
             Log.i("tag", "onResponse");
+
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putString(getString(R.string.reflectionId), reflection.getId().toString());
+            editor.putBoolean(getString(R.string.isInitRef), true);
+            editor.apply();
         }
 
         @Override
@@ -46,13 +46,13 @@ public class GetReflectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_getting_reflection);
 
         Intent intent = getIntent();
-        nativeLang = (Language) intent.getSerializableExtra(EXTRA_NATIVE_LANG);
-        foreignLang = (Language) intent.getSerializableExtra(EXTRA_FOREIGN_LANG);
+        Language nativeLang = (Language) intent.getSerializableExtra(EXTRA_NATIVE_LANG);
+        Language foreignLang = (Language) intent.getSerializableExtra(EXTRA_FOREIGN_LANG);
 
         TextView title = findViewById(R.id.title);
         title.setText(getString(R.string.pleaseWait));
 
-        progress = findViewById(R.id.progress);
+        ProgressBar progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
         Api.getInstance().reflections().getByLanguages(nativeLang, foreignLang, getByLangListener);
