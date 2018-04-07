@@ -48,12 +48,6 @@ public class ReflectionService {
 
     public void getByLanguages(Language nativeLang, Language foreignLang,
                                ParsedRequestListener<Reflection> listener) {
-        AndroidNetworking.get(url + "languages/{n_id}/{f_id}")
-                .addPathParameter("n_id", nativeLang.getId().toString())
-                .addPathParameter("f_id", foreignLang.getId().toString())
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsObject(Reflection.class, listener);
+        getByLanguages(nativeLang.getId(), foreignLang.getId(), listener);
     }
 }

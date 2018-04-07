@@ -1,11 +1,12 @@
 package ru.tp.lingany.lingany.sdk.reflections;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
 
-public class Reflection {
+public class Reflection implements Serializable {
 
     private UUID id;
 

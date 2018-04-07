@@ -7,6 +7,8 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 import java.util.UUID;
 
+import ru.tp.lingany.lingany.sdk.categories.Category;
+
 
 public class TrainingService {
 
@@ -40,5 +42,9 @@ public class TrainingService {
                 .setPriority(Priority.HIGH)
                 .build()
                 .getAsObjectList(Training.class, listener);
+    }
+
+    public void getForCategory(Category category, ParsedRequestListener<List<Training>> listener) {
+        getForCategory(category.getId(), listener);
     }
 }

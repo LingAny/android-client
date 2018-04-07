@@ -38,6 +38,10 @@ public class CategoryActivity extends AppCompatActivity {
         public void onClick(View view, int position) {
             Log.i("tag", "[CategoryClickListener.onClick]");
             Category category = categories.get(position);
+
+            Intent intent = new Intent(CategoryActivity.this, TrainingActivity.class);
+            intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
+            startActivity(intent);
         }
     }
 

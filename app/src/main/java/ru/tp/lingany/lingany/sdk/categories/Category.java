@@ -1,11 +1,12 @@
 package ru.tp.lingany.lingany.sdk.categories;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
 
 
-public class Category {
+public class Category implements Serializable {
 
     private UUID id;
 
