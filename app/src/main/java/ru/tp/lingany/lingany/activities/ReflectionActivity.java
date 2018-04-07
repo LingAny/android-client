@@ -3,6 +3,7 @@ package ru.tp.lingany.lingany.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,11 @@ public class ReflectionActivity extends AppCompatActivity {
         public void onResponse(Reflection reflection) {
             Log.i("tag", "onResponse");
 
-            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+//            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = prefs.edit();
+
             editor.putString(getString(R.string.reflectionId), reflection.getId().toString());
             editor.putBoolean(getString(R.string.isInitRef), true);
             editor.apply();

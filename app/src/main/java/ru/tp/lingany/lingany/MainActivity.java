@@ -3,6 +3,7 @@ package ru.tp.lingany.lingany;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+//        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
 
         if (!isInitRef) {
