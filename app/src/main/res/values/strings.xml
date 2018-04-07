@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">LingAny</string>
+    <string name="api_host">185.143.172.57</string>
+    <string name="api_prefix">/api/v1/lingany-da</string>
+    <string name="api_categories">/categories</string>
+    <string name="api_languages">/languages</string>
+    <string name="api_reflection">/reflection</string>
+    <string name="api_training">/training</string>
+    <string name="isInitRef">isInitRef</string>
+    <string name="reflectionId">reflectionId</string>
+
+    <string name="loadSupportedLang">Loading languages</string>
+    <string name="chooseNativeLang">Choose native language</string>
+    <string name="chooseForeignLang">Choose foreign language</string>
+
+    <string name="pleaseWait">Please wait</string>
+
 </resources>
