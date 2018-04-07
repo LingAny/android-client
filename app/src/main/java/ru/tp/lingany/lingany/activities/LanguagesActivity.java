@@ -17,7 +17,8 @@ import java.util.List;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.models.Language;
+import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.reflections.Reflection;
 
 public class LanguagesActivity extends AppCompatActivity {
 
@@ -29,6 +30,18 @@ public class LanguagesActivity extends AppCompatActivity {
         public void onResponse(List<Language> languages) {
             progress.setVisibility(View.INVISIBLE);
             langRecyclerView.setAdapter(new LanguagesAdapter(languages));
+        }
+
+        @Override
+        public void onError(ANError anError) {
+            Log.e("tag", anError.toString());
+        }
+    };
+
+    private final ParsedRequestListener<List<Reflection>> test = new ParsedRequestListener<List<Reflection>>() {
+        @Override
+        public void onResponse(List<Reflection> response) {
+            Log.i("tag", "onResponse");
         }
 
         @Override
@@ -51,7 +64,10 @@ public class LanguagesActivity extends AppCompatActivity {
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(this);
         langRecyclerView.setLayoutManager(categoryLayoutManager);
 
-        Api.getInstance().languages().getAll(listener);
+//        Api.getInstance().languages().getAll(listener);
+
+        Api api = Api.getInstance();
+        api.reflections().getAll(test);
 
 
 //        NetworkManager.getInstance().get("http://185.143.172.57/api/v1/lingany-da/languages/", listener);

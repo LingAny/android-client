@@ -1,4 +1,6 @@
-package ru.tp.lingany.lingany.models;
+package ru.tp.lingany.lingany.sdk.languages;
+
+import java.util.UUID;
 
 /**
  * Created by anton on 29.03.18.
@@ -6,23 +8,23 @@ package ru.tp.lingany.lingany.models;
 
 public class Language {
 
-    private String id;
+    private UUID id;
 
     private String href;
 
     private String title;
 
-    public Language(String id, String href, String title) {
+    public Language(UUID id, String href, String title) {
         this.id = id;
         this.href = href;
         this.title = title;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

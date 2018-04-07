@@ -1,14 +1,11 @@
-package ru.tp.lingany.lingany.sdk.services;
-
-import android.util.Log;
+package ru.tp.lingany.lingany.sdk.languages;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
 import java.util.List;
-
-import ru.tp.lingany.lingany.sdk.models.Language;
+import java.util.UUID;
 
 
 public class LanguageService {
@@ -20,7 +17,6 @@ public class LanguageService {
     }
 
     public void getAll(ParsedRequestListener<List<Language>> listener) {
-        Log.i("LanguageService", "getAll  by url: " + url);
         AndroidNetworking.get(url)
                 .setTag(this)
                 .setPriority(Priority.HIGH)
@@ -28,4 +24,12 @@ public class LanguageService {
                 .getAsObjectList(Language.class, listener);
     }
 
+    public void getById(UUID uid, ParsedRequestListener<Language> listener) {
+        AndroidNetworking.get(url + "{uid}")
+                .addPathParameter("uid", uid.toString())
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObject(Language.class, listener);
+    }
 }
