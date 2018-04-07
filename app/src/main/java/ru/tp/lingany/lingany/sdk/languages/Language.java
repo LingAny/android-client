@@ -1,9 +1,10 @@
 package ru.tp.lingany.lingany.sdk.languages;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
-public class Language {
+public class Language implements Serializable {
 
     private UUID id;
 
