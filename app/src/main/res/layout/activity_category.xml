@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context="ru.tp.lingany.lingany.activities.CategoryActivity">
 
     <TextView
         android:id="@+id/title"
@@ -20,5 +22,15 @@
         android:layout_gravity="center"
         android:visibility="invisible"
         tools:visibility="visible"/>
+
+    <!-- A RecyclerView with some commonly used attributes -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/categories"
+        android:padding="@dimen/padding"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

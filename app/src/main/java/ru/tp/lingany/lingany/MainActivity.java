@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.UUID;
+
+import ru.tp.lingany.lingany.activities.CategoryActivity;
 import ru.tp.lingany.lingany.activities.ChooseNativeLangActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,17 +31,13 @@ public class MainActivity extends AppCompatActivity {
         if (!isInitRef) {
             startActivity(new Intent(MainActivity.this, ChooseNativeLangActivity.class));
         } else {
-
+            String refIdKey = getString(R.string.reflectionId);
+            String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
+            Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+            intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflectionId);
+            startActivity(intent);
         }
 
         Log.i(TAG, "onStart");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-//        editor.putBoolean(IS_INIT_REF_KEY, checkBox.isChecked());
-//        editor.apply();
     }
 }

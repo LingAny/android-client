@@ -36,9 +36,9 @@ public class ChooseForeignLangActivity extends AppCompatActivity {
 
             Language foreignLang = languages.get(position);
 
-            Intent intent = new Intent(ChooseForeignLangActivity.this, GetReflectionActivity.class);
-            intent.putExtra(GetReflectionActivity.EXTRA_NATIVE_LANG, (Serializable) nativeLang);
-            intent.putExtra(GetReflectionActivity.EXTRA_FOREIGN_LANG, (Serializable) foreignLang);
+            Intent intent = new Intent(ChooseForeignLangActivity.this, ReflectionActivity.class);
+            intent.putExtra(ReflectionActivity.EXTRA_NATIVE_LANG, (Serializable) nativeLang);
+            intent.putExtra(ReflectionActivity.EXTRA_FOREIGN_LANG, (Serializable) foreignLang);
             startActivity(intent);
         }
     }

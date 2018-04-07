@@ -18,7 +18,7 @@ import ru.tp.lingany.lingany.sdk.languages.Language;
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
 
 
-public class GetReflectionActivity extends AppCompatActivity {
+public class ReflectionActivity extends AppCompatActivity {
 
     public static final String EXTRA_NATIVE_LANG = "EXTRA_NATIVE_LANG";
     public static final String EXTRA_FOREIGN_LANG = "EXTRA_FOREIGN_LANG";
@@ -32,6 +32,10 @@ public class GetReflectionActivity extends AppCompatActivity {
             editor.putString(getString(R.string.reflectionId), reflection.getId().toString());
             editor.putBoolean(getString(R.string.isInitRef), true);
             editor.apply();
+
+            Intent intent = new Intent(ReflectionActivity.this, CategoryActivity.class);
+            intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflection.getId().toString());
+            startActivity(intent);
         }
 
         @Override
@@ -43,7 +47,7 @@ public class GetReflectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_getting_reflection);
+        setContentView(R.layout.activity_reflection);
 
         Intent intent = getIntent();
         Language nativeLang = (Language) intent.getSerializableExtra(EXTRA_NATIVE_LANG);
