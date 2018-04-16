@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.gsonparserfactory.GsonParserFactory;
 
 
 public class App extends Application {
@@ -15,6 +16,7 @@ public class App extends Application {
         Log.i("App", "onCreate");
 
         AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.setParserFactory(new GsonParserFactory());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
