@@ -32,21 +32,24 @@
         android:orientation="horizontal">
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center|bottom"
         android:orientation="horizontal">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layostartut_margin="@dimen/contentMargin"
+            android:layout_gravity="center|start"
             android:text="@string/agreeButton"
         />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/contentMargin"
+            android:layout_gravity="center|end"
             android:text="@string/notAgreeButton"
             />
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
