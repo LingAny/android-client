@@ -71,10 +71,21 @@ public class TrainingActivity extends AppCompatActivity {
         leftBtnContainer.removeAllViews();
         rightBtnContainer.removeAllViews();
 
-        this.inflateContainer(leftBtnContainer, R.layout.item_answer_button, training.getNativeWord());
-        this.inflateContainer(leftBtnContainer, R.layout.item_answer_button, training.getRandomWord());
-        this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
-        this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
+        int translationPosition = (int) (Math.random() * 3);
+        for (int i = 0; i < 4; ++i) {
+            ViewGroup currentContainer;
+
+            if (i % 2 == 0) {
+                currentContainer = leftBtnContainer;
+            } else {
+                currentContainer = rightBtnContainer
+            }
+            if (i == translationPosition) {
+                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
+            } else {
+                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getRandomWord());
+            }
+        }
     }
 
     private void inflateContainer(ViewGroup container, int button, String buttonText) {
