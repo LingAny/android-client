@@ -1,11 +1,18 @@
 package ru.tp.lingany.lingany.sdk.categories;
 
+import android.util.Log;
+import android.view.View;
+
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
+import ru.tp.lingany.lingany.sdk.trainings.Training;
 
 
 public class Category implements Serializable {
@@ -58,6 +65,19 @@ public class Category implements Serializable {
         Api.getInstance().categories().getRandomWords(this.reflection.getId(), getRandomWordsListener);
     }
 
+    private final ParsedRequestListener<List<String>> getRandomWordsListener = new ParsedRequestListener<List<String>>() {
+        @Override
+        public void onResponse(List<String> response) {
+            randomWords = response;
+
+            Log.i("CategoryModel", "onResponse updating random words");
+        }
+
+        @Override
+        public void onError(ANError anError) {
+            Log.e("tag", anError.toString());
+        }
+    };
 
 
 }

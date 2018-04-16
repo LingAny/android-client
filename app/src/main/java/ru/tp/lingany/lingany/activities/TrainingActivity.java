@@ -45,6 +45,7 @@ public class TrainingActivity extends AppCompatActivity {
         public void onResponse(List<Training> response) {
             trainings = response;
             progress.setVisibility(View.INVISIBLE);
+            setWords();
 
             Log.i("TrainingActivity", "onResponse");
         }
@@ -56,7 +57,8 @@ public class TrainingActivity extends AppCompatActivity {
     };
 
     private void setWords() {
-        if (trainings.size() < 1) {
+//        <3 to have time
+        if (trainings.size() < 3) {
             updateTrainings();
         }
         Training training = this.trainings.get(0);
@@ -78,12 +80,13 @@ public class TrainingActivity extends AppCompatActivity {
             if (i % 2 == 0) {
                 currentContainer = leftBtnContainer;
             } else {
-                currentContainer = rightBtnContainer
+                currentContainer = rightBtnContainer;
             }
             if (i == translationPosition) {
                 this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
             } else {
-                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getRandomWord());
+//                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getRandomWord());
+                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
             }
         }
     }
@@ -103,7 +106,7 @@ public class TrainingActivity extends AppCompatActivity {
 
     private void proccessAnswer(View view) {
         TextView textView = (TextView) view;
-        if (this.currentTraining != null && this.currentTraining == textView.getText()) {
+        if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
             System.out.println("YES");
             this.inflateMarkOrCross(R.layout.item_mark);
         } else {
@@ -140,22 +143,22 @@ public class TrainingActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_training);
 
-        Intent intent = getIntent();
-        this.category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
-
-        TextView title = findViewById(R.id.trainingTitle);
-        title.setText(category.getId().toString());
-
-        progress = findViewById(R.id.progress);
-        progress.setVisibility(View.VISIBLE);
-
-        updateTrainings();
-
         this.inflater = LayoutInflater.from(this);
         this.leftBtnContainer = (ViewGroup) findViewById(R.id.leftButtonsContainer);
         this.rightBtnContainer = (ViewGroup) findViewById(R.id.rightButtonsContainer);
         this.markCrossContainer = (ViewGroup) findViewById(R.id.containerMarkAndCross);
         this.wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
+
+        Intent intent = getIntent();
+        this.category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
+
+//        TextView title = findViewById(R.id.trainingTitle);
+//        title.setText(category.getId().toString());
+
+        progress = findViewById(R.id.progress);
+        progress.setVisibility(View.VISIBLE);
+
+        updateTrainings();
     }
 
     private void updateTrainings() {
