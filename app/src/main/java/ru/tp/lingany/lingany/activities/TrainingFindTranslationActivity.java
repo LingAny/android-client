@@ -14,10 +14,9 @@ import android.widget.TextView;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.Api;
@@ -78,6 +77,10 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
 
         int translationPosition = (int) (Math.random() * 3);
+
+        RandArray randArr = new RandArray(trainings.size());
+        List<Integer> indexes = randArr.getRandIdx();
+
         for (int i = 0; i < 4; ++i) {
             ViewGroup currentContainer;
 
@@ -87,10 +90,10 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
                 currentContainer = rightBtnContainer;
             }
             if (i == translationPosition) {
-                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
+                inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
             } else {
-//                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getRandomWord());
-                this.inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
+                Integer idx = indexes.get(i);
+                inflateContainer(currentContainer, R.layout.item_answer_button, trainings.get(idx).getNativeWord());
             }
         }
     }
@@ -179,14 +182,17 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
             this.size = size;
         }
 
-        public Set<Integer> getRandIdx() {
-            if (size < 3) {
+        public List<Integer> getRandIdx() {
+            if (size < 4) {
                 return null;
             }
-            Set<Integer> arr = new HashSet<>();
+//            HashSet<Integer> arr = new HashSet<>();
+            List<Integer> arr = new ArrayList<>();
             while (arr.size() < 4) {
                 Integer idx = rand.nextInt(size);
-                arr.add(idx);
+                if (!arr.contains(idx)) {
+                    arr.add(idx);
+                }
             }
 
             return arr;
