@@ -2,6 +2,7 @@ package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,8 @@ public class TrainingActivity extends AppCompatActivity {
 
     private ProgressBar progress;
 
-    private List<Training> training;
+    private Category category;
+    private List<Training> trainings;
     private Training currentTraining;
 
     private LayoutInflater inflater;
@@ -41,10 +43,10 @@ public class TrainingActivity extends AppCompatActivity {
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
-            training = response;
+            trainings = response;
             progress.setVisibility(View.INVISIBLE);
 
-            Log.i("tag", "onResponse");
+            Log.i("TrainingActivity", "onResponse");
         }
 
         @Override
@@ -53,8 +55,13 @@ public class TrainingActivity extends AppCompatActivity {
         }
     };
 
-    private void setWords(Training training) {
+    private void setWords() {
+        if (trainings.size() < 1) {
+            updateTrainings();
+        }
+        Training training = this.trainings.get(0);
         this.currentTraining = training;
+        clearMarkAndCross();
         this.wordToTranslate.setText(training.getForeignWord());
         inflateButtonsContainers(training);
 
@@ -68,7 +75,6 @@ public class TrainingActivity extends AppCompatActivity {
         this.inflateContainer(leftBtnContainer, R.layout.item_answer_button, training.getRandomWord());
         this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
         this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
-
     }
 
     private void inflateContainer(ViewGroup container, int button, String buttonText) {
@@ -100,10 +106,8 @@ public class TrainingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Do something after 2000ms
-                setNewWords();
-                setWordView();
-                inflateContainers();
-                clearMarkCross();
+                trainings.remove(0);
+                setWords();
             }
         }, 2000);
 
@@ -115,6 +119,10 @@ public class TrainingActivity extends AppCompatActivity {
         this.markCrossContainer.addView(view);
     }
 
+    private void clearMarkAndCross() {
+        this.markCrossContainer.removeAllViews();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +130,7 @@ public class TrainingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_training);
 
         Intent intent = getIntent();
-        Category category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
+        this.category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
         TextView title = findViewById(R.id.trainingTitle);
         title.setText(category.getId().toString());
@@ -130,13 +138,16 @@ public class TrainingActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        Api.getInstance().training().getForCategory(category, getForCategoryListener);
+        updateTrainings();
 
         this.inflater = LayoutInflater.from(this);
         this.leftBtnContainer = (ViewGroup) findViewById(R.id.leftButtonsContainer);
         this.rightBtnContainer = (ViewGroup) findViewById(R.id.rightButtonsContainer);
         this.markCrossContainer = (ViewGroup) findViewById(R.id.containerMarkAndCross);
         this.wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
+    }
 
+    private void updateTrainings() {
+        Api.getInstance().training().getForCategory(this.category, getForCategoryListener);
     }
 }
