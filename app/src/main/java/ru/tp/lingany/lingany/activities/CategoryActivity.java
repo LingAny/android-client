@@ -40,6 +40,7 @@ public class CategoryActivity extends AppCompatActivity {
             Category category = categories.get(position);
 
             Intent intent = new Intent(CategoryActivity.this, TrainingFindTranslationActivity.class);
+//            Intent intent = new Intent(CategoryActivity.this, TrainingSprintActivity.class);
             intent.putExtra(TrainingFindTranslationActivity.EXTRA_CATEGORY, category);
             startActivity(intent);
         }
