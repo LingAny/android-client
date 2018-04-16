@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button
+    android:layout_width="match_parent"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:textColor="#ffffff"
+    android:layout_marginTop="@dimen/contentMargin"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

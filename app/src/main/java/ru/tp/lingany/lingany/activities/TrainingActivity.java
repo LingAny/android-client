@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,12 +28,22 @@ public class TrainingActivity extends AppCompatActivity {
     private ProgressBar progress;
 
     private List<Training> training;
+    private Training currentTraining;
+
+    private LayoutInflater inflater;
+
+    private ViewGroup leftBtnContainer;
+    private ViewGroup rightBtnContainer;
+    private ViewGroup markCrossContainer;
+
+    private TextView wordToTranslate;
 
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
             training = response;
             progress.setVisibility(View.INVISIBLE);
+
             Log.i("tag", "onResponse");
         }
 
@@ -41,21 +53,90 @@ public class TrainingActivity extends AppCompatActivity {
         }
     };
 
+    private void setWords(Training training) {
+        this.currentTraining = training;
+        this.wordToTranslate.setText(training.getForeignWord());
+        inflateButtonsContainers(training);
+
+    }
+
+    private void inflateButtonsContainers(Training training) {
+        leftBtnContainer.removeAllViews();
+        rightBtnContainer.removeAllViews();
+
+        this.inflateContainer(leftBtnContainer, R.layout.item_answer_button, training.getNativeWord());
+        this.inflateContainer(leftBtnContainer, R.layout.item_answer_button, training.getRandomWord());
+        this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
+        this.inflateContainer(rightBtnContainer, R.layout.item_answer_button, training.getRandomWord());
+
+    }
+
+    private void inflateContainer(ViewGroup container, int button, String buttonText) {
+        final View view = inflater.inflate(button, container, false);
+        TextView textView = (TextView) view;
+        textView.setText(buttonText);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                proccessAnswer(view);
+            }
+        });
+        container.addView(textView);
+    }
+
+    private void proccessAnswer(View view) {
+        TextView textView = (TextView) view;
+        if (this.currentTraining != null && this.currentTraining == textView.getText()) {
+            System.out.println("YES");
+            this.inflateMarkOrCross(R.layout.item_mark);
+        } else {
+            System.out.println("NO");
+            this.inflateMarkOrCross(R.layout.item_cross);
+        }
+
+//        do smth after delay
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 2000ms
+                setNewWords();
+                setWordView();
+                inflateContainers();
+                clearMarkCross();
+            }
+        }, 2000);
+
+    }
+
+    private void inflateMarkOrCross(int layout) {
+        this.markCrossContainer.removeAllViews();
+        final View view = inflater.inflate(layout, this.markCrossContainer, false);
+        this.markCrossContainer.addView(view);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_reflection);
+        setContentView(R.layout.activity_training);
 
         Intent intent = getIntent();
         Category category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
-        TextView title = findViewById(R.id.title);
+        TextView title = findViewById(R.id.trainingTitle);
         title.setText(category.getId().toString());
 
         progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
         Api.getInstance().training().getForCategory(category, getForCategoryListener);
+
+        this.inflater = LayoutInflater.from(this);
+        this.leftBtnContainer = (ViewGroup) findViewById(R.id.leftButtonsContainer);
+        this.rightBtnContainer = (ViewGroup) findViewById(R.id.rightButtonsContainer);
+        this.markCrossContainer = (ViewGroup) findViewById(R.id.containerMarkAndCross);
+        this.wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
+
     }
 }
