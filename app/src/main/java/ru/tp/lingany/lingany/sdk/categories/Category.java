@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
 
 
@@ -24,7 +25,7 @@ public class Category implements Serializable {
         this.href = href;
         this.title = title;
         this.reflection = reflection;
-        fillRandomWords();
+        fillrandomWords();
     }
 
     public UUID getId() {
@@ -43,8 +44,9 @@ public class Category implements Serializable {
         return reflection;
     }
 
-    public void getRandomWords() {
-        if (randomWords.size() < 1) {
+    public String getRandomWords() {
+//        < 3 for having some time
+        if (randomWords.size() < 3) {
             fillrandomWords();
         }
         String word = randomWords.get(0);
@@ -53,6 +55,9 @@ public class Category implements Serializable {
     }
 
     private void fillrandomWords() {
-
+        Api.getInstance().categories().getRandomWords(this.reflection.getId(), getRandomWordsListener);
     }
+
+
+
 }

@@ -40,4 +40,13 @@ public class CategoryService {
                 .build()
                 .getAsObjectList(Category.class, listener);
     }
+
+    public void getRandomWords(UUID refId, ParsedRequestListener<List<String>> listener) {
+        AndroidNetworking.get(url + "randomWords/{uid}")
+                .addPathParameter("uid", refId.toString())
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObjectList(String.class, listener);
+    }
 }
