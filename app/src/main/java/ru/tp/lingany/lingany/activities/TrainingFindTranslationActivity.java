@@ -14,7 +14,10 @@ import android.widget.TextView;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.Api;
@@ -72,6 +75,7 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
     private void inflateButtonsContainers(Training training) {
         leftBtnContainer.removeAllViews();
         rightBtnContainer.removeAllViews();
+
 
         int translationPosition = (int) (Math.random() * 3);
         for (int i = 0; i < 4; ++i) {
@@ -163,5 +167,29 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     private void updateTrainings() {
         Api.getInstance().training().getForCategory(this.category, getForCategoryListener);
+    }
+
+    public class RandArray {
+
+        private int size;
+
+        private Random rand = new Random();
+
+        public RandArray(int size){
+            this.size = size;
+        }
+
+        public Set<Integer> getRandIdx() {
+            if (size < 3) {
+                return null;
+            }
+            Set<Integer> arr = new HashSet<>();
+            while (arr.size() < 4) {
+                Integer idx = rand.nextInt(size);
+                arr.add(idx);
+            }
+
+            return arr;
+        }
     }
 }
