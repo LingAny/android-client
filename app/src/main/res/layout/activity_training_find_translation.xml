@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.tp.lingany.lingany.activities.TrainingActivity">
+    tools:context="ru.tp.lingany.lingany.activities.TrainingFindTranslationActivity">
 
     <TextView
-        android:id="@+id/trainingTitle"
+        android:id="@+id/trainingFindTranslationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/headerTraining"
+        android:text="@string/headerTrainingFindTranslation"
         android:textSize="35sp"
         android:layout_gravity="center|top"
         />

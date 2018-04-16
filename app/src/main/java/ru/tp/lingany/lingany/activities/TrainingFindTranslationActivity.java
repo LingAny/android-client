@@ -22,7 +22,7 @@ import ru.tp.lingany.lingany.sdk.categories.Category;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
 
 
-public class TrainingActivity extends AppCompatActivity {
+public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
 
@@ -47,7 +47,7 @@ public class TrainingActivity extends AppCompatActivity {
             progress.setVisibility(View.INVISIBLE);
             setWords();
 
-            Log.i("TrainingActivity", "onResponse");
+            Log.i("FindTranslationActivity", "onResponse");
         }
 
         @Override
@@ -141,7 +141,7 @@ public class TrainingActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_training);
+        setContentView(R.layout.activity_training_find_translation);
 
         this.inflater = LayoutInflater.from(this);
         this.leftBtnContainer = (ViewGroup) findViewById(R.id.leftButtonsContainer);
