@@ -3,36 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.tp.lingany.lingany.activities.TrainingFindTranslationActivity">
+    tools:context="ru.tp.lingany.lingany.activities.TrainingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center">
-        <TextView
-            android:id="@+id/trainingFindTranslationTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/headerTrainingFindTranslation"
-            android:textSize="35sp"
-            android:layout_gravity="center"
-            />
+        <LinearLayout
+            android:id="@+id/trainingHeaderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_gravity="center"
-            tools:visibility="visible"/>
-
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/marksContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="50dp">
-        </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout

@@ -6,20 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
@@ -32,18 +26,18 @@ import java.util.Random;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationButtonsFragment;
 import ru.tp.lingany.lingany.fragments.MarksForTranslationFragment;
+import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
 
 
-public class TrainingFindTranslationActivity extends AppCompatActivity {
+public class TrainingActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     final String TRANSLATION_BUTTONS_CREATED = "translationButtonsCreated";
     final String MARKS_FOR_TRANSLATIONS_CREATED = "marksForTranslationsCreated";
-
-    private ProgressBar progress;
+    final String TRAINING_HEADER_CREATED = "trainingHeaderCreated";
 
     private Category category;
     private List<Training> trainings;
@@ -56,12 +50,13 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
     private TextView wordToTranslate;
     private FindTranslationButtonsFragment translationButtonsFragment;
     private List<View> translationButtons;
+    private TrainingHeaderFragment trainingHeaderFragment;
+    private TextView trainingTitle;
 
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            progress.setVisibility(View.INVISIBLE);
             setWords();
 
             Log.i("FindTranslationActivity", "onResponse");
@@ -141,27 +136,27 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         registerReceiver(translationButtonsReciever, new IntentFilter(TRANSLATION_BUTTONS_CREATED));
         registerReceiver(marksForTranslationReciever, new IntentFilter(MARKS_FOR_TRANSLATIONS_CREATED));
+        registerReceiver(trainingHeaderReciever, new IntentFilter(TRAINING_HEADER_CREATED));
 
-        setContentView(R.layout.activity_training_find_translation);
+        setContentView(R.layout.activity_training);
 
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
         inflater = LayoutInflater.from(this);
 
-        markCrossContainer = (ViewGroup) findViewById(R.id.containerMarkAndCross);
-        wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
-
-        progress = findViewById(R.id.progress);
-        progress.setVisibility(View.VISIBLE);
-
-        inizializeTranslationButtons();
-        inizializeMarksForTranslation();
+        inizializeTranslationFragments();
         updateTrainings();
-        setListenersOnTranslationButtons();
     }
 
     private void updateTrainings() {
         Api.getInstance().training().getForCategory(this.category, getForCategoryListener);
+    }
+
+    private void inizializeTranslationFragments() {
+        inizializeTranslationButtons();
+        inizializeMarksForTranslation();
+        inizializeTrainingHeader();
+
     }
 
     private void inizializeTranslationButtons() {
@@ -177,6 +172,14 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         marksForTranslationFragment = new MarksForTranslationFragment();
         transaction.replace(R.id.marksContainer, marksForTranslationFragment);
+        transaction.commit();
+    }
+
+    private void inizializeTrainingHeader() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        trainingHeaderFragment = new TrainingHeaderFragment();
+        transaction.replace(R.id.trainingHeaderContainer, trainingHeaderFragment);
         transaction.commit();
     }
 
@@ -236,6 +239,16 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
             if (intent != null && MARKS_FOR_TRANSLATIONS_CREATED.equals(intent.getAction())) {
                 markCrossContainer = marksForTranslationFragment.getMarkCrossContainer();
                 wordToTranslate = marksForTranslationFragment.getWordToTranslate();
+            }
+        }
+    };
+
+    private final BroadcastReceiver trainingHeaderReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (intent != null && TRAINING_HEADER_CREATED.equals(intent.getAction())) {
+                trainingTitle = trainingHeaderFragment.getTrainingTitle();
+                trainingTitle.setText("Find Translation");
             }
         }
     };

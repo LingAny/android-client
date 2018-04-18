@@ -39,9 +39,9 @@ public class CategoryActivity extends AppCompatActivity {
             Log.i("tag", "[CategoryClickListener.onClick]");
             Category category = categories.get(position);
 
-            Intent intent = new Intent(CategoryActivity.this, TrainingFindTranslationActivity.class);
+            Intent intent = new Intent(CategoryActivity.this, TrainingActivity.class);
 //            Intent intent = new Intent(CategoryActivity.this, TrainingSprintActivity.class);
-            intent.putExtra(TrainingFindTranslationActivity.EXTRA_CATEGORY, category);
+            intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
             startActivity(intent);
         }
     }
