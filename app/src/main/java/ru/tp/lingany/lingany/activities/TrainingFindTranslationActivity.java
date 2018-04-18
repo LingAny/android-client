@@ -1,16 +1,25 @@
 package ru.tp.lingany.lingany.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
@@ -30,6 +39,7 @@ import ru.tp.lingany.lingany.sdk.trainings.Training;
 public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+    final String TRANSLATION_BUTTONS_CREATED = "translationButtonsCreated";
 
     private ProgressBar progress;
 
@@ -39,10 +49,11 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     private LayoutInflater inflater;
 
-    private ViewGroup buttonsContainer;
     private ViewGroup markCrossContainer;
 
     private TextView wordToTranslate;
+    private FindTranslationButtonsFragment translationButtonsFragment;
+    private List<View> translationButtons;
 
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
@@ -61,54 +72,34 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
     };
 
     private void setWords() {
-//        <3 to have time
-        if (trainings.size() < 3) {
+//        <4 to have time
+        if (trainings.size() < 4) {
             updateTrainings();
         }
+
         Training training = trainings.get(0);
         currentTraining = training;
         clearMarkAndCross();
         wordToTranslate.setText(training.getForeignWord());
-//        inflateButtonsContainers(training);
+        setFindTranslationButtons(training);
     }
 
-    private void setButtonsText(Training training) {
-        ViewGroup fragmentFindTranslationButtons = findViewById(R.id.fragmentFindTranslationButtons);
-        fragmentFindTranslationButtons.removeAllViews();
-
+    private void setFindTranslationButtons(Training training) {
         int translationPosition = (int) (Math.random() * 3);
 
         RandArray randArr = new RandArray(trainings.size());
         List<Integer> indexes = randArr.getRandIdx();
 
-        for (int i = 0; i < 4; ++i) {
-            ViewGroup currentContainer;
+        for (int i = 0; i < translationButtons.size(); ++i) {
+            TextView textView = (TextView) translationButtons.get(i);
 
-            if (i % 2 == 0) {
-                currentContainer = leftBtnContainer;
-            } else {
-                currentContainer = rightBtnContainer;
-            }
             if (i == translationPosition) {
-                inflateContainer(currentContainer, R.layout.item_answer_button, training.getNativeWord());
+                textView.setText(training.getNativeWord());
             } else {
                 Integer idx = indexes.get(i);
-                inflateContainer(currentContainer, R.layout.item_answer_button, trainings.get(idx).getNativeWord());
+                textView.setText(trainings.get(idx).getNativeWord());
             }
         }
-    }
-
-    private void inflateContainer(ViewGroup container, int button, String buttonText) {
-        final View view = inflater.inflate(button, container, false);
-        TextView textView = (TextView) view;
-        textView.setText(buttonText);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                proccessAnswer(view);
-            }
-        });
-        container.addView(textView);
     }
 
     private void proccessAnswer(View view) {
@@ -146,6 +137,7 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(translationButtonsReciever, new IntentFilter(TRANSLATION_BUTTONS_CREATED));
 
         setContentView(R.layout.activity_training_find_translation);
 
@@ -155,26 +147,42 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
         markCrossContainer = (ViewGroup) findViewById(R.id.containerMarkAndCross);
         wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
-        buttonsContainer = (ViewGroup) findViewById(R.id.buttonsContainer);
 
         progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
 
-        addTranlationButtons();
+        inizializeTranslationButtons();
         updateTrainings();
+        setListenersOnTranslationButtons();
     }
 
     private void updateTrainings() {
         Api.getInstance().training().getForCategory(this.category, getForCategoryListener);
     }
 
-    private void addTranlationButtons() {
+    private void inizializeTranslationButtons() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        transaction.replace(R.id.buttonsContainer, new FindTranslationButtonsFragment());
+        translationButtonsFragment = new FindTranslationButtonsFragment();
+        transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
         transaction.commit();
+
     }
+
+    private void setListenersOnTranslationButtons() {
+        translationButtons = translationButtonsFragment.getButtons();
+        for (View button:translationButtons) {
+            button.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            proccessAnswer(v);
+
+                        }
+                    });
+        }
+    }
+
 
     public class RandArray {
 
@@ -202,4 +210,16 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
             return arr;
         }
     }
+
+    private final BroadcastReceiver translationButtonsReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (intent != null && TRANSLATION_BUTTONS_CREATED.equals(intent.getAction())) {
+                setListenersOnTranslationButtons();
+            }
+        }
+    };
+
 }
+
+
