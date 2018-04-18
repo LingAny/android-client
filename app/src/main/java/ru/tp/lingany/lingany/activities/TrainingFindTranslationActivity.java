@@ -31,6 +31,7 @@ import java.util.Random;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationButtonsFragment;
+import ru.tp.lingany.lingany.fragments.MarksForTranslationFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
@@ -40,6 +41,7 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     final String TRANSLATION_BUTTONS_CREATED = "translationButtonsCreated";
+    final String MARKS_FOR_TRANSLATIONS_CREATED = "marksForTranslationsCreated";
 
     private ProgressBar progress;
 
@@ -49,8 +51,8 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
 
     private LayoutInflater inflater;
 
+    private MarksForTranslationFragment marksForTranslationFragment;
     private ViewGroup markCrossContainer;
-
     private TextView wordToTranslate;
     private FindTranslationButtonsFragment translationButtonsFragment;
     private List<View> translationButtons;
@@ -138,6 +140,7 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerReceiver(translationButtonsReciever, new IntentFilter(TRANSLATION_BUTTONS_CREATED));
+        registerReceiver(marksForTranslationReciever, new IntentFilter(MARKS_FOR_TRANSLATIONS_CREATED));
 
         setContentView(R.layout.activity_training_find_translation);
 
@@ -152,6 +155,7 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
         progress.setVisibility(View.VISIBLE);
 
         inizializeTranslationButtons();
+        inizializeMarksForTranslation();
         updateTrainings();
         setListenersOnTranslationButtons();
     }
@@ -166,23 +170,29 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
         translationButtonsFragment = new FindTranslationButtonsFragment();
         transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
         transaction.commit();
+    }
 
+    private void inizializeMarksForTranslation() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        marksForTranslationFragment = new MarksForTranslationFragment();
+        transaction.replace(R.id.marksContainer, marksForTranslationFragment);
+        transaction.commit();
     }
 
     private void setListenersOnTranslationButtons() {
         translationButtons = translationButtonsFragment.getButtons();
         for (View button:translationButtons) {
             button.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            proccessAnswer(v);
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        proccessAnswer(v);
 
-                        }
-                    });
+                    }
+                });
         }
     }
-
 
     public class RandArray {
 
@@ -216,6 +226,16 @@ public class TrainingFindTranslationActivity extends AppCompatActivity {
         public void onReceive(final Context context, final Intent intent) {
             if (intent != null && TRANSLATION_BUTTONS_CREATED.equals(intent.getAction())) {
                 setListenersOnTranslationButtons();
+            }
+        }
+    };
+
+    private final BroadcastReceiver marksForTranslationReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (intent != null && MARKS_FOR_TRANSLATIONS_CREATED.equals(intent.getAction())) {
+                markCrossContainer = marksForTranslationFragment.getMarkCrossContainer();
+                wordToTranslate = marksForTranslationFragment.getWordToTranslate();
             }
         }
     };

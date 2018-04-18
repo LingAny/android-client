@@ -27,29 +27,12 @@
             android:layout_gravity="center"
             tools:visibility="visible"/>
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/marksContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:paddingTop="50dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/wordToTranslate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="30sp"
-                />
-            <LinearLayout
-                android:id="@+id/containerMarkAndCross"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:orientation="horizontal">
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:paddingTop="50dp">
+        </FrameLayout>
     </LinearLayout>
 
     <FrameLayout
