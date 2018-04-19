@@ -8,7 +8,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="lu"
             android:layout_gravity="start|top"
             />
 
@@ -17,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="ld"
             android:layout_gravity="start|bottom"
             />
 
@@ -26,7 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="ru"
             android:layout_gravity="end|top"
             />
 
@@ -35,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="rd"
             android:layout_gravity="end|bottom"
             />
 </FrameLayout>

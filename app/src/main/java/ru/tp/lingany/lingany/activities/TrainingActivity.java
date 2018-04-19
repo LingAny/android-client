@@ -35,9 +35,14 @@ import ru.tp.lingany.lingany.sdk.trainings.Training;
 public class TrainingActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
-    final String TRANSLATION_BUTTONS_CREATED = "translationButtonsCreated";
-    final String MARKS_FOR_TRANSLATIONS_CREATED = "marksForTranslationsCreated";
-    final String TRAINING_HEADER_CREATED = "trainingHeaderCreated";
+    private final String TRANSLATION_BUTTONS_CREATED = "translationButtonsCreated";
+    private final String MARKS_FOR_TRANSLATIONS_CREATED = "marksForTranslationsCreated";
+    private final String TRAINING_HEADER_CREATED = "trainingHeaderCreated";
+    private final String TRAINING_TITLE_FIND_TRANSLATIONS = "Find Translation";
+
+    private final String MODE_FIND_TRANSLATION = "modeFindTranslation";
+    private final String MODE_SPRINT = "modeSprint";
+    private String currentMode;
 
     private Category category;
     private List<Training> trainings;
@@ -52,6 +57,8 @@ public class TrainingActivity extends AppCompatActivity {
     private List<View> translationButtons;
     private TrainingHeaderFragment trainingHeaderFragment;
     private TextView trainingTitle;
+
+
 
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
@@ -77,9 +84,13 @@ public class TrainingActivity extends AppCompatActivity {
         Training training = trainings.get(0);
         currentTraining = training;
 
-        clearMarkAndCross();
-        wordToTranslate.setText(training.getForeignWord());
-        setFindTranslationButtons(training);
+        if (currentMode.equals(MODE_FIND_TRANSLATION)) {
+            clearMarkAndCross();
+            wordToTranslate.setText(training.getForeignWord());
+            setFindTranslationButtons(training);
+        } else if (currentMode.equals(MODE_SPRINT)) {
+
+        }
     }
 
     private void setFindTranslationButtons(Training training) {
@@ -100,16 +111,13 @@ public class TrainingActivity extends AppCompatActivity {
         }
     }
 
-    private void proccessAnswer(View view) {
+    private void proccessAnswerTranslationButtons(View view) {
         TextView textView = (TextView) view;
         if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
-            System.out.println("YES");
             this.inflateMarkOrCross(R.layout.item_mark);
         } else {
-            System.out.println("NO");
             this.inflateMarkOrCross(R.layout.item_cross);
         }
-
 //        do smth after delay
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -123,7 +131,7 @@ public class TrainingActivity extends AppCompatActivity {
     }
 
     private void inflateMarkOrCross(int layout) {
-        this.markCrossContainer.removeAllViews();
+        clearMarkAndCross();
         final View view = inflater.inflate(layout, this.markCrossContainer, false);
         this.markCrossContainer.addView(view);
     }
@@ -144,6 +152,7 @@ public class TrainingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
         inflater = LayoutInflater.from(this);
+        currentMode = MODE_FIND_TRANSLATION;
 
         inizializeTranslationFragments();
         updateTrainings();
@@ -157,7 +166,6 @@ public class TrainingActivity extends AppCompatActivity {
         inizializeTrainingHeader();
         inizializeMarksForTranslation();
         inizializeTranslationButtons();
-
     }
 
     private void inizializeTranslationButtons() {
@@ -191,8 +199,7 @@ public class TrainingActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        proccessAnswer(v);
-
+                        proccessAnswerTranslationButtons(v);
                     }
                 });
         }
@@ -249,7 +256,7 @@ public class TrainingActivity extends AppCompatActivity {
         public void onReceive(final Context context, final Intent intent) {
             if (intent != null && TRAINING_HEADER_CREATED.equals(intent.getAction())) {
                 trainingTitle = trainingHeaderFragment.getTrainingTitle();
-                trainingTitle.setText("Find Translation");
+                trainingTitle.setText(TRAINING_TITLE_FIND_TRANSLATIONS);
             }
         }
     };

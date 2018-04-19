@@ -10,22 +10,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center">
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/trainingHeaderContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center">
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/marksContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="50dp"
             android:orientation="vertical"
             android:layout_gravity="center">
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
     <FrameLayout
