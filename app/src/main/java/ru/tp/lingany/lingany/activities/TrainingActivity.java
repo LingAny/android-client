@@ -76,6 +76,7 @@ public class TrainingActivity extends AppCompatActivity {
 
         Training training = trainings.get(0);
         currentTraining = training;
+
         clearMarkAndCross();
         wordToTranslate.setText(training.getForeignWord());
         setFindTranslationButtons(training);
@@ -153,9 +154,9 @@ public class TrainingActivity extends AppCompatActivity {
     }
 
     private void inizializeTranslationFragments() {
-        inizializeTranslationButtons();
-        inizializeMarksForTranslation();
         inizializeTrainingHeader();
+        inizializeMarksForTranslation();
+        inizializeTranslationButtons();
 
     }
 

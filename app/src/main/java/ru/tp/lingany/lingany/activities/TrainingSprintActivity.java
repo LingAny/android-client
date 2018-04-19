@@ -112,7 +112,7 @@ public class TrainingSprintActivity extends AppCompatActivity {
         inflater = LayoutInflater.from(this);
         containerForMarks = (ViewGroup) findViewById(R.id.containerForMarks);
         wordToTranslate = (TextView) findViewById(R.id.wordToTranslate);
-        wordTranslation = (TextView) findViewById(R.id.wordTranslation);
+        wordTranslation = (TextView) findViewById(R.id.wordTranslation2);
 
         progress = findViewById(R.id.progress);
         progress.setVisibility(View.VISIBLE);
@@ -126,8 +126,8 @@ public class TrainingSprintActivity extends AppCompatActivity {
     }
 
     private void setUpButtons() {
-        agreeButton = (Button) findViewById(R.id.agreeButton);
-        notAgreeButton = (Button) findViewById(R.id.notAgreeButton);
+        agreeButton = (Button) findViewById(R.id.agreeButton2);
+        notAgreeButton = (Button) findViewById(R.id.notAgreeButton2);
         agreeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
