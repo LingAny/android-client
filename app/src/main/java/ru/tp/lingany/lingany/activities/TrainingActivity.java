@@ -20,6 +20,7 @@ import java.util.List;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationButtonsFragment;
 import ru.tp.lingany.lingany.fragments.MarksForTranslationFragment;
+import ru.tp.lingany.lingany.fragments.SprintButtonsFragment;
 import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
@@ -65,17 +66,22 @@ public class TrainingActivity extends AppCompatActivity {
         setTranslationButtons(training);
     }
 
-private void setTranslationButtons(Training training) {
-    List<Integer> indexes = RandArray.getRandIdx(3, 0, trainings.size() - 1);
-    List<String> words = new ArrayList<>();
+    private void setTranslationButtons(Training training) {
+        List<Integer> indexes = RandArray.getRandIdx(3, 0, trainings.size() - 1);
+        List<String> words = new ArrayList<>();
 
-    for (Integer index: indexes) {
-        words.add(trainings.get(index).getNativeWord());
+        for (Integer index: indexes) {
+            words.add(trainings.get(index).getNativeWord());
+        }
+        translationButtonsFragment.setWordsOnButtons(training.getNativeWord(), words);
     }
-    translationButtonsFragment.setWordsOnButtons(training.getNativeWord(), words);
-}
 
-    private void proccessAnswerTranslationButtons(View view) {
+    private void proccessAnswerSprint(View view) {
+
+    }
+
+
+    private void proccessAnswerTranslation(View view) {
         TextView textView = (TextView) view;
         if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
             marksForTranslationFragment.setMark();
@@ -112,7 +118,15 @@ private void setTranslationButtons(Training training) {
     }
 
     private void inizializeTranslationFragments() {
-        inizializeTrainingHeader();
+        String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
+        inizializeHeader(TRAINING_FIND_TRANSLATION_TITLE);
+        inizializeMarksForTranslation();
+        inizializeTranslationButtons();
+    }
+
+    private void inizializeSprintFragments() {
+        String TRAINING_Sprint_TITLE = "Sprint";
+        inizializeHeader(TRAINING_Sprint_TITLE);
         inizializeMarksForTranslation();
         inizializeTranslationButtons();
     }
@@ -120,7 +134,7 @@ private void setTranslationButtons(Training training) {
     private void inizializeTranslationButtons() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        translationButtonsFragment = FindTranslationButtonsFragment.newInstance(new ButtonClickCallback());
+        translationButtonsFragment = FindTranslationButtonsFragment.newInstance(new ButtonClickCallbackFindTranslation());
         transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
         transaction.commit();
     }
@@ -133,19 +147,25 @@ private void setTranslationButtons(Training training) {
         transaction.commit();
     }
 
-    private void inizializeTrainingHeader() {
-        String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
+    private<T> void inizializeHeader(String title, T fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        TrainingHeaderFragment trainingHeaderFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
-        transaction.replace(R.id.trainingHeaderContainer, trainingHeaderFragment);
+        TrainingHeaderFragment trainingHeaderFragment = TrainingHeaderFragment.newInstance(title);
+        transaction.replace(R.id.trainingHeaderContainer, fragment);
         transaction.commit();
     }
 
-    public class ButtonClickCallback implements FindTranslationButtonsFragment.OnClickCallback, Serializable {
+    public class ButtonClickCallbackFindTranslation implements FindTranslationButtonsFragment.OnClickCallback, Serializable {
         @Override
         public void onClick(View view) {
-            proccessAnswerTranslationButtons(view);
+            proccessAnswerTranslation(view);
+        }
+    }
+
+    public class ButtonClickCallbackSprint implements SprintButtonsFragment.OnClickCallback, Serializable {
+        @Override
+        public void onClick(View view) {
+            proccessAnswerSprint(view);
         }
     }
 
