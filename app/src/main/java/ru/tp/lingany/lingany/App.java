@@ -14,11 +14,11 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Log.i("App", "onCreate");
-
         AndroidNetworking.initialize(getApplicationContext());
         AndroidNetworking.setParserFactory(new GsonParserFactory());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

@@ -15,4 +15,10 @@
 
     <string name="pleaseWait">Please wait</string>
 
+    <string name="headerTrainingFindTranslation">Find translation</string>
+    <string name="headerTrainingSprint">Sprint</string>
+
+    <string name="agreeButton">Yes</string>
+    <string name="notAgreeButton">No</string>
+
 </resources>

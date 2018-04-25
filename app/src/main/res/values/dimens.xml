@@ -3,4 +3,8 @@
     <dimen name="min_image_width">160dp</dimen>
     <dimen name="min_image_height">160dp</dimen>
     <dimen name="padding">8dp</dimen>
+
+    <dimen name="contentPadding">0dp</dimen>
+    <dimen name="contentMargin">16dp</dimen>
+
 </resources>
