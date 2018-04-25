@@ -1,20 +1,13 @@
 package ru.tp.lingany.lingany.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
@@ -23,7 +16,6 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationButtonsFragment;
@@ -38,8 +30,6 @@ import ru.tp.lingany.lingany.utils.RandArray;
 public class TrainingActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
-    private final String TRAINING_HEADER_CREATED = "trainingHeaderCreated";
-    private final String TRAINING_TITLE_FIND_TRANSLATIONS = "Find Translation";
 
     private Category category;
     private List<Training> trainings;
@@ -47,9 +37,6 @@ public class TrainingActivity extends AppCompatActivity {
 
     private MarksForTranslationFragment marksForTranslationFragment;
     private FindTranslationButtonsFragment translationButtonsFragment;
-    private TrainingHeaderFragment trainingHeaderFragment;
-    private TextView trainingTitle;
-
 
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
@@ -110,7 +97,6 @@ private void setTranslationButtons(Training training) {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver(trainingHeaderReciever, new IntentFilter(TRAINING_HEADER_CREATED));
 
         setContentView(R.layout.activity_training);
 
@@ -148,22 +134,13 @@ private void setTranslationButtons(Training training) {
     }
 
     private void inizializeTrainingHeader() {
+        String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        trainingHeaderFragment = new TrainingHeaderFragment();
+        TrainingHeaderFragment trainingHeaderFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
         transaction.replace(R.id.trainingHeaderContainer, trainingHeaderFragment);
         transaction.commit();
     }
-
-    private final BroadcastReceiver trainingHeaderReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if (intent != null && TRAINING_HEADER_CREATED.equals(intent.getAction())) {
-                trainingTitle = trainingHeaderFragment.getTrainingTitle();
-                trainingTitle.setText(TRAINING_TITLE_FIND_TRANSLATIONS);
-            }
-        }
-    };
 
     public class ButtonClickCallback implements FindTranslationButtonsFragment.OnClickCallback, Serializable {
         @Override
