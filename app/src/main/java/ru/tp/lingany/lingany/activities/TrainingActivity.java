@@ -32,6 +32,7 @@ import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
+import ru.tp.lingany.lingany.utils.RandArray;
 
 
 public class TrainingActivity extends AppCompatActivity {
@@ -59,12 +60,11 @@ public class TrainingActivity extends AppCompatActivity {
     private TextView trainingTitle;
 
 
-
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-//            setWords();
+            setWords();
 
             Log.i("FindTranslationActivity", "onResponse");
         }
@@ -76,51 +76,44 @@ public class TrainingActivity extends AppCompatActivity {
     };
 
     private void setWords() {
-
+        if (trainings.size() < 4) {
+//            to next activity
+        }
         Training training = trainings.get(0);
         currentTraining = training;
 
-        if (currentMode.equals(MODE_FIND_TRANSLATION)) {
-            clearMarkAndCross();
-            wordToTranslate.setText(training.getForeignWord());
-            setFindTranslationButtons(training);
-        } else if (currentMode.equals(MODE_SPRINT)) {
-
-        }
+        clearMarkAndCross();
+        wordToTranslate.setText(training.getForeignWord());
+        setTranslationButtons(training);
     }
 
-    private void setFindTranslationButtons(Training training) {
-        int translationPosition = (int) (Math.random() * 3);
+//    private void setTranslationButtons(Training training) {
+//        int translationPosition = (int) (Math.random() * 3);
+//
+//        RandArray randArr = new RandArray(trainings.size());
+//        List<Integer> indexes = randArr.getRandIdx();
+//
+//        for (int i = 0; i < 4; ++i) {
+////            TextView textView = (TextView) translationButtons.get(i);
+//            TextView textView = null;
+//            if (i == translationPosition) {
+//                textView.setText(training.getNativeWord());
+//            } else {
+//                Integer idx = indexes.get(i);
+//                textView.setText(trainings.get(idx).getNativeWord());
+//            }
+//        }
+//    }
+private void setTranslationButtons(Training training) {
+    List<Integer> indexes = RandArray.getRandIdx(3, 0, trainings.size() - 1);
+    List<String> words = new ArrayList<>();
+    words.add(training.getNativeWord());
 
-        RandArray randArr = new RandArray(trainings.size());
-        List<Integer> indexes = randArr.getRandIdx();
-
-        for (int i = 0; i < 4; ++i) {
-//            TextView textView = (TextView) translationButtons.get(i);
-            TextView textView = null;
-            if (i == translationPosition) {
-                textView.setText(training.getNativeWord());
-            } else {
-                Integer idx = indexes.get(i);
-                textView.setText(trainings.get(idx).getNativeWord());
-            }
-        }
+    for (Integer index: indexes) {
+        words.add(trainings.get(index).getNativeWord());
     }
-
-    private List<String> getNewWords() {
-//        Training training = trainings.get(0);
-//        currentTraining = training;
-        List<String> words = new ArrayList<>();
-        words.add("fsuhbfeshi");
-        words.add("fe");
-        words.add("fswaf");
-        words.add("seaf");
-//        words.add(training.getNativeWord());
-//        words.add(training.getForeignWord());
-//        words.add(training.getForeignWord());
-//        words.add(training.getForeignWord());
-        return words;
-    }
+    translationButtonsFragment.setWordsOnButtons(words);
+}
 
     private void proccessAnswerTranslationButtons(View view) {
         TextView textView = (TextView) view;
@@ -181,7 +174,7 @@ public class TrainingActivity extends AppCompatActivity {
     private void inizializeTranslationButtons() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        translationButtonsFragment = FindTranslationButtonsFragment.newInstance(new ButtonClickCallback(), getNewWords());
+        translationButtonsFragment = FindTranslationButtonsFragment.newInstance(new ButtonClickCallback());
         transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
         transaction.commit();
     }
@@ -202,32 +195,7 @@ public class TrainingActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public class RandArray {
 
-        private int size;
-
-        private Random rand = new Random();
-
-        public RandArray(int size){
-            this.size = size;
-        }
-
-        public List<Integer> getRandIdx() {
-            if (size < 4) {
-                return null;
-            }
-//            HashSet<Integer> arr = new HashSet<>();
-            List<Integer> arr = new ArrayList<>();
-            while (arr.size() < 4) {
-                Integer idx = rand.nextInt(size);
-                if (!arr.contains(idx)) {
-                    arr.add(idx);
-                }
-            }
-
-            return arr;
-        }
-    }
 
     private final BroadcastReceiver marksForTranslationReciever = new BroadcastReceiver() {
         @Override

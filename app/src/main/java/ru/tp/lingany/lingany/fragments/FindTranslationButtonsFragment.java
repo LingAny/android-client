@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.activities.TrainingActivity;
 
 public class FindTranslationButtonsFragment extends Fragment {
-    private List<View> buttons = new ArrayList<>();
+    private List<TextView> buttons = new ArrayList<>();
 
     public interface OnClickCallback {
         void onClick(View view);
@@ -28,7 +29,7 @@ public class FindTranslationButtonsFragment extends Fragment {
 
     private OnClickCallback callback;
 
-    public static FindTranslationButtonsFragment newInstance(OnClickCallback listener, List<String> text) {
+    public static FindTranslationButtonsFragment newInstance(OnClickCallback listener) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("listener", (Serializable) listener);
 
@@ -52,10 +53,10 @@ public class FindTranslationButtonsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            buttons.add((View) Objects.requireNonNull(getView()).findViewById(R.id.leftUpperButton));
-            buttons.add((View) getView().findViewById(R.id.leftDownButton));
-            buttons.add((View) getView().findViewById(R.id.rightUpperButton));
-            buttons.add((View) getView().findViewById(R.id.rightDownButton));
+            buttons.add((TextView) Objects.requireNonNull(getView()).findViewById(R.id.leftUpperButton));
+            buttons.add((TextView) getView().findViewById(R.id.leftDownButton));
+            buttons.add((TextView) getView().findViewById(R.id.rightUpperButton));
+            buttons.add((TextView) getView().findViewById(R.id.rightDownButton));
 
             readBundle(getArguments());
 
@@ -70,7 +71,14 @@ public class FindTranslationButtonsFragment extends Fragment {
             }
     }
 
-    public List<View> getButtons() {
+    public void setWordsOnButtons(List<String> words) {
+        for (int i = 0; i < words.size() && i < buttons.size(); ++i) {
+            buttons.get(i).setText(words.get(i));
+        }
+    }
+
+
+    public List<TextView> getButtons() {
         return buttons;
     }
 }
