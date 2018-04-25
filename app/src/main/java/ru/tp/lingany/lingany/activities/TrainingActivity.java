@@ -38,23 +38,14 @@ import ru.tp.lingany.lingany.utils.RandArray;
 public class TrainingActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
-    private final String MARKS_FOR_TRANSLATIONS_CREATED = "marksForTranslationsCreated";
     private final String TRAINING_HEADER_CREATED = "trainingHeaderCreated";
     private final String TRAINING_TITLE_FIND_TRANSLATIONS = "Find Translation";
-
-    private final String MODE_FIND_TRANSLATION = "modeFindTranslation";
-    private final String MODE_SPRINT = "modeSprint";
-    private String currentMode;
 
     private Category category;
     private List<Training> trainings;
     private Training currentTraining;
 
-    private LayoutInflater inflater;
-
     private MarksForTranslationFragment marksForTranslationFragment;
-    private ViewGroup markCrossContainer;
-    private TextView wordToTranslate;
     private FindTranslationButtonsFragment translationButtonsFragment;
     private TrainingHeaderFragment trainingHeaderFragment;
     private TextView trainingTitle;
@@ -77,13 +68,13 @@ public class TrainingActivity extends AppCompatActivity {
 
     private void setWords() {
         if (trainings.size() < 4) {
-//            to next activity
+//            to next game
         }
         Training training = trainings.get(0);
         currentTraining = training;
 
-        clearMarkAndCross();
-        wordToTranslate.setText(training.getForeignWord());
+        marksForTranslationFragment.clearMarkAndCross();
+        marksForTranslationFragment.setWordToTranslate(training.getForeignWord());
         setTranslationButtons(training);
     }
 
@@ -100,11 +91,11 @@ private void setTranslationButtons(Training training) {
     private void proccessAnswerTranslationButtons(View view) {
         TextView textView = (TextView) view;
         if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
-            this.inflateMarkOrCross(R.layout.item_mark);
+            marksForTranslationFragment.setMark();
         } else {
-            this.inflateMarkOrCross(R.layout.item_cross);
+            marksForTranslationFragment.setCross();
         }
-//        do smth after delay
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -116,28 +107,15 @@ private void setTranslationButtons(Training training) {
         }, 2000);
     }
 
-    private void inflateMarkOrCross(int layout) {
-        clearMarkAndCross();
-        final View view = inflater.inflate(layout, this.markCrossContainer, false);
-        this.markCrossContainer.addView(view);
-    }
-
-    private void clearMarkAndCross() {
-        this.markCrossContainer.removeAllViews();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver(marksForTranslationReciever, new IntentFilter(MARKS_FOR_TRANSLATIONS_CREATED));
         registerReceiver(trainingHeaderReciever, new IntentFilter(TRAINING_HEADER_CREATED));
 
         setContentView(R.layout.activity_training);
 
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
-        inflater = LayoutInflater.from(this);
-        currentMode = MODE_FIND_TRANSLATION;
 
         inizializeTranslationFragments();
         updateTrainings();
@@ -176,16 +154,6 @@ private void setTranslationButtons(Training training) {
         transaction.replace(R.id.trainingHeaderContainer, trainingHeaderFragment);
         transaction.commit();
     }
-
-    private final BroadcastReceiver marksForTranslationReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if (intent != null && MARKS_FOR_TRANSLATIONS_CREATED.equals(intent.getAction())) {
-                markCrossContainer = marksForTranslationFragment.getMarkCrossContainer();
-                wordToTranslate = marksForTranslationFragment.getWordToTranslate();
-            }
-        }
-    };
 
     private final BroadcastReceiver trainingHeaderReciever = new BroadcastReceiver() {
         @Override
