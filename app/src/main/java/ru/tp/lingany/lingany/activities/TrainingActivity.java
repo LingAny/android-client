@@ -87,32 +87,14 @@ public class TrainingActivity extends AppCompatActivity {
         setTranslationButtons(training);
     }
 
-//    private void setTranslationButtons(Training training) {
-//        int translationPosition = (int) (Math.random() * 3);
-//
-//        RandArray randArr = new RandArray(trainings.size());
-//        List<Integer> indexes = randArr.getRandIdx();
-//
-//        for (int i = 0; i < 4; ++i) {
-////            TextView textView = (TextView) translationButtons.get(i);
-//            TextView textView = null;
-//            if (i == translationPosition) {
-//                textView.setText(training.getNativeWord());
-//            } else {
-//                Integer idx = indexes.get(i);
-//                textView.setText(trainings.get(idx).getNativeWord());
-//            }
-//        }
-//    }
 private void setTranslationButtons(Training training) {
     List<Integer> indexes = RandArray.getRandIdx(3, 0, trainings.size() - 1);
     List<String> words = new ArrayList<>();
-    words.add(training.getNativeWord());
 
     for (Integer index: indexes) {
         words.add(trainings.get(index).getNativeWord());
     }
-    translationButtonsFragment.setWordsOnButtons(words);
+    translationButtonsFragment.setWordsOnButtons(training.getNativeWord(), words);
 }
 
     private void proccessAnswerTranslationButtons(View view) {
@@ -194,8 +176,6 @@ private void setTranslationButtons(Training training) {
         transaction.replace(R.id.trainingHeaderContainer, trainingHeaderFragment);
         transaction.commit();
     }
-
-
 
     private final BroadcastReceiver marksForTranslationReciever = new BroadcastReceiver() {
         @Override

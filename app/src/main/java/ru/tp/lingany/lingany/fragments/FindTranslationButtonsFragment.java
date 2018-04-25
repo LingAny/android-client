@@ -1,9 +1,6 @@
 package ru.tp.lingany.lingany.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.activities.TrainingActivity;
 
 public class FindTranslationButtonsFragment extends Fragment {
     private List<TextView> buttons = new ArrayList<>();
@@ -71,14 +67,18 @@ public class FindTranslationButtonsFragment extends Fragment {
             }
     }
 
-    public void setWordsOnButtons(List<String> words) {
-        for (int i = 0; i < words.size() && i < buttons.size(); ++i) {
-            buttons.get(i).setText(words.get(i));
+    public void setWordsOnButtons(String translationWord, List<String> words) {
+        int translationPosition = (int) (Math.random() * 3);
+        for (int i = 0, j = 0; i < buttons.size(); ++i) {
+            if (i == translationPosition) {
+                buttons.get(i).setText(translationWord);
+            } else {
+                if (words.size() < 1) {
+                    break;
+                }
+                buttons.get(i).setText(words.get(j));
+                ++j;
+            }
         }
-    }
-
-
-    public List<TextView> getButtons() {
-        return buttons;
     }
 }
