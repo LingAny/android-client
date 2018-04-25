@@ -22,7 +22,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activities.ChooseReflectionActivity" android:noHistory="true" />
+        <activity android:name=".activities.SelectReflectionActivity" android:noHistory="true" />
 
         <activity android:name=".activities.ChooseNativeLangActivity" android:noHistory="true"/>
         <activity android:name=".activities.ChooseForeignLangActivity" android:noHistory="true" />
