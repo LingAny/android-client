@@ -68,19 +68,4 @@ public class SprintButtonsFragment extends Fragment {
                     });
         }
     }
-
-    public void setWordsOnButtons(String translationWord, java.util.List<String> words) {
-        int translationPosition = (int) (Math.random() * 3);
-        for (int i = 0, j = 0; i < buttons.size(); ++i) {
-            if (i == translationPosition) {
-                buttons.get(i).setText(translationWord);
-            } else {
-                if (words.size() < 1) {
-                    break;
-                }
-                buttons.get(i).setText(words.get(j));
-                ++j;
-            }
-        }
-    }
 }

@@ -28,10 +28,10 @@ import ru.tp.lingany.lingany.sdk.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
 
-public class TrainingActivity extends AppCompatActivity {
+public class TrainingActivity extends AppCompatActivity implements FindTranslationButtonsFragment.FindTranslationBtnListener {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
-
+    FragmentManager fragmentManager;
     private Category category;
     private List<Training> trainings;
     private Training currentTraining;
@@ -105,6 +105,8 @@ public class TrainingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_training);
+        fragmentManager = getSupportFragmentManager();
+
 
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
@@ -119,54 +121,38 @@ public class TrainingActivity extends AppCompatActivity {
 
     private void inizializeTranslationFragments() {
         String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
-        inizializeHeader(TRAINING_FIND_TRANSLATION_TITLE);
-        inizializeMarksForTranslation();
-        inizializeTranslationButtons();
-    }
-
-    private void inizializeSprintFragments() {
-        String TRAINING_Sprint_TITLE = "Sprint";
-        inizializeHeader(TRAINING_Sprint_TITLE);
-        inizializeMarksForTranslation();
-        inizializeTranslationButtons();
-    }
-
-    private void inizializeTranslationButtons() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        translationButtonsFragment = FindTranslationButtonsFragment.newInstance(new ButtonClickCallbackFindTranslation());
-        transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
-        transaction.commit();
-    }
 
-    private void inizializeMarksForTranslation() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
+        transaction.replace(R.id.trainingHeaderContainer, headerFragment);
+
         marksForTranslationFragment = new MarksForTranslationFragment();
         transaction.replace(R.id.marksContainer, marksForTranslationFragment);
+
+        translationButtonsFragment = new FindTranslationButtonsFragment();
+        transaction.replace(R.id.buttonsContainer, translationButtonsFragment);
+
         transaction.commit();
     }
 
-    private<T> void inizializeHeader(String title, T fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        TrainingHeaderFragment trainingHeaderFragment = TrainingHeaderFragment.newInstance(title);
-        transaction.replace(R.id.trainingHeaderContainer, fragment);
-        transaction.commit();
-    }
-
-    public class ButtonClickCallbackFindTranslation implements FindTranslationButtonsFragment.OnClickCallback, Serializable {
-        @Override
-        public void onClick(View view) {
-            proccessAnswerTranslation(view);
-        }
-    }
+//    private void inizializeSprintFragments() {
+//        String TRAINING_Sprint_TITLE = "Sprint";
+//        inizializeHeader(TRAINING_Sprint_TITLE);
+//        inizializeMarksForTranslation();
+//        inizializeTranslationButtons();
+//    }
 
     public class ButtonClickCallbackSprint implements SprintButtonsFragment.OnClickCallback, Serializable {
         @Override
         public void onClick(View view) {
             proccessAnswerSprint(view);
         }
+    }
+
+
+    @Override
+    public void onFindTranslationBtnClick(View view) {
+        proccessAnswerTranslation(view);
     }
 
 }

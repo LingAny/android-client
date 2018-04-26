@@ -1,5 +1,6 @@
 package ru.tp.lingany.lingany.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,27 +20,11 @@ import ru.tp.lingany.lingany.R;
 public class FindTranslationButtonsFragment extends Fragment {
     private List<TextView> buttons = new ArrayList<>();
 
-    public interface OnClickCallback {
-        void onClick(View view);
+    public interface FindTranslationBtnListener {
+        void onFindTranslationBtnClick(View view);
     }
 
-    private OnClickCallback callback;
-
-    public static FindTranslationButtonsFragment newInstance(OnClickCallback listener) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("listener", (Serializable) listener);
-
-        FindTranslationButtonsFragment fragment = new FindTranslationButtonsFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    private void readBundle(Bundle bundle) {
-        if (bundle != null) {
-            callback = (OnClickCallback) bundle.getSerializable("listener");
-        }
-    }
+    private FindTranslationBtnListener findTranslationBtnListenerl;
 
     @Nullable
     @Override
@@ -54,14 +39,12 @@ public class FindTranslationButtonsFragment extends Fragment {
             buttons.add((TextView) getView().findViewById(R.id.rightUpperButton));
             buttons.add((TextView) getView().findViewById(R.id.rightDownButton));
 
-            readBundle(getArguments());
-
             for (View button:buttons) {
                 button.setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                callback.onClick(v);
+                                findTranslationBtnListenerl.onFindTranslationBtnClick(v);
                             }
                         });
             }
@@ -80,5 +63,11 @@ public class FindTranslationButtonsFragment extends Fragment {
                 ++j;
             }
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        findTranslationBtnListenerl = (FindTranslationBtnListener) context;
     }
 }
