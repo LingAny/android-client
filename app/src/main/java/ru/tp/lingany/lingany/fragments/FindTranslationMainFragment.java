@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.activities.TrainingActivity;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
@@ -57,7 +56,7 @@ public class FindTranslationMainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_translations_main, null, false);
+        return inflater.inflate(R.layout.fragment_find_translations, null, false);
     }
 
     @Override
