@@ -7,6 +7,9 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.UUID;
+
+import ru.tp.lingany.lingany.activities.CategoryActivity;
 import ru.tp.lingany.lingany.activities.SelectReflectionActivity;
 
 
@@ -25,21 +28,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
 
-        startActivity(new Intent(MainActivity.this, SelectReflectionActivity.class));
-//
-//        if (!isInitRef) {
-//            startActivity(new Intent(MainActivity.this, ChooseNativeLangActivity.class));
-//        } else {
-//            String refIdKey = getString(R.string.reflectionId);
-//            String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
-//            Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
-//            intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflectionId);
-//            startActivity(intent);
-//        }
+        if (!isInitRef) {
+            startActivity(new Intent(MainActivity.this, SelectReflectionActivity.class));
+        } else {
+            String refIdKey = getString(R.string.reflectionId);
+            String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
+            Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+            intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflectionId);
+            startActivity(intent);
+        }
 
         Log.i(TAG, "onStart");
     }
