@@ -20,7 +20,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
-public class FindTranslationMainFragment extends Fragment {
+public class FindTranslationFragment extends Fragment {
     private List<TextView> buttons = new ArrayList<>();
 
     public interface FindTranslationListener {
@@ -35,11 +35,11 @@ public class FindTranslationMainFragment extends Fragment {
     private TextView wordToTranslate;
     private LayoutInflater inflater;
 
-    public static FindTranslationMainFragment newInstance(List<Training> trainings) {
+    public static FindTranslationFragment newInstance(List<Training> trainings) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("trainings", (Serializable) trainings);
 
-        FindTranslationMainFragment fragment = new FindTranslationMainFragment();
+        FindTranslationFragment fragment = new FindTranslationFragment();
         fragment.setArguments(bundle);
 
         return fragment;
@@ -48,7 +48,8 @@ public class FindTranslationMainFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            trainings = (List<Training>) bundle.getSerializable("trainings");
+            List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
+            trainings = new ArrayList<>(localTrainings);
         }
     }
 
@@ -87,6 +88,7 @@ public class FindTranslationMainFragment extends Fragment {
     private void setAll() {
         if (trainings.size() < 4) {
             finish();
+            return;
         }
         Training training = trainings.get(0);
         currentTraining = training;
@@ -121,25 +123,6 @@ public class FindTranslationMainFragment extends Fragment {
         }
     }
 
-    private void processAnswer(View view) {
-        TextView textView = (TextView) view;
-        if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
-            setMark();
-        } else {
-            setCross();
-        }
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 2000ms
-                trainings.remove(0);
-                setAll();
-            }
-        }, 1000);
-    }
-
     public void setWordToTranslate(String word) {
         wordToTranslate.setText(word);
     }
@@ -158,6 +141,27 @@ public class FindTranslationMainFragment extends Fragment {
 
     public void clearMarkAndCross() {
         markCrossContainer.removeAllViews();
+    }
+
+    private void processAnswer(View view) {
+        TextView textView = (TextView) view;
+        if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
+            setMark();
+        } else {
+            setCross();
+        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 2000ms
+                if (trainings.size() > 0) {
+                    trainings.remove(0);
+                    setAll();
+                }
+            }
+        }, 1000);
     }
 
     @Override

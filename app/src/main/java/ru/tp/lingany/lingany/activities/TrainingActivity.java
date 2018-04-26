@@ -13,7 +13,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.fragments.FindTranslationMainFragment;
+import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
 import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
@@ -22,15 +22,13 @@ import ru.tp.lingany.lingany.sdk.trainings.Training;
 
 
 public class TrainingActivity extends AppCompatActivity implements
-        FindTranslationMainFragment.FindTranslationListener,
+        FindTranslationFragment.FindTranslationListener,
         SprintFragment.SprintListener {
 
     enum Mode { FIND_TRANSLATION, SPRINT }
-    private Mode mode;
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     private FragmentManager fragmentManager;
-    private Category category;
     private List<Training> trainings;
 
 
@@ -49,8 +47,6 @@ public class TrainingActivity extends AppCompatActivity implements
         }
     };
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +55,7 @@ public class TrainingActivity extends AppCompatActivity implements
         fragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
-        category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
+        Category category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
         Api.getInstance().training().getForCategory(category, getForCategoryListener);
     }
 
@@ -68,7 +64,7 @@ public class TrainingActivity extends AppCompatActivity implements
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
-        FindTranslationMainFragment translationButtonsFragment = FindTranslationMainFragment.newInstance(trainings);
+        FindTranslationFragment translationButtonsFragment = FindTranslationFragment.newInstance(trainings);
 
         transaction.replace(R.id.trainingHeaderContainer, headerFragment);
         transaction.replace(R.id.trainingBodyContainer, translationButtonsFragment);
@@ -90,22 +86,21 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void changeMode(Mode newMode) {
-        mode = newMode;
-        if (mode == Mode.FIND_TRANSLATION) {
+        if (newMode == Mode.FIND_TRANSLATION) {
             inizializeTranslationFragments();
-        } else if (mode == Mode.SPRINT) {
+        } else if (newMode == Mode.SPRINT) {
             inizializeSprintFragments();
         }
     }
 
     @Override
     public void onFindTranslationFinished() {
-
+        changeMode(Mode.SPRINT);
     }
 
     @Override
     public void onSprintFinished() {
-//        proccessAnswerSprint(view);
+        changeMode(Mode.FIND_TRANSLATION);
     }
 
 }

@@ -54,7 +54,8 @@ public class SprintFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            trainings = (List<Training>) bundle.getSerializable("trainings");
+            List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
+            trainings = new ArrayList<>(localTrainings);
         }
     }
 
@@ -94,6 +95,7 @@ public class SprintFragment extends Fragment {
     private void setAll() {
         if (trainings.size() < 1) {
             finish();
+            return;
         }
         Training training = trainings.get(0);
 
@@ -164,8 +166,10 @@ public class SprintFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                trainings.remove(0);
-                setAll();
+                if (trainings.size() > 0) {
+                    trainings.remove(0);
+                    setAll();
+                }
             }
         }, 1000);
     }
