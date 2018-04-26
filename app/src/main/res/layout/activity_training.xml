@@ -19,20 +19,13 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/marksContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/trainingBodyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:paddingTop="50dp"
             android:orientation="vertical"
             android:layout_gravity="center">
         </FrameLayout>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/buttonsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_gravity="bottom">
-    </FrameLayout>
 
 </FrameLayout>
