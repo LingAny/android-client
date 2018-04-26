@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.activities.TrainingActivity;
 import ru.tp.lingany.lingany.sdk.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
@@ -55,7 +54,9 @@ public class SprintFragment extends Fragment {
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
-            trainings = new ArrayList<>(localTrainings);
+            if (localTrainings != null) {
+                trainings = new ArrayList<>(localTrainings);
+            }
         }
     }
 
@@ -63,7 +64,7 @@ public class SprintFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_marks_sprint, null, false);
+        return inflater.inflate(R.layout.fragment_sprint, null, false);
     }
 
     @Override
@@ -74,8 +75,8 @@ public class SprintFragment extends Fragment {
         wordToTranslate = getView().findViewById(R.id.wordToTranslateSprint);
         wordTranslation = getView().findViewById(R.id.wordTranslationSprint);
 
-        TextView agreeButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.agreeButton);
-        TextView notAgreeButton = (TextView) getView().findViewById(R.id.notAgreeButton);
+        TextView agreeButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
+        TextView notAgreeButton = (TextView) getView().findViewById(R.id.notAgreeButtonSprint);
 
         List<TextView> buttons = new ArrayList<>();
         buttons.add(agreeButton);
@@ -147,7 +148,7 @@ public class SprintFragment extends Fragment {
 
     private void processAnswer(View view) {
         TextView textView = (TextView) view;
-        if (textView.getId() == R.id.agreeButton) {
+        if (textView.getId() == R.id.agreeButtonSprint) {
             if (getRealTranslationText().equals(getWordTranslationText())) {
                 addMark();
             } else {

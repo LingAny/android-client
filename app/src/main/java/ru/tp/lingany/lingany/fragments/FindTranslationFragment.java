@@ -49,7 +49,9 @@ public class FindTranslationFragment extends Fragment {
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
             List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
-            trainings = new ArrayList<>(localTrainings);
+            if (localTrainings != null) {
+                trainings = new ArrayList<>(localTrainings);
+            }
         }
     }
 

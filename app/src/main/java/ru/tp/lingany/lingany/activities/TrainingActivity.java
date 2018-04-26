@@ -31,12 +31,11 @@ public class TrainingActivity extends AppCompatActivity implements
     private FragmentManager fragmentManager;
     private List<Training> trainings;
 
-
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.SPRINT);
+            changeMode(Mode.FIND_TRANSLATION);
 
             Log.i("FindTranslationActivity", "onResponse");
         }

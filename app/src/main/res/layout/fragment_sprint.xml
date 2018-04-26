@@ -30,22 +30,21 @@
 
     <FrameLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:id="@+id/fragmentSprintButtons">
+        android:layout_width="match_parent">
         <Button
-            android:id="@+id/agreeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:id="@+id/agreeButtonSprint"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:textSize="23sp"
             android:layout_gravity="start|bottom"
             android:text="@string/agreeButton"
             />
 
         <Button
-            android:id="@+id/notAgreeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:id="@+id/notAgreeButtonSprint"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:textSize="23sp"
             android:layout_gravity="end|bottom"
             android:text="@string/notAgreeButton"
             />
