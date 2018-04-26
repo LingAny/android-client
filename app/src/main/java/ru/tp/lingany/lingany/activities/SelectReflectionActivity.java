@@ -102,8 +102,10 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         switch (currentRequest) {
             case API_GET_ALL_LANGUAGES:
                 Api.getInstance().languages().getAll(listener);
+                break;
             case API_GET_REFLECTION_FOR_LANGUAGES:
                 Api.getInstance().reflections().getByLanguages(nativeLang, foreignLang, getByLangListener);
+                break;
         }
     }
 
