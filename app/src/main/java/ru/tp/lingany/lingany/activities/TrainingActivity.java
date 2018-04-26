@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationButtonsFragment;
 import ru.tp.lingany.lingany.fragments.MarksForTranslationFragment;
 import ru.tp.lingany.lingany.fragments.SprintButtonsFragment;
+import ru.tp.lingany.lingany.fragments.SprintMarksFragment;
 import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
@@ -32,6 +32,9 @@ public class TrainingActivity extends AppCompatActivity implements
         FindTranslationButtonsFragment.FindTranslationBtnListener,
         SprintButtonsFragment.SprintBtnListener {
 
+    enum Mode { FIND_TRANSLATION, SPRINT }
+    Mode mode;
+
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     FragmentManager fragmentManager;
     private Category category;
@@ -41,11 +44,15 @@ public class TrainingActivity extends AppCompatActivity implements
     private MarksForTranslationFragment marksForTranslationFragment;
     private FindTranslationButtonsFragment translationButtonsFragment;
 
+    private SprintButtonsFragment sprintButtonsFragment;
+    private SprintMarksFragment sprintMarksFragment;
+
+
     private final ParsedRequestListener<List<Training>> getForCategoryListener = new ParsedRequestListener<List<Training>>() {
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            setWords();
+            setAll();
 
             Log.i("FindTranslationActivity", "onResponse");
         }
@@ -56,9 +63,62 @@ public class TrainingActivity extends AppCompatActivity implements
         }
     };
 
-    private void setWords() {
+    private void setAll() {
+        if (mode.equals(Mode.FIND_TRANSLATION)) {
+            setTranslationMode();
+        } else if (mode.equals(Mode.SPRINT)) {
+            setSprintMode();
+        }
+    }
+
+    private void setSprintMode() {
         if (trainings.size() < 4) {
-//            to next game
+            changeMode(Mode.FIND_TRANSLATION);
+        }
+        Training training = trainings.get(0);
+        currentTraining = training;
+
+        sprintMarksFragment.setWordToTranslate(training.getForeignWord());
+
+        int index = RandArray.getRandIndex( 0, trainings.size() - 1);
+        if (index % 2 == 0) {
+            sprintMarksFragment.setWordTranslation(training.getNativeWord(), training.getNativeWord());
+        } else {
+            sprintMarksFragment.setWordTranslation(training.getNativeWord(), trainings.get(index).getNativeWord());
+        }
+    }
+
+    private void proccessAnswerSprint(View view) {
+        TextView textView = (TextView) view;
+        if (textView.getText() == "Yes") {
+            if (sprintMarksFragment.getRealTranslationText().equals(sprintMarksFragment.getWordTranslationText())) {
+                sprintMarksFragment.addMark();
+            } else {
+                sprintMarksFragment.addCross();
+            }
+        } else {
+            if (sprintMarksFragment.getRealTranslationText().equals(sprintMarksFragment.getWordTranslationText())) {
+                sprintMarksFragment.addCross();
+            } else {
+                sprintMarksFragment.addMark();
+
+            }
+        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 2000ms
+                trainings.remove(0);
+                setAll();
+            }
+        }, 2000);
+    }
+
+    private void setTranslationMode() {
+        if (trainings.size() < 4) {
+            changeMode(Mode.SPRINT);
         }
         Training training = trainings.get(0);
         currentTraining = training;
@@ -69,7 +129,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void setTranslationButtons(Training training) {
-        List<Integer> indexes = RandArray.getRandIdx(3, 0, trainings.size() - 1);
+        List<Integer> indexes = RandArray.getRandIndexes(3, 0, trainings.size() - 1);
         List<String> words = new ArrayList<>();
 
         for (Integer index: indexes) {
@@ -77,11 +137,6 @@ public class TrainingActivity extends AppCompatActivity implements
         }
         translationButtonsFragment.setWordsOnButtons(training.getNativeWord(), words);
     }
-
-    private void proccessAnswerSprint(View view) {
-
-    }
-
 
     private void proccessAnswerTranslation(View view) {
         TextView textView = (TextView) view;
@@ -97,7 +152,7 @@ public class TrainingActivity extends AppCompatActivity implements
             public void run() {
                 //Do something after 2000ms
                 trainings.remove(0);
-                setWords();
+                setAll();
             }
         }, 2000);
     }
@@ -113,8 +168,7 @@ public class TrainingActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
-        inizializeTranslationFragments();
-        updateTrainings();
+        changeMode(Mode.SPRINT);
     }
 
     private void updateTrainings() {
@@ -137,6 +191,31 @@ public class TrainingActivity extends AppCompatActivity implements
         transaction.commit();
     }
 
+    private void inizializeSprintFragments() {
+        String TRAINING_SPRINT_TITLE = "Sprint";
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_SPRINT_TITLE);
+        transaction.replace(R.id.trainingHeaderContainer, headerFragment);
+
+        sprintMarksFragment = new SprintMarksFragment();
+        transaction.replace(R.id.marksContainer, sprintMarksFragment);
+
+        sprintButtonsFragment = new SprintButtonsFragment();
+        transaction.replace(R.id.buttonsContainer, sprintButtonsFragment);
+
+        transaction.commit();
+    }
+
+    private void changeMode(Mode newMode) {
+        mode = newMode;
+        if (mode == Mode.FIND_TRANSLATION) {
+            inizializeTranslationFragments();
+        } else if (mode == Mode.SPRINT) {
+            inizializeSprintFragments();
+        }
+        updateTrainings();
+    }
 
     @Override
     public void onFindTranslationBtnClick(View view) {
