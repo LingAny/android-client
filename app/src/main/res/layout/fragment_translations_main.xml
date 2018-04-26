@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_gravity="center|top"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/wordToTranslate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30sp"
+        />
+    <LinearLayout
+        android:id="@+id/containerMarkAndCross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <Button
+            android:id="@+id/leftUpperButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_gravity="start|top"
+            />
+
+        <Button
+            android:id="@+id/leftDownButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_gravity="start|bottom"
+            />
+
+        <Button
+            android:id="@+id/rightUpperButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_gravity="end|top"
+            />
+
+        <Button
+            android:id="@+id/rightDownButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_gravity="end|bottom"
+            />
+    </FrameLayout>
+
+</LinearLayout>
