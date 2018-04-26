@@ -1,5 +1,6 @@
 package ru.tp.lingany.lingany.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,27 +20,11 @@ public class SprintButtonsFragment extends Fragment {
     TextView agreeButton;
     TextView notAgreeButton;
 
-    public interface OnClickCallback {
-        void onClick(View view);
+    public interface SprintBtnListener {
+        void onSprintBtnClick(View view);
     }
 
-    private OnClickCallback callback;
-
-    public static SprintButtonsFragment newInstance(OnClickCallback listener) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("listener", (Serializable) listener);
-
-        SprintButtonsFragment fragment = new SprintButtonsFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
-    private void readBundle(Bundle bundle) {
-        if (bundle != null) {
-            callback = (OnClickCallback) bundle.getSerializable("listener");
-        }
-    }
+    private SprintBtnListener sprintBtnListener;
 
     @Nullable
     @Override
@@ -53,8 +37,6 @@ public class SprintButtonsFragment extends Fragment {
         agreeButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.agreeButton);
         notAgreeButton = (TextView) getView().findViewById(R.id.notAgreeButton);
 
-        readBundle(getArguments());
-
         List<TextView> buttons = new ArrayList<>();
         buttons.add(agreeButton);
         buttons.add(notAgreeButton);
@@ -63,9 +45,15 @@ public class SprintButtonsFragment extends Fragment {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            callback.onClick(v);
+                            sprintBtnListener.onSprintBtnClick(v);
                         }
                     });
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        sprintBtnListener = (SprintBtnListener) context;
     }
 }

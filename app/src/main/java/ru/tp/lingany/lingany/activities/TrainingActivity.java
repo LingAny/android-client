@@ -28,7 +28,9 @@ import ru.tp.lingany.lingany.sdk.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
 
-public class TrainingActivity extends AppCompatActivity implements FindTranslationButtonsFragment.FindTranslationBtnListener {
+public class TrainingActivity extends AppCompatActivity implements
+        FindTranslationButtonsFragment.FindTranslationBtnListener,
+        SprintButtonsFragment.SprintBtnListener {
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     FragmentManager fragmentManager;
@@ -135,24 +137,15 @@ public class TrainingActivity extends AppCompatActivity implements FindTranslati
         transaction.commit();
     }
 
-//    private void inizializeSprintFragments() {
-//        String TRAINING_Sprint_TITLE = "Sprint";
-//        inizializeHeader(TRAINING_Sprint_TITLE);
-//        inizializeMarksForTranslation();
-//        inizializeTranslationButtons();
-//    }
-
-    public class ButtonClickCallbackSprint implements SprintButtonsFragment.OnClickCallback, Serializable {
-        @Override
-        public void onClick(View view) {
-            proccessAnswerSprint(view);
-        }
-    }
-
 
     @Override
     public void onFindTranslationBtnClick(View view) {
         proccessAnswerTranslation(view);
+    }
+
+    @Override
+    public void onSprintBtnClick(View view) {
+        proccessAnswerSprint(view);
     }
 
 }
