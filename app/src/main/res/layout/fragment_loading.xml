@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragmentLoading"
+    tools:context=".activities.SelectReflectionActivity">
+
+    <com.victor.loading.rotate.RotateLoading
+        android:id="@+id/loader"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:loading_speed="11"
+        app:loading_width="5dp"
+        app:loading_color="@color/colorPrimaryDark"
+        android:layout_gravity="center_vertical|center_horizontal"
+        />
+
+    <ImageView
+        android:id="@+id/refresh"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/icon_refresh"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="invisible"/>
+
+</FrameLayout>
