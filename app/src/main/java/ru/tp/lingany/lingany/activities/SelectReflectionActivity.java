@@ -14,6 +14,7 @@ import ru.tp.lingany.lingany.fragments.SelectNativeLangFragment;
 import ru.tp.lingany.lingany.fragments.SelectForeignLangFragment;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
+
 public class SelectReflectionActivity extends AppCompatActivity implements
         SelectNativeLangFragment.NativeLangClickListener,
         SelectForeignLangFragment.ForeignLangClickListener {
