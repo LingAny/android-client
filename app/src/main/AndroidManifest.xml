@@ -29,7 +29,6 @@
         <activity android:name=".activities.ReflectionActivity" android:noHistory="true" />
         <activity android:name=".activities.CategoryActivity" />
         <activity android:name=".activities.TrainingActivity" />
-        <activity android:name=".activities.TrainingSprintActivity" />
     </application>
 
 
