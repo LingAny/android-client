@@ -38,11 +38,38 @@ public class SelectNativeLangFragment extends Fragment {
         void onNativeLangClick(View view, List<Language> supportedLanguages, int position);
     }
 
-    private class LangClickListener implements LanguagesAdapter.ItemClickListener {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_select_native_lang, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        title = view.findViewById(R.id.title);
+        progressBar = view.findViewById(R.id.progressBar);
+        langRecyclerView = view.findViewById(R.id.languages);
+
+
+        title.setText(getString(R.string.loadSupportedLang));
+        progressBar.setVisibility(View.VISIBLE);
+
+        RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
+        langRecyclerView.setLayoutManager(categoryLayoutManager);
+
+        Api.getInstance().languages().getAll(listener);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        nativeLangClickListener = (NativeLangClickListener) context;
+    }
+
+    private class ItemClickListener implements LanguagesAdapter.ItemClickListener {
 
         @Override
         public void onClick(View view, int position) {
-            Log.i("tag", "[SelectNativeLangFragment] [LangClickListener] [onClick]");
             nativeLangClickListener.onNativeLangClick(view, supportedLanguages, position);
         }
     }
@@ -53,7 +80,7 @@ public class SelectNativeLangFragment extends Fragment {
             supportedLanguages = languages;
             title.setText(getString(R.string.chooseNativeLang));
             progressBar.setVisibility(View.INVISIBLE);
-            langRecyclerView.setAdapter(new LanguagesAdapter(languages, new SelectNativeLangFragment.LangClickListener()));
+            langRecyclerView.setAdapter(new LanguagesAdapter(languages, new ItemClickListener()));
         }
 
         @Override
@@ -61,32 +88,4 @@ public class SelectNativeLangFragment extends Fragment {
             Log.e("tag", anError.toString());
         }
     };
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_select_native_lang, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        progressBar = view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-
-        langRecyclerView = view.findViewById(R.id.languages);
-
-        RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
-        langRecyclerView.setLayoutManager(categoryLayoutManager);
-
-        title = view.findViewById(R.id.title);
-        title.setText(getString(R.string.loadSupportedLang));
-
-        Api.getInstance().languages().getAll(listener);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        nativeLangClickListener = (NativeLangClickListener) context;
-    }
 }
