@@ -2,13 +2,9 @@ package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -17,69 +13,106 @@ import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.adapters.CategoryAdapter;
+import ru.tp.lingany.lingany.fragments.LoadingFragment;
+import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity implements
+        LoadingFragment.RefreshListener,
+        SelectCategoryFragment.CategoryClickListener {
 
-    public static final String EXTRA_REFLECTION = "EXTRA_REFLECTION";
-
-    private ProgressBar progress;
+    private UUID refId;
 
     private List<Category> categories;
 
-    private RecyclerView categoryRecyclerView;
+    private LoadingFragment loadingFragment;
 
-    private class CategoryClickListener implements CategoryAdapter.ItemClickListener {
+    public static final String EXTRA_REFLECTION = "EXTRA_REFLECTION";
 
-        @Override
-        public void onClick(View view, int position) {
-            Log.i("tag", "[CategoryClickListener.onClick]");
-            Category category = categories.get(position);
-
-            Intent intent = new Intent(CategoryActivity.this, TrainingActivity.class);
-//            Intent intent = new Intent(CategoryActivity.this, TrainingSprintActivity.class);
-            intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
-            startActivity(intent);
-        }
-    }
-
-    private final ParsedRequestListener<List<Category>> getForRefListener = new ParsedRequestListener<List<Category>>() {
-        @Override
-        public void onResponse(List<Category> response) {
-            Log.i("tag","onResponse");
-            categories = response;
-            progress.setVisibility(View.INVISIBLE);
-            categoryRecyclerView.setAdapter(new CategoryAdapter(categories, new CategoryClickListener()));
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            Log.e("tag", anError.toString());
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_category);
 
-        categoryRecyclerView = findViewById(R.id.categories);
-        RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(this);
-        categoryRecyclerView.setLayoutManager(categoryLayoutManager);
+        refId = getRefId();
+        loadingFragment = new LoadingFragment();
 
+        inflateLoadingFragment();
+        getCategoriesForReflection();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (getForRefListenerHandler != null) {
+            getForRefListenerHandler.unregister();
+        }
+    }
+
+    @Override
+    public void onClickCategory(int position) {
+        Category category = categories.get(position);
+        Intent intent = new Intent(CategoryActivity.this, TrainingActivity.class);
+        intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadingFragment.startLoading();
+        getCategoriesForReflection();
+    }
+
+    private ListenerHandler getForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Category>>() {
+        @Override
+        public void onResponse(List<Category> response) {
+            categories = response;
+            loadingFragment.stopLoading();
+            inflateSelectCategoryFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
+        }
+
+        @Override
+        public void onError(ANError anError) {
+            loadingFragment.showRefresh();
+        }
+    });
+
+    @SuppressWarnings("unchecked")
+    private void getCategoriesForReflection() {
+        ParsedRequestListener<List<Category>> listener = (ParsedRequestListener<List<Category>>) getForRefListenerHandler.asListener();
+        Api.getInstance().categories().getForReflection(refId, listener);
+    }
+
+    private UUID getRefId() {
         Intent intent = getIntent();
-        UUID reflectionId = UUID.fromString(intent.getStringExtra(EXTRA_REFLECTION));
+        return UUID.fromString(intent.getStringExtra(EXTRA_REFLECTION));
+    }
 
-        TextView title = findViewById(R.id.title);
-        title.setText(reflectionId.toString());
+    private void inflateSelectCategoryFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, SelectCategoryFragment.getInstance(categories))
+                .commit();
+    }
 
-        progress = findViewById(R.id.progress);
-        progress.setVisibility(View.VISIBLE);
+    private void inflateLoadingFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, loadingFragment)
+                .commit();
+    }
 
-        Api.getInstance().categories().getForReflection(reflectionId, getForRefListener);
+    private void inflateSelectCategoryFragment(int delayMillis) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                inflateSelectCategoryFragment();
+            }
+        }, delayMillis);
     }
 }
