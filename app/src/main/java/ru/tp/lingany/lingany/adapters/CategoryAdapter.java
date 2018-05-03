@@ -32,8 +32,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
-        Category lang = data.get(position);
-        holder.title.setText(lang.getTitle());
+        Category category = data.get(position);
+        holder.title.setText(category.getTitle());
     }
 
     @Override
