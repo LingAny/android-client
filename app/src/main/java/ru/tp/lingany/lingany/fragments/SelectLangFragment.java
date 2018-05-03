@@ -20,45 +20,45 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 
-public class SelectForeignLangFragment extends Fragment {
+public class SelectLangFragment extends Fragment {
 
-    private TextView title;
-    private RecyclerView langRecyclerView;
-    private ForeignLangClickListener foreignLangClickListener;
-
+    private String title;
     private List<Language> languages;
 
-    private static final String SUPPORTED_FOREIGN_LANGUAGES = "SUPPORTED_FOREIGN_LANGUAGES";
+    private LangClickListener langClickListener;
 
+    private static final String LANGUAGES = "LANGUAGES";
+    private static final String TITLE = "TITLE";
 
-    public static SelectForeignLangFragment getInstance(List<Language> foreignLanguages) {
+    public static SelectLangFragment getInstance(String title, List<Language> languages) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(SUPPORTED_FOREIGN_LANGUAGES, (Serializable) foreignLanguages);
 
-        SelectForeignLangFragment fragment = new SelectForeignLangFragment();
+        bundle.putSerializable(TITLE, title);
+        bundle.putSerializable(LANGUAGES, (Serializable) languages);
+
+        SelectLangFragment fragment = new SelectLangFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public interface ForeignLangClickListener {
-        void onForeignLangClick(View view, int position);
+    public interface LangClickListener {
+        void onClickLanguage(int position);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_select_foreign_lang, container, false);
+        return inflater.inflate(R.layout.fragment_select_native_lang, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         readBundle(Objects.requireNonNull(getArguments()));
 
-        title = view.findViewById(R.id.title);
-        langRecyclerView = view.findViewById(R.id.languages);
+        TextView titleTextView = view.findViewById(R.id.title);
+        RecyclerView langRecyclerView = view.findViewById(R.id.languages);
 
-        title.setText(getString(R.string.chooseForeignLang));
+        titleTextView.setText(title);
 
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
         langRecyclerView.setLayoutManager(categoryLayoutManager);
@@ -68,20 +68,20 @@ public class SelectForeignLangFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        foreignLangClickListener = (ForeignLangClickListener) context;
+        langClickListener = (LangClickListener) context;
     }
 
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
-        languages = (List<Language>) bundle.getSerializable(SUPPORTED_FOREIGN_LANGUAGES);
+        title = (String) bundle.getSerializable(TITLE);
+        languages = (List<Language>) bundle.getSerializable(LANGUAGES);
     }
 
     private class ItemClickListener implements LanguagesAdapter.ItemClickListener {
 
         @Override
         public void onClick(View view, int position) {
-            foreignLangClickListener.onForeignLangClick(view, position);
+            langClickListener.onClickLanguage(position);
         }
     }
-
 }
