@@ -15,7 +15,7 @@ import ru.tp.lingany.lingany.sdk.categories.Category;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private List<Category> data;
-    ItemClickListener itemClickListener;
+    private ItemClickListener itemClickListener;
 
 
     public CategoryAdapter(List<Category> data, ItemClickListener listener) {
@@ -43,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public interface ItemClickListener {
 
-        public void onClick(View view, int position);
+        void onClick(View view, int position);
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
