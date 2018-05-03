@@ -20,6 +20,7 @@ import ru.tp.lingany.lingany.fragments.SelectLangFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.languages.Language;
 import ru.tp.lingany.lingany.sdk.reflections.Reflection;
+import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
 public class SelectReflectionActivity extends AppCompatActivity implements
@@ -32,18 +33,19 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
     private Reflection reflection;
 
-    private List<Language> supportedLanguages;
     private List<Language> foreignLanguages;
+
+    private List<Language> supportedLanguages;
 
     private LoadingFragment loadingFragment;
 
-    private enum Requests {API_GET_ALL_LANGUAGES, API_GET_REFLECTION_FOR_LANGUAGES, NONE}
-
     private enum LangTypes {NATIVE, FOREIGN, NONE}
 
-    private Requests request = Requests.NONE;
-    private LangTypes langType = LangTypes.NONE;
+    private enum Requests {API_GET_ALL_LANGUAGES, API_GET_REFLECTION_BY_LANGUAGES, NONE}
 
+    private Requests request = Requests.NONE;
+
+    private LangTypes langType = LangTypes.NONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,18 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         loadingFragment = new LoadingFragment();
         inflateLoadingFragment();
 
-        request = Requests.API_GET_ALL_LANGUAGES;
-        Api.getInstance().languages().getAll(getAllLangListener);
+        getAllLanguages();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (getAllLangListenerHandler != null) {
+            getAllLangListenerHandler.unregister();
+        }
+        if (getReflectionByLangListener != null) {
+            getReflectionByLangListener.unregister();
+        }
     }
 
     @Override
@@ -74,30 +86,30 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         loadingFragment.startLoading();
         switch (request) {
             case API_GET_ALL_LANGUAGES:
-                Api.getInstance().languages().getAll(getAllLangListener);
+                getAllLanguages();
                 break;
-            case API_GET_REFLECTION_FOR_LANGUAGES:
-                Api.getInstance().reflections().getByLanguages(nativeLang, foreignLang, getByLangListener);
+            case API_GET_REFLECTION_BY_LANGUAGES:
+                getReflectionByLanguages();
                 break;
         }
     }
 
-    private final ParsedRequestListener<List<Language>> getAllLangListener = new ParsedRequestListener<List<Language>>() {
+    private ListenerHandler getAllLangListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Language>>() {
         @Override
         public void onResponse(List<Language> response) {
             supportedLanguages = response;
             loadingFragment.stopLoading();
             inflateNativeLangFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
-            request = Requests.NONE;
+            dropRequestType();
         }
 
         @Override
         public void onError(ANError anError) {
             loadingFragment.showRefresh();
         }
-    };
+    });
 
-    private final ParsedRequestListener<Reflection> getByLangListener = new ParsedRequestListener<Reflection>() {
+    private ListenerHandler getReflectionByLangListener = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<Reflection>() {
         @Override
         public void onResponse(Reflection response) {
             reflection = response;
@@ -105,14 +117,15 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
             saveReflection();
             startCategoryActivity();
-            request = Requests.NONE;
+            dropRequestType();
+            dropLangType();
         }
 
         @Override
         public void onError(ANError anError) {
             loadingFragment.showRefresh();
         }
-    };
+    });
 
     private void selectNativeLang(int position) {
         nativeLang = supportedLanguages.get(position);
@@ -124,8 +137,7 @@ public class SelectReflectionActivity extends AppCompatActivity implements
     private void selectForeignLang(int position) {
         foreignLang = foreignLanguages.get(position);
         inflateLoadingFragment();
-        request = Requests.API_GET_REFLECTION_FOR_LANGUAGES;
-        Api.getInstance().reflections().getByLanguages(nativeLang, foreignLang, getByLangListener);
+        getReflectionByLanguages();
     }
 
     private void inflateNativeLangFragment() {
@@ -180,5 +192,27 @@ public class SelectReflectionActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         }, getResources().getInteger(R.integer.delayInflateAfterLoading));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void getAllLanguages() {
+        request = Requests.API_GET_ALL_LANGUAGES;
+        ParsedRequestListener<List<Language>> listener = (ParsedRequestListener<List<Language>>) getAllLangListenerHandler.asListener();
+        Api.getInstance().languages().getAll(listener);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void getReflectionByLanguages() {
+        request = Requests.API_GET_REFLECTION_BY_LANGUAGES;
+        ParsedRequestListener<Reflection> listener = (ParsedRequestListener<Reflection>) getReflectionByLangListener.asListener();
+        Api.getInstance().reflections().getByLanguages(nativeLang, foreignLang, listener);
+    }
+
+    private void dropRequestType() {
+        request = Requests.NONE;
+    }
+
+    private void dropLangType() {
+        langType = LangTypes.NONE;
     }
 }
