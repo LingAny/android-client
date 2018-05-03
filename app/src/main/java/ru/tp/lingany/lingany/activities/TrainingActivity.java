@@ -56,7 +56,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.FIND_TRANSLATION);
+            changeMode(Mode.SPRINT);
             loadingFragment.stopLoading();
         }
 
