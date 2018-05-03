@@ -52,7 +52,7 @@ public class SelectCategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         readBundle(Objects.requireNonNull(getArguments()));
 
-        RecyclerView langRecyclerView = view.findViewById(R.id.languages);
+        RecyclerView langRecyclerView = view.findViewById(R.id.categories);
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
         langRecyclerView.setLayoutManager(categoryLayoutManager);
         langRecyclerView.setAdapter(new CategoryAdapter(categories, new ItemClickListener()));
