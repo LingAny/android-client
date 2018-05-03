@@ -1,9 +1,13 @@
 package ru.tp.lingany.lingany.utils;
 
+import android.os.Handler;
+
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 public class ListenerHandler<T> {
     private final T proxy;
@@ -28,9 +32,20 @@ public class ListenerHandler<T> {
         T proxy = (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
             @Override
             public Object invoke(final Object o, final Method method, final Object[] objects) throws Throwable {
-                T listener = reference.get();
+                final T listener = reference.get();
                 if (listener != null) {
-                    method.invoke(listener, objects);
+
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                method.invoke(listener, objects);
+                            } catch (IllegalAccessException | InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                 }
                 return null;
             }
