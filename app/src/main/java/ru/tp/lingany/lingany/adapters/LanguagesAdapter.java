@@ -16,7 +16,7 @@ import ru.tp.lingany.lingany.sdk.languages.Language;
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {
 
     private List<Language> data;
-    ItemClickListener itemClickListener;
+    private ItemClickListener itemClickListener;
 
 
 
@@ -45,7 +45,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
     public interface ItemClickListener {
 
-        public void onClick(View view, int position);
+        void onClick(View view, int position);
     }
 
     public static class LanguageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +63,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
 
         @Override
         public void onClick(View view) {
-            Log.i("tag", "onClick");
+            Log.d("tag", "onClick");
             listener.onClick(view, getAdapterPosition());
         }
     }
