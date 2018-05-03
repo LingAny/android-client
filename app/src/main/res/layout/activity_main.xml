@@ -7,20 +7,4 @@
     android:orientation="vertical"
     tools:context="ru.tp.lingany.lingany.MainActivity">
 
-    <Button
-        android:id="@+id/languages_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="get supported languages"
-        tools:layout_editor_absoluteX="84dp"
-        tools:layout_editor_absoluteY="231dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="145dp"
-        tools:layout_editor_absoluteY="331dp" />
-
 </LinearLayout>

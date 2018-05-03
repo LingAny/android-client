@@ -2,10 +2,7 @@ package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -36,7 +33,6 @@ public class TrainingActivity extends AppCompatActivity implements
     public static final String TRAININGS = "TRAININGS";
     public static final String TRAINING_MODE = "TRAINING_MODE";
 
-    private FragmentManager fragmentManager;
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
     private Category category;
@@ -47,7 +43,7 @@ public class TrainingActivity extends AppCompatActivity implements
             savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
         }
         if (mode != null) {
-            savedInstanceState.putSerializable(TRAINING_MODE, (Serializable) mode);
+            savedInstanceState.putSerializable(TRAINING_MODE, mode);
         }
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -72,7 +68,6 @@ public class TrainingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
         loadingFragment = new LoadingFragment();
-        fragmentManager = getSupportFragmentManager();
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
@@ -98,30 +93,30 @@ public class TrainingActivity extends AppCompatActivity implements
         Api.getInstance().training().getForCategory(category, listener);
     }
 
-    private void inizializeTranslationFragments() {
+    private void initializeTranslationFragments() {
         String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
         FindTranslationFragment translationButtonsFragment = FindTranslationFragment.newInstance(trainings);
 
-        transaction.replace(R.id.trainingHeaderContainer, headerFragment);
-        transaction.replace(R.id.trainingBodyContainer, translationButtonsFragment);
-
-        transaction.commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.trainingHeaderContainer, headerFragment)
+                .replace(R.id.trainingBodyContainer, translationButtonsFragment)
+                .commit();
     }
 
-    private void inizializeSprintFragments() {
+    private void initializeSprintFragments() {
         String TRAINING_SPRINT_TITLE = "Sprint";
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_SPRINT_TITLE);
         SprintFragment sprintFragment = SprintFragment.newInstance(trainings);
 
-        transaction.replace(R.id.trainingHeaderContainer, headerFragment);
-        transaction.replace(R.id.trainingBodyContainer, sprintFragment);
-
-        transaction.commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.trainingHeaderContainer, headerFragment)
+                .replace(R.id.trainingBodyContainer, sprintFragment)
+                .commit();
     }
 
     private void inflateLoadingFragment() {
@@ -134,9 +129,9 @@ public class TrainingActivity extends AppCompatActivity implements
     private void changeMode(Mode newMode) {
         mode = newMode;
         if (newMode == Mode.FIND_TRANSLATION) {
-            inizializeTranslationFragments();
+            initializeTranslationFragments();
         } else if (newMode == Mode.SPRINT) {
-            inizializeSprintFragments();
+            initializeSprintFragments();
         }
     }
 
