@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:layout_gravity="center|top"
-    android:paddingTop="50dp"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/wordToTranslateSprint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        />
-    <TextView
-        android:id="@+id/wordTranslationSprint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        />
+    android:layout_width="match_parent">
     <LinearLayout
-        android:id="@+id/containerMarkAndCrossSprint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/wordToTranslateSprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            />
+        <TextView
+            android:id="@+id/wordTranslationSprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            />
+        <LinearLayout
+            android:id="@+id/containerMarkAndCrossSprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:orientation="horizontal">
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom">
         <Button
             android:id="@+id/agreeButtonSprint"
             android:layout_width="180dp"
@@ -50,4 +54,4 @@
             />
     </FrameLayout>
 
-</LinearLayout>
+</FrameLayout>
