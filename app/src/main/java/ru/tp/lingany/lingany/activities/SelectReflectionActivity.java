@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -38,8 +37,9 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
     private LoadingFragment loadingFragment;
 
-    private enum Requests { API_GET_ALL_LANGUAGES, API_GET_REFLECTION_FOR_LANGUAGES, NONE }
-    private enum LangTypes { NATIVE, FOREIGN, NONE }
+    private enum Requests {API_GET_ALL_LANGUAGES, API_GET_REFLECTION_FOR_LANGUAGES, NONE}
+
+    private enum LangTypes {NATIVE, FOREIGN, NONE}
 
     private Requests request = Requests.NONE;
     private LangTypes langType = LangTypes.NONE;
@@ -94,7 +94,6 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         @Override
         public void onError(ANError anError) {
             loadingFragment.showRefresh();
-            Toast.makeText(SelectReflectionActivity.this, "can't load", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -112,7 +111,6 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         @Override
         public void onError(ANError anError) {
             loadingFragment.showRefresh();
-            Toast.makeText(SelectReflectionActivity.this, "can't load", Toast.LENGTH_SHORT).show();
         }
     };
 
