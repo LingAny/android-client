@@ -153,6 +153,7 @@ public class FindTranslationFragment extends Fragment {
             setCross();
         }
 
+        disableButtons();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -161,9 +162,22 @@ public class FindTranslationFragment extends Fragment {
                 if (trainings.size() > 0) {
                     trainings.remove(0);
                     setAll();
+                    enableButtons();
                 }
             }
         }, 1000);
+    }
+
+    private void disableButtons() {
+        for (TextView button: buttons) {
+            button.setClickable(false);
+        }
+    }
+
+    private void enableButtons() {
+        for (TextView button: buttons) {
+            button.setClickable(true);
+        }
     }
 
     @Override

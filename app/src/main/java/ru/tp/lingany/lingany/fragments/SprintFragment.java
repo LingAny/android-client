@@ -35,6 +35,8 @@ public class SprintFragment extends Fragment {
     private boolean victories = false;
     private int markAndCrossLength = 0;
 
+    List<TextView> buttons = new ArrayList<>();
+
     public interface SprintListener {
         void onSprintFinished();
     }
@@ -78,7 +80,6 @@ public class SprintFragment extends Fragment {
         TextView agreeButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
         TextView notAgreeButton = (TextView) getView().findViewById(R.id.notAgreeButtonSprint);
 
-        List<TextView> buttons = new ArrayList<>();
         buttons.add(agreeButton);
         buttons.add(notAgreeButton);
         for (View button:buttons) {
@@ -162,6 +163,7 @@ public class SprintFragment extends Fragment {
             }
         }
 
+        disableButtons();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -170,9 +172,22 @@ public class SprintFragment extends Fragment {
                 if (trainings.size() > 0) {
                     trainings.remove(0);
                     setAll();
+                    enableButtons();
                 }
             }
         }, 1000);
+    }
+
+    private void disableButtons() {
+        for (TextView button: buttons) {
+            button.setClickable(false);
+        }
+    }
+
+    private void enableButtons() {
+        for (TextView button: buttons) {
+            button.setClickable(true);
+        }
     }
 
     public String getWordTranslationText() {
