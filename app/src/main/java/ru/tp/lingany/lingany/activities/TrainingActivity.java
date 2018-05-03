@@ -10,6 +10,7 @@ import android.util.Log;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
@@ -29,12 +30,23 @@ public class TrainingActivity extends AppCompatActivity implements
         SprintFragment.SprintListener {
 
     enum Mode { FIND_TRANSLATION, SPRINT }
+    private Mode mode;
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+    public static final String TRAININGS = "TRAININGS";
+
     private FragmentManager fragmentManager;
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
     private Category category;
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (trainings != null) {
+            savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
+        }
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     private ListenerHandler getForCategoryListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
         @Override
@@ -54,11 +66,19 @@ public class TrainingActivity extends AppCompatActivity implements
     });
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_training);
         loadingFragment = new LoadingFragment();
+
+        if (savedInstanceState != null) {
+            trainings = (List<Training>) savedInstanceState.getSerializable(TRAININGS);
+            if (trainings != null) {
+//                changeMode(mode);
+                return;
+            }
+        }
 
         fragmentManager = getSupportFragmentManager();
 
@@ -108,6 +128,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void changeMode(Mode newMode) {
+        mode = newMode;
         if (newMode == Mode.FIND_TRANSLATION) {
             inizializeTranslationFragments();
         } else if (newMode == Mode.SPRINT) {
