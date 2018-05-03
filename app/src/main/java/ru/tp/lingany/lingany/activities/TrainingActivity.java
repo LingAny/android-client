@@ -34,6 +34,7 @@ public class TrainingActivity extends AppCompatActivity implements
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     public static final String TRAININGS = "TRAININGS";
+    public static final String TRAINING_MODE = "TRAINING_MODE";
 
     private FragmentManager fragmentManager;
     private List<Training> trainings;
@@ -45,6 +46,9 @@ public class TrainingActivity extends AppCompatActivity implements
         if (trainings != null) {
             savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
         }
+        if (mode != null) {
+            savedInstanceState.putSerializable(TRAINING_MODE, (Serializable) mode);
+        }
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -53,9 +57,6 @@ public class TrainingActivity extends AppCompatActivity implements
         public void onResponse(List<Training> response) {
             trainings = response;
             changeMode(Mode.FIND_TRANSLATION);
-
-            Log.i("FindTranslationActivity", "onResponse");
-
             loadingFragment.stopLoading();
         }
 
@@ -71,19 +72,22 @@ public class TrainingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
         loadingFragment = new LoadingFragment();
+        fragmentManager = getSupportFragmentManager();
+        Intent intent = getIntent();
+        category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
         if (savedInstanceState != null) {
             trainings = (List<Training>) savedInstanceState.getSerializable(TRAININGS);
+            mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
+            if (mode == null) {
+                mode = Mode.FIND_TRANSLATION;
+            }
             if (trainings != null) {
-//                changeMode(mode);
+                changeMode(mode);
                 return;
             }
         }
 
-        fragmentManager = getSupportFragmentManager();
-
-        Intent intent = getIntent();
-        category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
         inflateLoadingFragment();
         getTrainingsForCategory();
     }
