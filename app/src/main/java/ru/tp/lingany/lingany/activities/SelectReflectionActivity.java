@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,8 @@ import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
 public class SelectReflectionActivity extends AppCompatActivity implements
-        SelectLangFragment.LangClickListener,
-        LoadingFragment.RefreshListener {
+        LoadingFragment.RefreshListener,
+        SelectLangFragment.LangClickListener {
 
     private Language nativeLang;
 
@@ -47,14 +48,33 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
     private LangTypes langType = LangTypes.NONE;
 
+    private static final String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";
+
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (supportedLanguages != null) {
+            savedInstanceState.putSerializable(SUPPORTED_LANGUAGES, (Serializable) supportedLanguages);
+        }
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_reflection);
 
         loadingFragment = new LoadingFragment();
-        inflateLoadingFragment();
 
+        if (savedInstanceState != null) {
+            supportedLanguages = (List<Language>) savedInstanceState.getSerializable(SUPPORTED_LANGUAGES);
+            if (supportedLanguages != null) {
+                inflateNativeLangFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
+                return;
+            }
+        }
+
+        inflateLoadingFragment();
         getAllLanguages();
     }
 

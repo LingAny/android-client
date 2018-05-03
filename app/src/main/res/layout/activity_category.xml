@@ -5,32 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="ru.tp.lingany.lingany.activities.CategoryActivity">
+    tools:context=".activities.CategoryActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        />
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        tools:visibility="visible"/>
-
-    <!-- A RecyclerView with some commonly used attributes -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/categories"
-        android:padding="@dimen/padding"
+    <FrameLayout
+        android:id="@+id/container"
         android:clipToPadding="false"
-        android:scrollbars="vertical"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom">
+    </FrameLayout>
 
 </LinearLayout>
