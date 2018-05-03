@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,14 +32,32 @@ public class CategoryActivity extends AppCompatActivity implements
 
     public static final String EXTRA_REFLECTION = "EXTRA_REFLECTION";
 
+    public static final String CATEGORIES = "CATEGORIES";
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (categories != null) {
+            savedInstanceState.putSerializable(CATEGORIES, (Serializable) categories);
+        }
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
         refId = getRefId();
         loadingFragment = new LoadingFragment();
+
+        if (savedInstanceState != null) {
+            categories = (List<Category>) savedInstanceState.getSerializable(CATEGORIES);
+            if (categories != null) {
+                inflateSelectCategoryFragment();
+                return;
+            }
+        }
 
         inflateLoadingFragment();
         getCategoriesForReflection();
