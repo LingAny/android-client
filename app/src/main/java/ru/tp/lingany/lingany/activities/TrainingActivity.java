@@ -52,7 +52,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.SPRINT);
+            changeMode(Mode.FIND_TRANSLATION);
             loadingFragment.stopLoading();
         }
 
@@ -94,7 +94,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void initializeTranslationFragments() {
-        String TRAINING_FIND_TRANSLATION_TITLE = "Find Translation";
+        String TRAINING_FIND_TRANSLATION_TITLE = getString(R.string.headerTrainingFindTranslation);
 
         TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
         FindTranslationFragment translationButtonsFragment = FindTranslationFragment.newInstance(trainings);
@@ -107,7 +107,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void initializeSprintFragments() {
-        String TRAINING_SPRINT_TITLE = "Sprint";
+        String TRAINING_SPRINT_TITLE = getString(R.string.headerTrainingSprint);
 
         TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_SPRINT_TITLE);
         SprintFragment sprintFragment = SprintFragment.newInstance(trainings);
@@ -158,5 +158,4 @@ public class TrainingActivity extends AppCompatActivity implements
     public void onSprintFinished() {
         changeMode(Mode.FIND_TRANSLATION);
     }
-
 }

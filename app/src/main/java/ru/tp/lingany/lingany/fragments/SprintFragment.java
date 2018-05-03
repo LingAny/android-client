@@ -37,6 +37,8 @@ public class SprintFragment extends Fragment {
 
     List<TextView> buttons = new ArrayList<>();
 
+    private static final String TRAININGS = "TRAININGS";
+
     public interface SprintListener {
         void onSprintFinished();
     }
@@ -44,7 +46,7 @@ public class SprintFragment extends Fragment {
 
     public static SprintFragment newInstance(List<Training> trainings) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("trainings", (Serializable) trainings);
+        bundle.putSerializable(TRAININGS, (Serializable) trainings);
 
         SprintFragment fragment = new SprintFragment();
         fragment.setArguments(bundle);
@@ -55,7 +57,7 @@ public class SprintFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
+            List<Training> localTrainings = (List<Training>) bundle.getSerializable(TRAININGS);
             if (localTrainings != null) {
                 trainings = new ArrayList<>(localTrainings);
             }
@@ -66,7 +68,7 @@ public class SprintFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_sprint, null, false);
+        return inflater.inflate(R.layout.fragment_sprint, container, false);
     }
 
     @Override
@@ -77,8 +79,8 @@ public class SprintFragment extends Fragment {
         wordToTranslate = getView().findViewById(R.id.wordToTranslateSprint);
         wordTranslation = getView().findViewById(R.id.wordTranslationSprint);
 
-        TextView agreeButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
-        TextView notAgreeButton = (TextView) getView().findViewById(R.id.notAgreeButtonSprint);
+        TextView agreeButton = Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
+        TextView notAgreeButton = getView().findViewById(R.id.notAgreeButtonSprint);
 
         buttons.add(agreeButton);
         buttons.add(notAgreeButton);
@@ -175,7 +177,7 @@ public class SprintFragment extends Fragment {
                     enableButtons();
                 }
             }
-        }, 1000);
+        }, getResources().getInteger(R.integer.delayNextTraining));
     }
 
     private void disableButtons() {

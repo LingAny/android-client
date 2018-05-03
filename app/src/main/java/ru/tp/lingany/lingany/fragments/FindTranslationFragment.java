@@ -35,9 +35,11 @@ public class FindTranslationFragment extends Fragment {
     private TextView wordToTranslate;
     private LayoutInflater inflater;
 
+    private static final String TRAININGS = "TRAININGS";
+
     public static FindTranslationFragment newInstance(List<Training> trainings) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("trainings", (Serializable) trainings);
+        bundle.putSerializable(TRAININGS, (Serializable) trainings);
 
         FindTranslationFragment fragment = new FindTranslationFragment();
         fragment.setArguments(bundle);
@@ -48,7 +50,7 @@ public class FindTranslationFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            List<Training> localTrainings = (List<Training>) bundle.getSerializable("trainings");
+            List<Training> localTrainings = (List<Training>) bundle.getSerializable(TRAININGS);
             if (localTrainings != null) {
                 trainings = new ArrayList<>(localTrainings);
             }
@@ -59,7 +61,7 @@ public class FindTranslationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        return inflater.inflate(R.layout.fragment_find_translations, null, false);
+        return inflater.inflate(R.layout.fragment_find_translations, container, false);
     }
 
     @Override
@@ -165,7 +167,7 @@ public class FindTranslationFragment extends Fragment {
                     enableButtons();
                 }
             }
-        }, 1000);
+        }, getResources().getInteger(R.integer.delayNextTraining));
     }
 
     private void disableButtons() {

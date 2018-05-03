@@ -3,5 +3,6 @@
     <integer name="max_speed">75</integer>
     <integer name="min_speed">5</integer>
     <integer name="delayInflateAfterLoading">400</integer>
+    <integer name="delayNextTraining">200</integer>
 
 </resources>
