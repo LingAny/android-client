@@ -1,42 +1,30 @@
 package ru.tp.lingany.lingany.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
-import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
-import ru.tp.lingany.lingany.sdk.Api;
+import ru.tp.lingany.lingany.pages.CategoriesPage;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
-import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
 public class CategoryActivity extends AppCompatActivity implements
@@ -47,7 +35,6 @@ public class CategoryActivity extends AppCompatActivity implements
 
     private List<Category> categories;
 
-    private LoadingFragment loadingFragment;
 
     public static final String EXTRA_REFLECTION = "EXTRA_REFLECTION";
 
@@ -55,7 +42,8 @@ public class CategoryActivity extends AppCompatActivity implements
 
     private BottomNavigationViewEx bnve;
     private ViewPager vp;
-    private VpAdapter vpAdapter;
+
+    private CategoriesPage categoriesPage;
 
     private static final String BRAIN_STORM_PAGE_POSITION = "BRAIN_STORM_PAGE_POSITION";
     private static final String SHAPE_PAGE_POSITION = "SHAPE_PAGE_POSITION";
@@ -84,7 +72,6 @@ public class CategoryActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_category);
 
         refId = getRefId();
-        loadingFragment = new LoadingFragment();
         initBottomNavigationBarWithViewPager();
 
 //        if (savedInstanceState != null) {
@@ -100,86 +87,23 @@ public class CategoryActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        getCategoriesForReflection();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
-        if (getForRefListenerHandler != null) {
-            getForRefListenerHandler.unregister();
-        }
     }
 
     @Override
     public void onClickCategory(int position) {
-        Category category = categories.get(position);
-        Intent intent = new Intent(CategoryActivity.this, TrainingActivity.class);
-        intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
-        startActivity(intent);
+        categoriesPage.selectCategory(position);
     }
 
     @Override
     public void onRefresh() {
-        loadingFragment.startLoading();
-//        getCategoriesForReflection();
-    }
-
-    private ListenerHandler getForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Category>>() {
-        @Override
-        public void onResponse(List<Category> response) {
-            categories = response;
-//            loadingFragment.stopLoading();
-            inflateSelectCategoryFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            loadingFragment.showRefresh();
-        }
-    });
-
-    @SuppressWarnings("unchecked")
-    private void getCategoriesForReflection() {
-        ParsedRequestListener<List<Category>> listener = (ParsedRequestListener<List<Category>>) getForRefListenerHandler.asListener();
-        Api.getInstance().categories().getForReflection(refId, listener);
+        categoriesPage.refresh();
     }
 
     private UUID getRefId() {
         Intent intent = getIntent();
         return UUID.fromString(intent.getStringExtra(EXTRA_REFLECTION));
-    }
-
-    private void inflateSelectCategoryFragment() {
-        int position = itemPositionMap.get(BRAIN_STORM_PAGE_POSITION);
-        Fragment fragment = SelectCategoryFragment.getInstance(categories);
-//        vpAdapter.getItem(position).g
-        vpAdapter.replaceItem(fragment, position);
-    }
-
-    private void inflateLoadingFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, loadingFragment)
-                .commit();
-    }
-
-    private void inflateSelectCategoryFragment(int delayMillis) {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                inflateSelectCategoryFragment();
-            }
-        }, 300);
     }
 
     @SuppressWarnings("unchecked")
@@ -195,29 +119,12 @@ public class CategoryActivity extends AppCompatActivity implements
         bnve.setItemHeight(BottomNavigationViewEx.dp2px(this, itemHeight));
 
         int size = 3;
-        List<Fragment> fragments = new LinkedList<>();
+        ArrayList<Fragment> fragments = new ArrayList<>();
         final SparseIntArray items = new SparseIntArray(size);
 
-        Category category1 = new Category(null, null, "title1", null);
-        List<Category> catList1 = new ArrayList<Category>();
-        catList1.add(category1);
-        Fragment fragment1 = SelectCategoryFragment.getInstance(catList1);
+        categoriesPage = CategoriesPage.getInstance(refId);
 
-        Category category2 = new Category(null, null, "title2", null);
-        List<Category> catList2 = new ArrayList<Category>();
-        catList2.add(category2);
-        Fragment fragment2 = SelectCategoryFragment.getInstance(catList2);
-
-        Category category3 = new Category(null, null, "title3", null);
-        List<Category> catList3 = new ArrayList<Category>();
-        catList3.add(category3);
-        Fragment fragment3 = SelectCategoryFragment.getInstance(catList3);
-
-//        fragments.add(fragment1);
-//        fragments.add(fragment2);
-//        fragments.add(fragment3);
-
-        fragments.add(new LoadingFragment());
+        fragments.add(categoriesPage);
         fragments.add(new LoadingFragment());
         fragments.add(new LoadingFragment());
 
@@ -225,7 +132,7 @@ public class CategoryActivity extends AppCompatActivity implements
         items.put(R.id.action_shape, 1);
         items.put(R.id.action_hot, 2);
 
-        vpAdapter = new VpAdapter(getSupportFragmentManager(), fragments);
+        VpAdapter vpAdapter = new VpAdapter(getSupportFragmentManager(), fragments);
         vp.setAdapter(vpAdapter);
 
         // set listener to change the current item of view pager when click bottom nav item
@@ -263,24 +170,9 @@ public class CategoryActivity extends AppCompatActivity implements
     private class VpAdapter extends FragmentPagerAdapter {
         private List<Fragment> data;
 
-        public VpAdapter(FragmentManager fm, List<Fragment> data) {
+        VpAdapter(FragmentManager fm, List<Fragment> data) {
             super(fm);
             this.data = data;
-        }
-
-        public void replaceItem(Fragment fragment, int position) {
-
-            destroyItem(vp, position, data.get(position));
-            finishUpdate(vp);
-            data.set(position, fragment);
-
-            Fragment old = getSupportFragmentManager().findFragmentByTag(makeFragmentName(vp.getId(), position));
-            getSupportFragmentManager().beginTransaction().remove(old).commitNow();
-//
-
-            this.notifyDataSetChanged();
-            instantiateItem(vp, position);
-            finishUpdate(vp);
         }
 
         @Override
@@ -290,8 +182,7 @@ public class CategoryActivity extends AppCompatActivity implements
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = data.get(position);
-            return fragment;
+            return data.get(position);
         }
     }
 }
