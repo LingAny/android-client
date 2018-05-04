@@ -10,17 +10,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/trainingTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/headerTrainingTranslation"
-            android:textSize="35sp"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="@dimen/contentMargin"
-
-            />
-
-        <TextView
             android:id="@+id/wordToTranslate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,18 +44,22 @@
                 android:id="@+id/leftUpperButton"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_margin="@dimen/contentMargin"
-                android:textSize="24sp"
+                android:layout_marginTop="@dimen/contentMargin"
+                android:layout_marginBottom="@dimen/contentMarginHalf"
+                android:layout_marginStart="@dimen/contentMargin"
+                android:layout_marginEnd="@dimen/contentMarginHalf"
+                android:textSize="16sp"
                 android:layout_gravity="start|top"
                 />
             <Button
                 android:id="@+id/leftDownButton"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_marginLeft="@dimen/contentMargin"
-                android:layout_marginRight="@dimen/contentMargin"
+                android:layout_marginTop="@dimen/contentMarginHalf"
                 android:layout_marginBottom="@dimen/contentMargin"
-                android:textSize="24sp"
+                android:layout_marginStart="@dimen/contentMargin"
+                android:layout_marginEnd="@dimen/contentMarginHalf"
+                android:textSize="16sp"
                 android:layout_gravity="start|bottom"
                 />
         </LinearLayout>
@@ -81,8 +74,11 @@
                 android:id="@+id/rightUpperButton"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_margin="@dimen/contentMargin"
-                android:textSize="24sp"
+                android:layout_marginTop="@dimen/contentMargin"
+                android:layout_marginBottom="@dimen/contentMarginHalf"
+                android:layout_marginStart="@dimen/contentMarginHalf"
+                android:layout_marginEnd="@dimen/contentMargin"
+                android:textSize="16sp"
                 android:layout_gravity="end|top"
                 />
 
@@ -90,10 +86,11 @@
                 android:id="@+id/rightDownButton"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_marginLeft="@dimen/contentMargin"
-                android:layout_marginRight="@dimen/contentMargin"
+                android:layout_marginTop="@dimen/contentMarginHalf"
                 android:layout_marginBottom="@dimen/contentMargin"
-                android:textSize="24sp"
+                android:layout_marginStart="@dimen/contentMarginHalf"
+                android:layout_marginEnd="@dimen/contentMargin"
+                android:textSize="16sp"
                 android:layout_gravity="end|bottom"
                 />
         </LinearLayout>

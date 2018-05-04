@@ -125,7 +125,7 @@ public class SprintFragment extends Fragment {
     }
 
     public void addMark() {
-        if (!victories || markAndCrossLength > 3) {
+        if (!victories || markAndCrossLength > 2) {
             clearMarkAndCross();
         }
         victories = true;
@@ -135,7 +135,7 @@ public class SprintFragment extends Fragment {
     }
 
     public void addCross() {
-        if (victories || markAndCrossLength > 3) {
+        if (victories || markAndCrossLength > 2) {
             clearMarkAndCross();
         }
         victories = false;
