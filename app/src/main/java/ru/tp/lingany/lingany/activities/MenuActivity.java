@@ -14,9 +14,7 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +22,6 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.pages.CategoriesPage;
-import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
 public class MenuActivity extends AppCompatActivity implements
@@ -33,37 +30,13 @@ public class MenuActivity extends AppCompatActivity implements
 
     private UUID refId;
 
-    private List<Category> categories;
-
-
     public static final String EXTRA_REFLECTION = "EXTRA_REFLECTION";
 
-    public static final String CATEGORIES = "CATEGORIES";
-
-    private BottomNavigationViewEx bnve;
     private ViewPager vp;
 
+    private BottomNavigationViewEx bnve;
+
     private CategoriesPage categoriesPage;
-
-    private static final String BRAIN_STORM_PAGE_POSITION = "BRAIN_STORM_PAGE_POSITION";
-    private static final String SHAPE_PAGE_POSITION = "SHAPE_PAGE_POSITION";
-    private static final String REPEAT_PAGE_POSITION = "REPEAT_PAGE_POSITION";
-
-    private final HashMap<String, Integer> itemPositionMap;
-    {
-        itemPositionMap = new HashMap<>();
-        itemPositionMap.put(BRAIN_STORM_PAGE_POSITION, 0);
-        itemPositionMap.put(SHAPE_PAGE_POSITION, 1);
-        itemPositionMap.put(REPEAT_PAGE_POSITION, 2);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (categories != null) {
-            savedInstanceState.putSerializable(CATEGORIES, (Serializable) categories);
-        }
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -73,22 +46,6 @@ public class MenuActivity extends AppCompatActivity implements
 
         refId = getRefId();
         initBottomNavigationBarWithViewPager();
-
-//        if (savedInstanceState != null) {
-//            categories = (List<Category>) savedInstanceState.getSerializable(CATEGORIES);
-//            if (categories != null) {
-//                inflateSelectCategoryFragment();
-//                return;
-//            }
-//        }
-//
-//        inflateLoadingFragment();
-//        getCategoriesForReflection();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
