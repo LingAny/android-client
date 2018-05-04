@@ -111,6 +111,9 @@ public class SprintFragment extends Fragment {
         }
 
         Training training = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
+
+        sprintData.setWordToTranslateText(training.getForeignWord());
+        sprintData.setRealTranslationText(training.getNativeWord());
         int index = RandArray.getRandIndex( 0, sprintData.getTrainings().size() - 1);
         if (index % 2 == 0) {
             sprintData.setWordTranslationText(training.getNativeWord());
