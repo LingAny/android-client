@@ -8,10 +8,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -122,7 +125,7 @@ public class CategoryActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Category> response) {
             categories = response;
-            loadingFragment.stopLoading();
+//            loadingFragment.stopLoading();
             inflateSelectCategoryFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
         }
 
@@ -144,11 +147,11 @@ public class CategoryActivity extends AppCompatActivity implements
     }
 
     private void inflateSelectCategoryFragment() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.container, )
-//                .commit();
-        vpAdapter.replaceItem(SelectCategoryFragment.getInstance(categories), itemPositionMap.get(BRAIN_STORM_PAGE_POSITION));
+        int position = itemPositionMap.get(BRAIN_STORM_PAGE_POSITION);
+        Fragment fragment = SelectCategoryFragment.getInstance(categories);
+//        vpAdapter.getItem(position).g
+        vpAdapter.replaceItem(fragment, position);
+        vpAdapter.notifyDataSetChanged();
     }
 
     private void inflateLoadingFragment() {
@@ -227,7 +230,7 @@ public class CategoryActivity extends AppCompatActivity implements
         });
     }
 
-    private static class VpAdapter extends FragmentPagerAdapter {
+    private class VpAdapter extends FragmentPagerAdapter {
         private List<Fragment> data;
 
         public VpAdapter(FragmentManager fm, List<Fragment> data) {
@@ -236,17 +239,53 @@ public class CategoryActivity extends AppCompatActivity implements
         }
 
         public void replaceItem(Fragment fragment, int position) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(data.get(position))
+                    .commit();
+
             data.set(position, fragment);
         }
+
+//        @Override
+//        public Object instantiateItem(ViewGroup collection, int position) {
+//
+//            // find view which already exists in a collection of view
+//            View mView = collection.findViewWithTag("my_view");
+//
+//            // if view doesn't exist, create new one
+//            if (mView == null) {
+//                // Inflate layout
+//                LayoutInflater layoutInflater = (LayoutInflater) collection.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                mView = layoutInflater.inflate(R.layout.my_view, null);
+//
+//                // set tag for newly inflated view
+//                mView.setTag("my_view");
+//
+//                // add view to collection
+//                ((ViewPager) collection).addView(mView, 0);
+//            }
+//
+//            Textview textview = (Textview) mView.findViewById(R.id.some_textview)
+//            textview.setText("I am on Posiiton " + position);
+//
+//            return mView;
+//        }
 
         @Override
         public int getCount() {
             return data.size();
+//            return POSITION_NONE;
         }
 
         @Override
         public Fragment getItem(int position) {
             return data.get(position);
         }
+
+//        @Override
+//        public int getItemPosition() {
+//            return POSITION_NONE;
+//        }
     }
 }
