@@ -27,7 +27,7 @@ import ru.tp.lingany.lingany.pages.CategoriesPage;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
-public class CategoryActivity extends AppCompatActivity implements
+public class MenuActivity extends AppCompatActivity implements
         LoadingFragment.RefreshListener,
         SelectCategoryFragment.CategoryClickListener {
 

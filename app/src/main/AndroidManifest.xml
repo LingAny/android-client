@@ -31,7 +31,7 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".activities.CategoryActivity"
+            android:name=".activities.MenuActivity"
             android:screenOrientation="portrait"
             />
         <activity
