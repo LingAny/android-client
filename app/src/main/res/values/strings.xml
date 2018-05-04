@@ -16,7 +16,7 @@
 
     <string name="pleaseWait">Please wait</string>
 
-    <string name="headerTrainingFindTranslation">Find translation</string>
+    <string name="headerTrainingTranslation">Find translation</string>
     <string name="headerTrainingSprint">Sprint</string>
 
     <string name="agreeButton">Yes</string>

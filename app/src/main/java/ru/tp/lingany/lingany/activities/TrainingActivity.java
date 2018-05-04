@@ -14,7 +14,6 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
-import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
@@ -94,35 +93,27 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void initializeTranslationFragments() {
-        String TRAINING_FIND_TRANSLATION_TITLE = getString(R.string.headerTrainingFindTranslation);
-
-        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
-        FindTranslationFragment translationButtonsFragment = FindTranslationFragment.newInstance(trainings);
+        FindTranslationFragment translationFragment = FindTranslationFragment.newInstance(trainings);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, headerFragment)
-                .replace(R.id.trainingBodyContainer, translationButtonsFragment)
+                .replace(R.id.trainingContainer, translationFragment)
                 .commit();
     }
 
     private void initializeSprintFragments() {
-        String TRAINING_SPRINT_TITLE = getString(R.string.headerTrainingSprint);
-
-        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_SPRINT_TITLE);
         SprintFragment sprintFragment = SprintFragment.newInstance(trainings);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, headerFragment)
-                .replace(R.id.trainingBodyContainer, sprintFragment)
+                .replace(R.id.trainingContainer, sprintFragment)
                 .commit();
     }
 
     private void inflateLoadingFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, loadingFragment)
+                .replace(R.id.trainingContainer, loadingFragment)
                 .commit();
     }
 
