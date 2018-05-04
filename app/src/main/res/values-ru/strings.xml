@@ -5,7 +5,7 @@
     <string name="chooseForeignLang">Выберите иностранный язык</string>
     <string name="categories">Категории</string>
 
-    <string name="headerTrainingFindTranslation">Перевод</string>
+    <string name="headerTrainingTranslation">Перевод</string>
     <string name="headerTrainingSprint">Спринт</string>
 
 </resources>

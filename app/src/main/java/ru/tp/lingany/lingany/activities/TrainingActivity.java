@@ -14,7 +14,6 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
-import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
@@ -28,10 +27,13 @@ public class TrainingActivity extends AppCompatActivity implements
 
     enum Mode { FIND_TRANSLATION, SPRINT }
     private Mode mode;
+    SprintFragment sprintFragment;
+    FindTranslationFragment translationFragment;
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     public static final String TRAININGS = "TRAININGS";
     public static final String TRAINING_MODE = "TRAINING_MODE";
+    public static final String TRAINING_NUMBER = "TRAINING_NUMBER";
 
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
@@ -42,9 +44,23 @@ public class TrainingActivity extends AppCompatActivity implements
         if (trainings != null) {
             savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
         }
+        int trainingNumber;
         if (mode != null) {
+            switch (mode) {
+                case FIND_TRANSLATION:
+                    trainingNumber = translationFragment.getCurrentTrainingNumber();
+                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+                    break;
+                case SPRINT:
+                    trainingNumber = sprintFragment.getCurrentTrainingNumber();
+                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+                    break;
+                default:
+                    break;
+            }
             savedInstanceState.putSerializable(TRAINING_MODE, mode);
         }
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -52,7 +68,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.FIND_TRANSLATION);
+            changeMode(Mode.SPRINT, 0);
             loadingFragment.stopLoading();
         }
 
@@ -74,13 +90,15 @@ public class TrainingActivity extends AppCompatActivity implements
         if (savedInstanceState != null) {
             trainings = (List<Training>) savedInstanceState.getSerializable(TRAININGS);
             mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
+            int currentTraining = (int) savedInstanceState.getSerializable(TRAINING_NUMBER);
+
             if (mode == null) {
                 mode = Mode.FIND_TRANSLATION;
             }
             if (trainings != null) {
-                changeMode(mode);
-                return;
+                changeMode(mode, currentTraining);
             }
+            return;
         }
 
         inflateLoadingFragment();
@@ -93,45 +111,37 @@ public class TrainingActivity extends AppCompatActivity implements
         Api.getInstance().training().getForCategory(category, listener);
     }
 
-    private void initializeTranslationFragments() {
-        String TRAINING_FIND_TRANSLATION_TITLE = getString(R.string.headerTrainingFindTranslation);
-
-        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_FIND_TRANSLATION_TITLE);
-        FindTranslationFragment translationButtonsFragment = FindTranslationFragment.newInstance(trainings);
+    private void initializeTranslationFragments(int currentTraining) {
+        translationFragment = FindTranslationFragment.newInstance(trainings, currentTraining);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, headerFragment)
-                .replace(R.id.trainingBodyContainer, translationButtonsFragment)
+                .replace(R.id.trainingContainer, translationFragment)
                 .commit();
     }
 
-    private void initializeSprintFragments() {
-        String TRAINING_SPRINT_TITLE = getString(R.string.headerTrainingSprint);
-
-        TrainingHeaderFragment headerFragment = TrainingHeaderFragment.newInstance(TRAINING_SPRINT_TITLE);
-        SprintFragment sprintFragment = SprintFragment.newInstance(trainings);
+    private void initializeSprintFragments(int currentTraining) {
+        sprintFragment = SprintFragment.newInstance(trainings, currentTraining);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, headerFragment)
-                .replace(R.id.trainingBodyContainer, sprintFragment)
+                .replace(R.id.trainingContainer, sprintFragment)
                 .commit();
     }
 
     private void inflateLoadingFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.trainingHeaderContainer, loadingFragment)
+                .replace(R.id.trainingContainer, loadingFragment)
                 .commit();
     }
 
-    private void changeMode(Mode newMode) {
+    private void changeMode(Mode newMode, int currentTraining) {
         mode = newMode;
         if (newMode == Mode.FIND_TRANSLATION) {
-            initializeTranslationFragments();
+            initializeTranslationFragments(currentTraining);
         } else if (newMode == Mode.SPRINT) {
-            initializeSprintFragments();
+            initializeSprintFragments(currentTraining);
         }
     }
 
@@ -151,11 +161,11 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onFindTranslationFinished() {
-        changeMode(Mode.SPRINT);
+        changeMode(Mode.SPRINT, 0);
     }
 
     @Override
     public void onSprintFinished() {
-        changeMode(Mode.FIND_TRANSLATION);
+        changeMode(Mode.FIND_TRANSLATION, 0);
     }
 }

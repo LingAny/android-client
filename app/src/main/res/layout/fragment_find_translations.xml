@@ -1,63 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical">
-    <FrameLayout
-        android:layout_height="250dp"
+    android:layout_width="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_gravity="center|top">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/wordToTranslate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/contentMargin"
             android:textSize="30sp"
             />
+
         <LinearLayout
             android:id="@+id/containerMarkAndCross"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/contentMargin">
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
-    <FrameLayout
-        android:layout_height="150dp"
+    <LinearLayout
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom">
-        <Button
-            android:id="@+id/leftUpperButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:textSize="23sp"
-            android:layout_gravity="start|top"
-            />
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:baselineAligned="false">
 
-        <Button
-            android:id="@+id/leftDownButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:textSize="23sp"
-            android:layout_gravity="start|bottom"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/leftUpperButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/contentMargin"
+                android:layout_marginBottom="@dimen/contentMarginHalf"
+                android:layout_marginStart="@dimen/contentMargin"
+                android:layout_marginEnd="@dimen/contentMarginHalf"
+                android:textSize="16sp"
+                android:layout_gravity="start|top"
+                />
+            <Button
+                android:id="@+id/leftDownButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/contentMarginHalf"
+                android:layout_marginBottom="@dimen/contentMargin"
+                android:layout_marginStart="@dimen/contentMargin"
+                android:layout_marginEnd="@dimen/contentMarginHalf"
+                android:textSize="16sp"
+                android:layout_gravity="start|bottom"
+                />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/rightUpperButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:textSize="23sp"
-            android:layout_gravity="end|top"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/rightDownButton"
-            android:layout_width="180dp"
-            android:layout_height="60dp"
-            android:textSize="23sp"
-            android:layout_gravity="end|bottom"
-            />
-    </FrameLayout>
+            <Button
+                android:id="@+id/rightUpperButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/contentMargin"
+                android:layout_marginBottom="@dimen/contentMarginHalf"
+                android:layout_marginStart="@dimen/contentMarginHalf"
+                android:layout_marginEnd="@dimen/contentMargin"
+                android:textSize="16sp"
+                android:layout_gravity="end|top"
+                />
 
+            <Button
+                android:id="@+id/rightDownButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="@dimen/contentMarginHalf"
+                android:layout_marginBottom="@dimen/contentMargin"
+                android:layout_marginStart="@dimen/contentMarginHalf"
+                android:layout_marginEnd="@dimen/contentMargin"
+                android:textSize="16sp"
+                android:layout_gravity="end|bottom"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>
