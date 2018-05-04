@@ -51,11 +51,7 @@ public class CategoryActivity extends AppCompatActivity implements
 
         refId = getRefId();
         loadingFragment = new LoadingFragment();
-
-        BottomNavigationViewEx bnve = findViewById(R.id.bottom_navigation);
-//        bnve.enableAnimation(false);
-//        bnve.enableShiftingMode(false);
-        bnve.setTextVisibility(false);
+        initBottomNavigationBar();
 
         if (savedInstanceState != null) {
             categories = (List<Category>) savedInstanceState.getSerializable(CATEGORIES);
@@ -143,5 +139,13 @@ public class CategoryActivity extends AppCompatActivity implements
                 inflateSelectCategoryFragment();
             }
         }, delayMillis);
+    }
+    
+    private void initBottomNavigationBar() {
+        BottomNavigationViewEx bnve = findViewById(R.id.bottom_navigation);
+        bnve.setTextVisibility(false);
+        int iconSize = 32;
+        bnve.setIconSize(iconSize, iconSize);
+        bnve.setItemHeight(BottomNavigationViewEx.dp2px(this, iconSize + 16));
     }
 }

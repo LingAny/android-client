@@ -12,26 +12,14 @@
         android:id="@+id/container"
         android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         />
 
-    <!--<android.support.design.widget.BottomNavigationView-->
-        <!--android:id="@+id/bottom_navigation"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="112dp"-->
-        <!--app:itemBackground="@color/colorPrimary"-->
-        <!--app:itemIconTint="@color/selector_item_gray_color"-->
-        <!--app:itemTextColor="@color/selector_item_gray_color"-->
-        <!--app:menu="@menu/bottom_navigation_main"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--/>-->
-
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/bottom_navigation"
-        app:itemIconTint="@color/selector_item_gray_color"
-        app:itemTextColor="@color/selector_item_gray_color"
+        app:itemIconTint="@color/selector_item_default_color"
+        app:itemTextColor="@color/selector_item_default_color"
         app:menu="@menu/bottom_navigation_main"
         style="@style/bnve_primary_bg"
         />
