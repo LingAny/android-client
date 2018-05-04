@@ -24,6 +24,8 @@ dependencies {
 
     compile 'com.amitshekhar.android:android-networking:1.0.1'
     compile 'com.victor:lib:1.0.4'
+    compile 'com.github.satyan:sugar:1.5'
 
     testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:design:26.1.0'
 }

@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.categories;
+package ru.tp.lingany.lingany.sdk.api.categories;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;

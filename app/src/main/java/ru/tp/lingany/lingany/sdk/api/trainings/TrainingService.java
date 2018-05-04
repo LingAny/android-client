@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.trainings;
+package ru.tp.lingany.lingany.sdk.api.trainings;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -7,7 +7,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 import java.util.UUID;
 
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
 public class TrainingService {

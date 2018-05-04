@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.languages;
+package ru.tp.lingany.lingany.sdk.api.languages;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -29,4 +29,8 @@ public class Language implements Serializable {
     public String getTitle() {
         return title;
     }
+
+//    public PersistenceLanguage toPersistenceLanguage() {
+//        return new PersistenceLanguage(id, title);
+//    }
 }

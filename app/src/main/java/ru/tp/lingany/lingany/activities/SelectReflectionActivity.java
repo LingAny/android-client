@@ -19,8 +19,8 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectLangFragment;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.languages.Language;
-import ru.tp.lingany.lingany.sdk.reflections.Reflection;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.reflections.Reflection;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 

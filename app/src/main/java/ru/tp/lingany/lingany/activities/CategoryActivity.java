@@ -3,7 +3,10 @@ package ru.tp.lingany.lingany.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -16,7 +19,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
@@ -61,6 +64,35 @@ public class CategoryActivity extends AppCompatActivity implements
 
         inflateLoadingFragment();
         getCategoriesForReflection();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        for (int i = 0; i < bottomNavigationView.getChildCount(); i++) {
+//            BottomBarTab tab = bottomNavigationView.get(i);
+//            tab.setGravity(Gravity.CENTER);
+//
+//            View icon = tab.findViewById(com.roughike.bottombar.R.id.bb_bottom_bar_icon);
+//            // the paddingTop will be modified when select/deselect,
+//            // so, in order to make the icon always center in tab,
+//            // we need set the paddingBottom equals paddingTop
+//            icon.setPadding(0, icon.getPaddingTop(), 0, icon.getPaddingTop());
+//
+//            View title = tab.findViewById(com.roughike.bottombar.R.id.bb_bottom_bar_title);
+//            title.setVisibility(View.GONE);
+//        }
+
+        Menu menu = bottomNavigationView.getMenu();
+
+        bottomNavigationView.ge
+
+        MenuItem menuMore = menu.findItem(R.id.action_favorites);
+        if (menuMore != null) {
+            menuMore.find;
+        }
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.CategoryAdapter;
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
 public class SelectCategoryFragment extends Fragment {

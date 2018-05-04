@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.reflections;
+package ru.tp.lingany.lingany.sdk.api.reflections;
 
 import ru.tp.lingany.lingany.sdk.ExpandItem;
 

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {

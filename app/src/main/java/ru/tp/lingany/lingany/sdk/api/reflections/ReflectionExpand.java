@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.reflections;
+package ru.tp.lingany.lingany.sdk.api.reflections;
 
 public class ReflectionExpand {
 

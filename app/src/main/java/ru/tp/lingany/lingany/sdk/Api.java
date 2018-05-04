@@ -1,9 +1,9 @@
 package ru.tp.lingany.lingany.sdk;
 
-import ru.tp.lingany.lingany.sdk.categories.CategoryService;
-import ru.tp.lingany.lingany.sdk.languages.LanguageService;
-import ru.tp.lingany.lingany.sdk.reflections.ReflectionService;
-import ru.tp.lingany.lingany.sdk.trainings.TrainingService;
+import ru.tp.lingany.lingany.sdk.api.categories.CategoryService;
+import ru.tp.lingany.lingany.sdk.api.languages.LanguageService;
+import ru.tp.lingany.lingany.sdk.api.reflections.ReflectionService;
+import ru.tp.lingany.lingany.sdk.api.trainings.TrainingService;
 
 
 public class Api {

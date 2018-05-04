@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.sdk.trainings.Training;
+import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
 public class SprintFragment extends Fragment {
