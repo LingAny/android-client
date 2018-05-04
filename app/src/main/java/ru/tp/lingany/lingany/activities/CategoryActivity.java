@@ -23,12 +23,14 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
+import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
@@ -91,12 +93,19 @@ public class CategoryActivity extends AppCompatActivity implements
 //        }
 //
 //        inflateLoadingFragment();
-        getCategoriesForReflection();
+//        getCategoriesForReflection();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        getCategoriesForReflection();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -118,7 +127,7 @@ public class CategoryActivity extends AppCompatActivity implements
     @Override
     public void onRefresh() {
         loadingFragment.startLoading();
-        getCategoriesForReflection();
+//        getCategoriesForReflection();
     }
 
     private ListenerHandler getForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Category>>() {
@@ -151,7 +160,6 @@ public class CategoryActivity extends AppCompatActivity implements
         Fragment fragment = SelectCategoryFragment.getInstance(categories);
 //        vpAdapter.getItem(position).g
         vpAdapter.replaceItem(fragment, position);
-        vpAdapter.notifyDataSetChanged();
     }
 
     private void inflateLoadingFragment() {
@@ -168,7 +176,7 @@ public class CategoryActivity extends AppCompatActivity implements
             public void run() {
                 inflateSelectCategoryFragment();
             }
-        }, delayMillis);
+        }, 1000);
     }
 
     @SuppressWarnings("unchecked")
@@ -184,8 +192,27 @@ public class CategoryActivity extends AppCompatActivity implements
         bnve.setItemHeight(BottomNavigationViewEx.dp2px(this, itemHeight));
 
         int size = 3;
-        ArrayList fragments = new ArrayList<>(size);
+        List<Fragment> fragments = new LinkedList<>();
         final SparseIntArray items = new SparseIntArray(size);
+
+        Category category1 = new Category(null, null, "title1", null);
+        List<Category> catList1 = new ArrayList<Category>();
+        catList1.add(category1);
+        Fragment fragment1 = SelectCategoryFragment.getInstance(catList1);
+
+        Category category2 = new Category(null, null, "title2", null);
+        List<Category> catList2 = new ArrayList<Category>();
+        catList2.add(category2);
+        Fragment fragment2 = SelectCategoryFragment.getInstance(catList2);
+
+        Category category3 = new Category(null, null, "title3", null);
+        List<Category> catList3 = new ArrayList<Category>();
+        catList3.add(category3);
+        Fragment fragment3 = SelectCategoryFragment.getInstance(catList3);
+
+//        fragments.add(fragment1);
+//        fragments.add(fragment2);
+//        fragments.add(fragment3);
 
         fragments.add(new LoadingFragment());
         fragments.add(new LoadingFragment());
@@ -239,53 +266,33 @@ public class CategoryActivity extends AppCompatActivity implements
         }
 
         public void replaceItem(Fragment fragment, int position) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(data.get(position))
-                    .commit();
 
             data.set(position, fragment);
+            vp.setCurrentItem(vp.getCurrentItem());
+//            data.set(1, fragment);
+//            data.set(2, fragment);
+            vp.destroyDrawingCache();
+            this.notifyDataSetChanged();
+            vp.destroyDrawingCache();
         }
-
-//        @Override
-//        public Object instantiateItem(ViewGroup collection, int position) {
-//
-//            // find view which already exists in a collection of view
-//            View mView = collection.findViewWithTag("my_view");
-//
-//            // if view doesn't exist, create new one
-//            if (mView == null) {
-//                // Inflate layout
-//                LayoutInflater layoutInflater = (LayoutInflater) collection.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                mView = layoutInflater.inflate(R.layout.my_view, null);
-//
-//                // set tag for newly inflated view
-//                mView.setTag("my_view");
-//
-//                // add view to collection
-//                ((ViewPager) collection).addView(mView, 0);
-//            }
-//
-//            Textview textview = (Textview) mView.findViewById(R.id.some_textview)
-//            textview.setText("I am on Posiiton " + position);
-//
-//            return mView;
-//        }
 
         @Override
         public int getCount() {
             return data.size();
-//            return POSITION_NONE;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return data.get(position);
+            Fragment fragment = data.get(position);
+            return fragment;
         }
 
-//        @Override
-//        public int getItemPosition() {
-//            return POSITION_NONE;
-//        }
+        @Override
+        public int getItemPosition(Object object) {
+            if (object instanceof SelectCategoryFragment) {
+                return POSITION_NONE;
+            }
+            return POSITION_UNCHANGED;
+        }
     }
 }

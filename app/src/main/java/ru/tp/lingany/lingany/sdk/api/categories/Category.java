@@ -23,14 +23,11 @@ public class Category implements Serializable {
 
     private Reflection reflection;
 
-    private List<String> randomWords;
-
     public Category(UUID id, String href, String title, Reflection reflection) {
         this.id = id;
         this.href = href;
         this.title = title;
         this.reflection = reflection;
-        fillrandomWords();
     }
 
     public UUID getId() {
@@ -48,34 +45,4 @@ public class Category implements Serializable {
     public Reflection getReflection() {
         return reflection;
     }
-
-    public String getRandomWords() {
-//        < 3 for having some time
-        if (randomWords.size() < 3) {
-            fillrandomWords();
-        }
-        String word = randomWords.get(0);
-        randomWords.remove(0);
-        return word;
-    }
-
-    private void fillrandomWords() {
-        Api.getInstance().categories().getRandomWords(this.reflection.getId(), getRandomWordsListener);
-    }
-
-    private final ParsedRequestListener<List<String>> getRandomWordsListener = new ParsedRequestListener<List<String>>() {
-        @Override
-        public void onResponse(List<String> response) {
-            randomWords = response;
-
-            Log.i("CategoryModel", "onResponse updating random words");
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            Log.e("tag", anError.toString());
-        }
-    };
-
-
 }
