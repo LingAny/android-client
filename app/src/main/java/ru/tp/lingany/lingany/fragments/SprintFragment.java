@@ -36,7 +36,6 @@ public class SprintFragment extends Fragment {
     List<TextView> buttons = new ArrayList<>();
 
     private static final String SPRINT_DATA = "SPRINT_DATA";
-    private static final String TRAININGS = "TRAININGS";
 
     public interface SprintListener {
         void onSprintFinished();
@@ -161,13 +160,13 @@ public class SprintFragment extends Fragment {
     private void processAnswer(View view) {
         TextView textView = (TextView) view;
         if (textView.getId() == R.id.agreeButtonSprint) {
-            if (getRealTranslationText().equals(getWordTranslationText())) {
+            if (sprintData.getRealTranslationText().equals(sprintData.getWordTranslationText())) {
                 addMark();
             } else {
                 addCross();
             }
         } else {
-            if (getRealTranslationText().equals(getWordTranslationText())) {
+            if (sprintData.getRealTranslationText().equals(sprintData.getWordTranslationText())) {
                 addCross();
             } else {
                 addMark();
@@ -180,7 +179,8 @@ public class SprintFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                setTrainingByNumber(currentTrainingNumber + 1);
+                sprintData.setFilled(false);
+                setAll(sprintData);
                 enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));
