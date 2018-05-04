@@ -8,9 +8,8 @@
     android:orientation="vertical"
     tools:context=".activities.CategoryActivity">
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:clipToPadding="false"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
