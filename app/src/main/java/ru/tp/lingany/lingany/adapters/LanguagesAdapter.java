@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
 
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {

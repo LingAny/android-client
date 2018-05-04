@@ -18,7 +18,7 @@ import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
-import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
 
 public class SelectLangFragment extends Fragment {
 

@@ -1,7 +1,6 @@
-package ru.tp.lingany.lingany.sdk.categories;
+package ru.tp.lingany.lingany.sdk.api.categories;
 
 import android.util.Log;
-import android.view.View;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -11,8 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.reflections.Reflection;
-import ru.tp.lingany.lingany.sdk.trainings.Training;
+import ru.tp.lingany.lingany.sdk.api.reflections.Reflection;
 
 
 public class Category implements Serializable {

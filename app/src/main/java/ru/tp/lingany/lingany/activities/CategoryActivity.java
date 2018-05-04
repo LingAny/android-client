@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +17,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
@@ -51,6 +52,11 @@ public class CategoryActivity extends AppCompatActivity implements
         refId = getRefId();
         loadingFragment = new LoadingFragment();
 
+        BottomNavigationViewEx bnve = findViewById(R.id.bottom_navigation);
+//        bnve.enableAnimation(false);
+//        bnve.enableShiftingMode(false);
+        bnve.setTextVisibility(false);
+
         if (savedInstanceState != null) {
             categories = (List<Category>) savedInstanceState.getSerializable(CATEGORIES);
             if (categories != null) {
@@ -61,6 +67,11 @@ public class CategoryActivity extends AppCompatActivity implements
 
         inflateLoadingFragment();
         getCategoriesForReflection();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override

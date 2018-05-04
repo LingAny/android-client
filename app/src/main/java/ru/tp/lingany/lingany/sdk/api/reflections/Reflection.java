@@ -1,9 +1,9 @@
-package ru.tp.lingany.lingany.sdk.reflections;
+package ru.tp.lingany.lingany.sdk.api.reflections;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
 
 
 public class Reflection implements Serializable {

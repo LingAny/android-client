@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.languages;
+package ru.tp.lingany.lingany.sdk.api.languages;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;

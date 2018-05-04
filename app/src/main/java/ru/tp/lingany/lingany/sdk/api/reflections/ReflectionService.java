@@ -1,4 +1,4 @@
-package ru.tp.lingany.lingany.sdk.reflections;
+package ru.tp.lingany.lingany.sdk.api.reflections;
 
 
 import com.androidnetworking.AndroidNetworking;
@@ -8,7 +8,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 import java.util.UUID;
 
-import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
 
 public class ReflectionService {
 

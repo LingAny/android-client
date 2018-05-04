@@ -16,8 +16,8 @@ import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
 import ru.tp.lingany.lingany.fragments.TrainingHeaderFragment;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.categories.Category;
-import ru.tp.lingany.lingany.sdk.trainings.Training;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
