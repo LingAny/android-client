@@ -34,19 +34,22 @@ public class SprintFragment extends Fragment {
     private List<Training> trainings;
     private boolean victories = false;
     private int markAndCrossLength = 0;
+    private int currentTrainingNumber;
 
     List<TextView> buttons = new ArrayList<>();
 
     private static final String TRAININGS = "TRAININGS";
+    private static final String CURRENT_TRAINING = "CURRENT_TRAINING";
 
     public interface SprintListener {
         void onSprintFinished();
     }
     private SprintListener sprintListener;
 
-    public static SprintFragment newInstance(List<Training> trainings) {
+    public static SprintFragment newInstance(List<Training> trainings, int currentTraining) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(TRAININGS, (Serializable) trainings);
+        bundle.putInt(CURRENT_TRAINING, currentTraining);
 
         SprintFragment fragment = new SprintFragment();
         fragment.setArguments(bundle);
@@ -61,6 +64,7 @@ public class SprintFragment extends Fragment {
             if (localTrainings != null) {
                 trainings = new ArrayList<>(localTrainings);
             }
+            currentTrainingNumber = (Integer) bundle.getInt(CURRENT_TRAINING);
         }
     }
 
@@ -93,15 +97,16 @@ public class SprintFragment extends Fragment {
                         }
                     });
         }
-        setAll();
+        setAll(currentTrainingNumber);
     }
 
-    private void setAll() {
-        if (trainings.size() < 1) {
+    private void setAll(int trainingNumber) {
+        currentTrainingNumber = trainingNumber;
+        if (currentTrainingNumber >= trainings.size() - 1) {
             finish();
             return;
         }
-        Training training = trainings.get(0);
+        Training training = trainings.get(currentTrainingNumber);
 
         setWordToTranslate(training.getForeignWord());
 
@@ -171,11 +176,8 @@ public class SprintFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                if (trainings.size() > 0) {
-                    trainings.remove(0);
-                    setAll();
-                    enableButtons();
-                }
+                setAll(currentTrainingNumber + 1);
+                enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));
     }
@@ -208,5 +210,9 @@ public class SprintFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         sprintListener = (SprintFragment.SprintListener) context;
+    }
+
+    public int getCurrentTrainingNumber() {
+        return currentTrainingNumber;
     }
 }

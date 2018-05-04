@@ -30,16 +30,19 @@ public class FindTranslationFragment extends Fragment {
     private FindTranslationListener findTranslationFinished;
     private List<Training> trainings;
     private Training currentTraining;
+    private int currentTrainingNumber;
 
     private ViewGroup markCrossContainer;
     private TextView wordToTranslate;
     private LayoutInflater inflater;
 
     private static final String TRAININGS = "TRAININGS";
+    private static final String CURRENT_TRAINING = "CURRENT_TRAINING";
 
-    public static FindTranslationFragment newInstance(List<Training> trainings) {
+    public static FindTranslationFragment newInstance(List<Training> trainings, int currentTraining) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(TRAININGS, (Serializable) trainings);
+        bundle.putInt(CURRENT_TRAINING, currentTraining);
 
         FindTranslationFragment fragment = new FindTranslationFragment();
         fragment.setArguments(bundle);
@@ -54,6 +57,7 @@ public class FindTranslationFragment extends Fragment {
             if (localTrainings != null) {
                 trainings = new ArrayList<>(localTrainings);
             }
+            currentTrainingNumber = (Integer) bundle.getInt(CURRENT_TRAINING);
         }
     }
 
@@ -86,20 +90,20 @@ public class FindTranslationFragment extends Fragment {
                 });
         }
 
-        setAll();
+        setAll(currentTrainingNumber);
     }
 
-    private void setAll() {
-        if (trainings.size() < 4) {
+    private void setAll(int trainingNumber) {
+        currentTrainingNumber = trainingNumber;
+        if (currentTrainingNumber >= trainings.size() - 4) {
             finish();
             return;
         }
-        Training training = trainings.get(0);
-        currentTraining = training;
+        currentTraining = trainings.get(currentTrainingNumber);
 
         clearMarkAndCross();
-        setWordToTranslate(training.getForeignWord());
-        setTranslationButtons(training);
+        setWordToTranslate(currentTraining.getForeignWord());
+        setTranslationButtons(currentTraining);
     }
 
     private void setTranslationButtons(Training training) {
@@ -149,7 +153,7 @@ public class FindTranslationFragment extends Fragment {
 
     private void processAnswer(View view) {
         TextView textView = (TextView) view;
-        if (this.currentTraining != null && this.currentTraining.getNativeWord() == textView.getText()) {
+        if (currentTraining != null && currentTraining.getNativeWord() == textView.getText()) {
             setMark();
         } else {
             setCross();
@@ -161,11 +165,8 @@ public class FindTranslationFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                if (trainings.size() > 0) {
-                    trainings.remove(0);
-                    setAll();
-                    enableButtons();
-                }
+                setAll(currentTrainingNumber + 1);
+                enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));
     }
@@ -192,4 +193,7 @@ public class FindTranslationFragment extends Fragment {
         findTranslationFinished.onFindTranslationFinished();
     }
 
+    public int getCurrentTrainingNumber() {
+        return currentTrainingNumber;
+    }
 }
