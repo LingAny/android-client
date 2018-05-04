@@ -14,6 +14,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
+import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
@@ -34,6 +35,7 @@ public class TrainingActivity extends AppCompatActivity implements
     public static final String TRAININGS = "TRAININGS";
     public static final String TRAINING_MODE = "TRAINING_MODE";
     public static final String TRAINING_NUMBER = "TRAINING_NUMBER";
+    public static final String SPRINT_DATA = "SPRINT_DATA";
 
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
@@ -52,8 +54,8 @@ public class TrainingActivity extends AppCompatActivity implements
                     savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
                     break;
                 case SPRINT:
-                    trainingNumber = sprintFragment.getCurrentTrainingNumber();
-                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+                    SprintData sprintData = sprintFragment.getSprintData();
+                    savedInstanceState.putSerializable(SPRINT_DATA, sprintData);
                     break;
                 default:
                     break;
@@ -121,7 +123,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void initializeSprintFragments(int currentTraining) {
-        sprintFragment = SprintFragment.newInstance(trainings, null);
+        sprintFragment = SprintFragment.newInstance(new SprintData(trainings));
 
         getSupportFragmentManager()
                 .beginTransaction()

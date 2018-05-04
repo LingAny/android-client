@@ -207,4 +207,12 @@ public class SprintFragment extends Fragment {
         super.onAttach(context);
         sprintListener = (SprintFragment.SprintListener) context;
     }
+
+    public SprintData getSprintData() {
+        return sprintData;
+    }
+
+    public void setSprintData(SprintData sprintData) {
+        this.sprintData = sprintData;
+    }
 }
