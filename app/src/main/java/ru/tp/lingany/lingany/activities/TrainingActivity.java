@@ -121,7 +121,7 @@ public class TrainingActivity extends AppCompatActivity implements
     }
 
     private void initializeSprintFragments(int currentTraining) {
-        sprintFragment = SprintFragment.newInstance(trainings, currentTraining);
+        sprintFragment = SprintFragment.newInstance(trainings, null);
 
         getSupportFragmentManager()
                 .beginTransaction()
