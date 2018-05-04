@@ -1,6 +1,5 @@
 package ru.tp.lingany.lingany.pages;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,8 +28,6 @@ import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 public class CategoriesPage extends Fragment {
 
-    private Context context;
-
     private UUID refId;
 
     private List<Category> categories;
@@ -39,6 +37,8 @@ public class CategoriesPage extends Fragment {
     public static final String REFLECTION_ID = "REFLECTION_ID";
 
     public static final String CATEGORIES = "CATEGORIES";
+
+    private ListenerHandler getForRefListenerHandler;
 
     public static CategoriesPage getInstance(UUID refId) {
         Bundle bundle = new Bundle();
@@ -57,10 +57,31 @@ public class CategoriesPage extends Fragment {
 
     public void selectCategory(int position) {
         Category category = categories.get(position);
-        Intent intent = new Intent(context, TrainingActivity.class);
+        Intent intent = new Intent(getContext(), TrainingActivity.class);
         intent.putExtra(TrainingActivity.EXTRA_CATEGORY, category);
         startActivity(intent);
     }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        readBundle(Objects.requireNonNull(getArguments()));
+        loadingFragment = new LoadingFragment();
+        getForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Category>>() {
+            @Override
+            public void onResponse(List<Category> response) {
+                categories = response;
+                loadingFragment.stopLoading();
+                inflateSelectCategoryFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                loadingFragment.showRefresh();
+            }
+        });
+    }
+
 
     @Nullable
     @Override
@@ -69,28 +90,56 @@ public class CategoriesPage extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        readBundle(Objects.requireNonNull(getArguments()));
+    @SuppressWarnings("unchecked")
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        loadingFragment = new LoadingFragment();
-        inflateLoadingFragment();
+        if (savedInstanceState != null) {
+            categories = (List<Category>) savedInstanceState.getSerializable(CATEGORIES);
+        }
+    }
 
-        getCategoriesForReflection();
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (categories == null) {
+            inflateLoadingFragment();
+            getCategoriesForReflection();
+        } else {
+            inflateSelectCategoryFragment();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (categories != null) {
+            outState.putSerializable(CATEGORIES, (Serializable) categories);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if (getForRefListenerHandler != null) {
             getForRefListenerHandler.unregister();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
     }
 
     @SuppressWarnings("unchecked")
@@ -98,20 +147,6 @@ public class CategoriesPage extends Fragment {
         ParsedRequestListener<List<Category>> listener = (ParsedRequestListener<List<Category>>) getForRefListenerHandler.asListener();
         Api.getInstance().categories().getForReflection(refId, listener);
     }
-
-    private ListenerHandler getForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Category>>() {
-        @Override
-        public void onResponse(List<Category> response) {
-            categories = response;
-            loadingFragment.stopLoading();
-            inflateSelectCategoryFragment(getResources().getInteger(R.integer.delayInflateAfterLoading));
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            loadingFragment.showRefresh();
-        }
-    });
 
     private void inflateSelectCategoryFragment() {
         Fragment fragment = SelectCategoryFragment.getInstance(categories);
