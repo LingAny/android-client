@@ -1,5 +1,6 @@
 package ru.tp.lingany.lingany.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,9 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,7 +179,7 @@ public class CategoryActivity extends AppCompatActivity implements
             public void run() {
                 inflateSelectCategoryFragment();
             }
-        }, 1000);
+        }, 300);
     }
 
     @SuppressWarnings("unchecked")
@@ -267,13 +270,17 @@ public class CategoryActivity extends AppCompatActivity implements
 
         public void replaceItem(Fragment fragment, int position) {
 
+            destroyItem(vp, position, data.get(position));
+            finishUpdate(vp);
             data.set(position, fragment);
-            vp.setCurrentItem(vp.getCurrentItem());
-//            data.set(1, fragment);
-//            data.set(2, fragment);
-            vp.destroyDrawingCache();
+
+            Fragment old = getSupportFragmentManager().findFragmentByTag(makeFragmentName(vp.getId(), position));
+            getSupportFragmentManager().beginTransaction().remove(old).commitNow();
+//
+
             this.notifyDataSetChanged();
-            vp.destroyDrawingCache();
+            instantiateItem(vp, position);
+            finishUpdate(vp);
         }
 
         @Override
@@ -285,14 +292,6 @@ public class CategoryActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             Fragment fragment = data.get(position);
             return fragment;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            if (object instanceof SelectCategoryFragment) {
-                return POSITION_NONE;
-            }
-            return POSITION_UNCHANGED;
         }
     }
 }
