@@ -8,11 +8,11 @@ public class RandArray {
 
     private static Random rand = new Random();
 
-    public static List<Integer> getRandIndexes(int size, int min, int max) {
+    public static List<Integer> getRandIndexes(int size, int min, int max, int indexToAvoid) {
         List<Integer> arr = new ArrayList<>();
         while (arr.size() < size) {
             Integer idx = rand.nextInt(max - min + 1) + min;//random between min and max including both
-            if (!arr.contains(idx)) {
+            if (!arr.contains(idx) && idx != indexToAvoid) {
                 arr.add(idx);
             }
         }

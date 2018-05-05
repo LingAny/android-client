@@ -4,28 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.tp.lingany.lingany.activities.TrainingActivity">
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/trainingContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center">
-        <FrameLayout
-            android:id="@+id/trainingHeaderContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/trainingBodyContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="20dp"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-        </FrameLayout>
-    </LinearLayout>
-
+    </FrameLayout>
 </FrameLayout>
