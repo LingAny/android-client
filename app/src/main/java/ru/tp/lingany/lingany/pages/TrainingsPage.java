@@ -113,4 +113,3 @@ public class TrainingsPage extends Fragment {
         refId = (UUID) bundle.getSerializable(REFLECTION_ID);
     }
 }
-
