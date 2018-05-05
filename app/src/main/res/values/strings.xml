@@ -21,5 +21,6 @@
 
     <string name="agreeButton">Yes</string>
     <string name="notAgreeButton">No</string>
+    <string name="rememberButton">Remember</string>
 
 </resources>
