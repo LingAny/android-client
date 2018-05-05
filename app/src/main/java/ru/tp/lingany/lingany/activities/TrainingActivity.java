@@ -162,11 +162,11 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onFindTranslationFinished() {
-//        changeMode(Mode.SPRINT, SprintData(trainings));
+        changeMode(Mode.SPRINT, new SprintData(trainings));
     }
 
     @Override
     public void onSprintFinished() {
-//        changeMode(Mode.FIND_TRANSLATION, 0);
+        changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
     }
 }

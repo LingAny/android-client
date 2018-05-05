@@ -103,6 +103,7 @@ public class FindTranslationFragment extends Fragment {
     }
 
     private void setNewTraining(TranslationData translationData) {
+        translationData.clearRandomWords();
         translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
         if (translationData.getCurrentTrainingNumber() >= translationData.getTrainings().size()) {
             finish();
@@ -118,7 +119,7 @@ public class FindTranslationFragment extends Fragment {
     }
 
     private void setTranslationButtons(TranslationData translationData) {
-        List<Integer> indexes = RandArray.getRandIndexes(3, 1, translationData.getTrainings().size() - 1, translationData.getCurrentTrainingNumber());
+        List<Integer> indexes = RandArray.getRandIndexes(3, 0, translationData.getTrainings().size() - 1, translationData.getCurrentTrainingNumber());
 
         Map<Integer, String> words = translationData.getRandomWords();
         for (Integer index: indexes) {

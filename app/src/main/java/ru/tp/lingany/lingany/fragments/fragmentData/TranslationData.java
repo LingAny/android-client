@@ -60,4 +60,8 @@ public class TranslationData extends FragmentData implements Serializable {
     public void setAnswerPosition(int answerPosition) {
         this.answerPosition = answerPosition;
     }
+
+    public void clearRandomWords() {
+        randomWords.clear();
+    }
 }
