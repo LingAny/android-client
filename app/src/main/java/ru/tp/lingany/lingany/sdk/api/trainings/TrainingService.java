@@ -44,6 +44,15 @@ public class TrainingService {
                 .getAsObjectList(Training.class, listener);
     }
 
+    public void getMixForReflection(UUID refId, ParsedRequestListener<List<Training>> listener) {
+        AndroidNetworking.get(url + "mix/{uid}")
+                .addPathParameter("uid", refId.toString())
+                .setTag(this)
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsObjectList(Training.class, listener);
+    }
+
     public void getForCategory(Category category, ParsedRequestListener<List<Training>> listener) {
         getForCategory(category.getId(), listener);
     }

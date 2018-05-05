@@ -207,8 +207,8 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SelectReflectionActivity.this, CategoryActivity.class);
-                intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflection.getId().toString());
+                Intent intent = new Intent(SelectReflectionActivity.this, MenuActivity.class);
+                intent.putExtra(MenuActivity.EXTRA_REFLECTION, reflection.getId().toString());
                 startActivity(intent);
             }
         }, getResources().getInteger(R.integer.delayInflateAfterLoading));
