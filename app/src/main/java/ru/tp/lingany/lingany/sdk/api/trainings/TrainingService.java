@@ -44,8 +44,8 @@ public class TrainingService {
                 .getAsObjectList(Training.class, listener);
     }
 
-    public void getShapeForReflection(UUID refId, ParsedRequestListener<List<Training>> listener) {
-        AndroidNetworking.get(url + "shape/{uid}")
+    public void getMixForReflection(UUID refId, ParsedRequestListener<List<Training>> listener) {
+        AndroidNetworking.get(url + "mix/{uid}")
                 .addPathParameter("uid", refId.toString())
                 .setTag(this)
                 .setPriority(Priority.HIGH)

@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
+
+import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.models.TrainingMode;
+import ru.tp.lingany.lingany.sdk.Api;
+import ru.tp.lingany.lingany.sdk.api.trainings.Training;
+import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 public class TrainingModeActivity extends AppCompatActivity implements
         LoadingFragment.RefreshListener {
@@ -17,8 +24,11 @@ public class TrainingModeActivity extends AppCompatActivity implements
     private UUID refId;
     private TrainingMode mode;
 
+    private List<Training> mix;
+
     private LoadingFragment loadingFragment;
 
+    private ListenerHandler getMixForRefListenerHandler;
 
     public static final String EXTRA_REFLECTION_ID = "EXTRA_REFLECTION_ID";
     public static final String EXTRA_TRAINING_MODE = "EXTRA_TRAINING_MODE";
@@ -31,7 +41,23 @@ public class TrainingModeActivity extends AppCompatActivity implements
         readIntent();
 
         loadingFragment = new LoadingFragment();
+        getMixForRefListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
+            @Override
+            public void onResponse(List<Training> response) {
+                mix = response;
+                loadingFragment.stopLoading();
+                Toast.makeText(getApplicationContext(), "onResponse", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                loadingFragment.showRefresh();
+            }
+        });
+
+
         inflateLoadingFragment();
+        getMixForReflection();
 
         Toast.makeText(this, mode.getTitle(), Toast.LENGTH_SHORT).show();
     }
@@ -52,5 +78,12 @@ public class TrainingModeActivity extends AppCompatActivity implements
     @Override
     public void onRefresh() {
         loadingFragment.startLoading();
+        getMixForReflection();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void getMixForReflection() {
+        ParsedRequestListener<List<Training>> listener = (ParsedRequestListener<List<Training>>) getMixForRefListenerHandler.asListener();
+        Api.getInstance().training().getMixForReflection(refId, listener);
     }
 }
