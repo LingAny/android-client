@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
-import java.io.Serializable;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
@@ -15,10 +14,12 @@ import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
 import ru.tp.lingany.lingany.fragments.TeachingFragment;
+import ru.tp.lingany.lingany.fragments.TypingFragment;
 import ru.tp.lingany.lingany.fragments.fragmentData.FragmentData;
 import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
 import ru.tp.lingany.lingany.fragments.fragmentData.TeachingData;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
+import ru.tp.lingany.lingany.fragments.fragmentData.TypingData;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
@@ -29,19 +30,22 @@ public class TrainingActivity extends AppCompatActivity implements
         FindTranslationFragment.FindTranslationListener,
         LoadingFragment.RefreshListener,
         SprintFragment.SprintListener,
-        TeachingFragment.TeachingListener {
+        TeachingFragment.TeachingListener,
+        TypingFragment.TypingListener {
 
-    enum Mode { TEACHING, FIND_TRANSLATION, SPRINT }
+    enum Mode { TEACHING, FIND_TRANSLATION, SPRINT, TYPING }
     private Mode mode;
-    SprintFragment sprintFragment;
-    FindTranslationFragment translationFragment;
-    TeachingFragment teachingFragment;
+    private SprintFragment sprintFragment;
+    private FindTranslationFragment translationFragment;
+    private TeachingFragment teachingFragment;
+    private TypingFragment typingFragment;
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     public static final String TRAINING_MODE = "TRAINING_MODE";
     public static final String SPRINT_DATA = "SPRINT_DATA";
     public static final String TRAINING_DATA = "TRAINING_DATA";
     public static final String TEACHING_DATA = "TEACHING_DATA";
+    public static final String TYPING_DATA = "TYPING_DATA";
 
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
@@ -62,6 +66,10 @@ public class TrainingActivity extends AppCompatActivity implements
                     SprintData sprintData = sprintFragment.getSprintData();
                     savedInstanceState.putSerializable(SPRINT_DATA, sprintData);
                     break;
+                case TYPING:
+                    TypingData typingData = typingFragment.getTypingData();
+                    savedInstanceState.putSerializable(TYPING_DATA, typingData);
+                    break;
                 default:
                     break;
             }
@@ -76,6 +84,7 @@ public class TrainingActivity extends AppCompatActivity implements
         public void onResponse(List<Training> response) {
             trainings = response;
             changeMode(Mode.TEACHING, new TeachingData(trainings));
+//            changeMode(Mode.TYPING, new TypingData(trainings));
             loadingFragment.stopLoading();
         }
 
@@ -108,6 +117,10 @@ public class TrainingActivity extends AppCompatActivity implements
             } else if (mode == Mode.FIND_TRANSLATION) {
                 TranslationData translationData = (TranslationData) savedInstanceState.getSerializable(TRAINING_DATA);
                 changeMode(mode, translationData);
+                return;
+            } else if (mode == Mode.TYPING) {
+                TypingData typingData = (TypingData) savedInstanceState.getSerializable(TYPING_DATA);
+                changeMode(mode, typingData);
                 return;
             }
         }
@@ -149,6 +162,15 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    private void initializeTypingFragment(TypingData typingData) {
+        typingFragment = TypingFragment.newInstance(typingData);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.trainingContainer, typingFragment)
+                .commit();
+    }
+
     private void inflateLoadingFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -164,6 +186,8 @@ public class TrainingActivity extends AppCompatActivity implements
             initializeTranslationFragments((TranslationData) data);
         } else if (newMode == Mode.SPRINT) {
             initializeSprintFragments((SprintData) data);
+        } else if (newMode == Mode.TYPING) {
+            initializeTypingFragment((TypingData) data);
         }
     }
 
@@ -193,6 +217,12 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onTeachingFinished() {
+        changeMode(Mode.TYPING, new TypingData(trainings));
+    }
+
+    @Override
+    public void onTypingFinished() {
         changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
     }
+
 }
