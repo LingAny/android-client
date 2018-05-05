@@ -99,7 +99,7 @@ public class FindTranslationFragment extends Fragment {
     private void setTrainingAfterSaveInstance(TranslationData translationData) {
         clearMarkAndCross();
         setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
-        setTranslationButtons(translationData);
+        setWordsOnButtons(translationData.getCurrentTraining().getNativeWord(), translationData.getRandomWords());
     }
 
     private void setNewTraining(TranslationData translationData) {
@@ -124,15 +124,17 @@ public class FindTranslationFragment extends Fragment {
         for (Integer index: indexes) {
             words.put(index, translationData.getTrainings().get(index).getNativeWord());
         }
+
+        int answerPosition = (int) (Math.random() * 3);
+        translationData.setAnswerPosition(answerPosition);
         setWordsOnButtons(translationData.getCurrentTraining().getNativeWord(), words);
     }
 
     public void setWordsOnButtons(String translationWord, Map<Integer, String> words) {
-        int translationPosition = (int) (Math.random() * 3);
 
         Iterator iterator = words.entrySet().iterator();
         for (int i = 0; i < buttons.size(); ++i) {
-            if (i == translationPosition) {
+            if (i == translationData.getAnswerPosition()) {
                 buttons.get(i).setText(translationWord);
             } else {
                 if (iterator.hasNext()) {

@@ -13,7 +13,7 @@ public class TranslationData extends FragmentData implements Serializable {
     private boolean isFilled;
 
     private HashMap<Integer, String> randomWords;
-
+    private int answerPosition;
 
     public TranslationData(List<Training> trainings) {
         super(trainings);
@@ -51,5 +51,13 @@ public class TranslationData extends FragmentData implements Serializable {
 
     public void setRandomWords(HashMap<Integer, String> randomWords) {
         this.randomWords = randomWords;
+    }
+
+    public int getAnswerPosition() {
+        return answerPosition;
+    }
+
+    public void setAnswerPosition(int answerPosition) {
+        this.answerPosition = answerPosition;
     }
 }
