@@ -2,8 +2,9 @@ package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
@@ -14,6 +15,7 @@ import java.util.UUID;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.models.TrainingMode;
+import ru.tp.lingany.lingany.models.TrainingModeTypes;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
@@ -46,7 +48,7 @@ public class TrainingModeActivity extends AppCompatActivity implements
             public void onResponse(List<Training> response) {
                 mix = response;
                 loadingFragment.stopLoading();
-                Toast.makeText(getApplicationContext(), "onResponse", Toast.LENGTH_SHORT).show();
+                inflateTrainingMode(getResources().getInteger(R.integer.delayInflateAfterLoading));
             }
 
             @Override
@@ -63,7 +65,7 @@ public class TrainingModeActivity extends AppCompatActivity implements
             inflateLoadingFragment();
             getMixForReflection();
         } else {
-            // TODO inflate training fragment
+            inflateTrainingMode();
         }
     }
 
@@ -85,6 +87,35 @@ public class TrainingModeActivity extends AppCompatActivity implements
                 .beginTransaction()
                 .replace(R.id.container, loadingFragment)
                 .commit();
+    }
+
+    private void inflateTrainingMode() {
+        Fragment fragment = null;
+        TrainingModeTypes.Type type = mode.getType();
+
+        if (type == TrainingModeTypes.Type.SPRINT_F2N) {
+            // TODO init fragmetn
+        } else if (type == TrainingModeTypes.Type.SPRINT_N2F) {
+            // TODO init fragmetn
+        } else if (type == TrainingModeTypes.Type.TRANSLATION_F2N) {
+            // TODO init fragmetn
+        } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F) {
+            // TODO init fragmetn
+        }
+
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.container, fragment)
+//                .commit();
+    }
+
+    private void inflateTrainingMode(int delayMillis) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                inflateTrainingMode();
+            }
+        }, delayMillis);
     }
 
     private void readIntent() {
