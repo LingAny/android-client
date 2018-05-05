@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
+import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
+import ru.tp.lingany.lingany.fragments.SprintFragment;
+import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
+import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
 import ru.tp.lingany.lingany.models.TrainingMode;
 import ru.tp.lingany.lingany.models.TrainingModeTypes;
 import ru.tp.lingany.lingany.sdk.Api;
@@ -21,7 +25,9 @@ import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 public class TrainingModeActivity extends AppCompatActivity implements
-        LoadingFragment.RefreshListener {
+        LoadingFragment.RefreshListener,
+        SprintFragment.SprintListener,
+        FindTranslationFragment.FindTranslationListener {
 
     private UUID refId;
     private TrainingMode mode;
@@ -89,24 +95,29 @@ public class TrainingModeActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    // TODO refactor this shit
     private void inflateTrainingMode() {
         Fragment fragment = null;
         TrainingModeTypes.Type type = mode.getType();
 
         if (type == TrainingModeTypes.Type.SPRINT_F2N) {
-            // TODO init fragmetn
+            SprintData data = new SprintData(mix);
+            fragment = SprintFragment.newInstance(data);
         } else if (type == TrainingModeTypes.Type.SPRINT_N2F) {
-            // TODO init fragmetn
+            SprintData data = new SprintData(mix);
+            fragment = SprintFragment.newInstance(data);
         } else if (type == TrainingModeTypes.Type.TRANSLATION_F2N) {
-            // TODO init fragmetn
+            TranslationData data = new TranslationData(mix);
+            fragment = FindTranslationFragment.newInstance(data);
         } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F) {
-            // TODO init fragmetn
+            TranslationData data = new TranslationData(mix);
+            fragment = FindTranslationFragment.newInstance(data);
         }
 
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.container, fragment)
-//                .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     private void inflateTrainingMode(int delayMillis) {
@@ -134,5 +145,15 @@ public class TrainingModeActivity extends AppCompatActivity implements
     private void getMixForReflection() {
         ParsedRequestListener<List<Training>> listener = (ParsedRequestListener<List<Training>>) getMixForRefListenerHandler.asListener();
         Api.getInstance().training().getMixForReflection(refId, listener);
+    }
+
+    @Override
+    public void onFindTranslationFinished() {
+        finish();
+    }
+
+    @Override
+    public void onSprintFinished() {
+        finish();
     }
 }
