@@ -14,8 +14,10 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
+import ru.tp.lingany.lingany.fragments.TeachingFragment;
 import ru.tp.lingany.lingany.fragments.fragmentData.FragmentData;
 import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
+import ru.tp.lingany.lingany.fragments.fragmentData.TeachingData;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
@@ -26,19 +28,20 @@ import ru.tp.lingany.lingany.utils.ListenerHandler;
 public class TrainingActivity extends AppCompatActivity implements
         FindTranslationFragment.FindTranslationListener,
         LoadingFragment.RefreshListener,
-        SprintFragment.SprintListener {
+        SprintFragment.SprintListener,
+        TeachingFragment.TeachingListener {
 
-    enum Mode { FIND_TRANSLATION, SPRINT }
+    enum Mode { TEACHING, FIND_TRANSLATION, SPRINT }
     private Mode mode;
     SprintFragment sprintFragment;
     FindTranslationFragment translationFragment;
+    TeachingFragment teachingFragment;
 
     public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
-    public static final String TRAININGS = "TRAININGS";
     public static final String TRAINING_MODE = "TRAINING_MODE";
-    public static final String TRAINING_NUMBER = "TRAINING_NUMBER";
     public static final String SPRINT_DATA = "SPRINT_DATA";
     public static final String TRAINING_DATA = "TRAINING_DATA";
+    public static final String TEACHING_DATA = "TEACHING_DATA";
 
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
@@ -48,6 +51,9 @@ public class TrainingActivity extends AppCompatActivity implements
     public void onSaveInstanceState(Bundle savedInstanceState) {
         if (mode != null) {
             switch (mode) {
+                case TEACHING:
+                    TeachingData teachingData = teachingFragment.getTeachingData();
+                    savedInstanceState.putSerializable(TEACHING_DATA, teachingData);
                 case FIND_TRANSLATION:
                     TranslationData translationData =  translationFragment.getTranslationData();
                     savedInstanceState.putSerializable(TRAINING_DATA, translationData);
@@ -69,7 +75,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
+            changeMode(Mode.TEACHING, new TeachingData(trainings));
             loadingFragment.stopLoading();
         }
 
@@ -91,7 +97,11 @@ public class TrainingActivity extends AppCompatActivity implements
         if (savedInstanceState != null) {
 
             mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
-            if (mode == Mode.SPRINT) {
+            if (mode == Mode.TEACHING) {
+                TeachingData teachingData = (TeachingData) savedInstanceState.getSerializable(TEACHING_DATA);
+                changeMode(mode, teachingData);
+                return;
+            } else if (mode == Mode.SPRINT) {
                 SprintData sprintData = (SprintData) savedInstanceState.getSerializable(SPRINT_DATA);
                 changeMode(mode, sprintData);
                 return;
@@ -130,6 +140,15 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    private void initializeTeachingFragment(TeachingData teachingData) {
+        teachingFragment = TeachingFragment.newInstance(teachingData);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.trainingContainer, teachingFragment)
+                .commit();
+    }
+
     private void inflateLoadingFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -139,7 +158,9 @@ public class TrainingActivity extends AppCompatActivity implements
 
     private void changeMode(Mode newMode, FragmentData data) {
         mode = newMode;
-        if (newMode == Mode.FIND_TRANSLATION) {
+        if (newMode == Mode.TEACHING) {
+            initializeTeachingFragment((TeachingData) data);
+        } else if (newMode == Mode.FIND_TRANSLATION) {
             initializeTranslationFragments((TranslationData) data);
         } else if (newMode == Mode.SPRINT) {
             initializeSprintFragments((SprintData) data);
@@ -167,6 +188,11 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSprintFinished() {
+        changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
+    }
+
+    @Override
+    public void onTeachingFinished() {
         changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
     }
 }
