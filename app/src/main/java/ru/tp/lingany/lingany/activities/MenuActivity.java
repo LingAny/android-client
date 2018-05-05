@@ -22,6 +22,7 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.pages.CategoriesPage;
+import ru.tp.lingany.lingany.pages.TrainingsPage;
 
 
 public class MenuActivity extends AppCompatActivity implements
@@ -37,6 +38,7 @@ public class MenuActivity extends AppCompatActivity implements
     private BottomNavigationViewEx bnve;
 
     private CategoriesPage categoriesPage;
+    private TrainingsPage trainingsPage;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -80,9 +82,10 @@ public class MenuActivity extends AppCompatActivity implements
         final SparseIntArray items = new SparseIntArray(size);
 
         categoriesPage = CategoriesPage.getInstance(refId);
+        trainingsPage = new TrainingsPage();
 
         fragments.add(categoriesPage);
-        fragments.add(new LoadingFragment());
+        fragments.add(trainingsPage);
         fragments.add(new LoadingFragment());
 
         items.put(R.id.action_categories, 0);
