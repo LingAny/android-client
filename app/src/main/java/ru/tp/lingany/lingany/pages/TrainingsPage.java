@@ -1,5 +1,6 @@
 package ru.tp.lingany.lingany.pages;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.TrainingModeAdapter;
@@ -22,9 +25,42 @@ public class TrainingsPage extends Fragment {
 
     private ArrayList<TrainingMode> modes;
 
+    private UUID refId;
+
+    private TrainingModeClickListener trainingModeClickListener;
+
+    private static final String REFLECTION_ID = "REFLECTION_ID";
+
+    public static TrainingsPage getInstance(UUID refId) {
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(REFLECTION_ID, refId);
+
+        TrainingsPage fragment = new TrainingsPage();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public interface TrainingModeClickListener {
+        void onClickTrainingMode(int position);
+    }
+
+    public void selectTraining(int position) {
+        // do start Training Mode Activity
+        TrainingMode mode = modes.get(position);
+        Toast.makeText(getContext(), mode.getTitle(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        trainingModeClickListener = (TrainingsPage.TrainingModeClickListener) context;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        readBundle(Objects.requireNonNull(getArguments()));
         initTrainingModes();
     }
 
@@ -37,7 +73,6 @@ public class TrainingsPage extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RecyclerView trainingRecyclerView = view.findViewById(R.id.trainings);
-
         RecyclerView.LayoutManager trainingLayoutManager = new LinearLayoutManager(getContext());
         trainingRecyclerView.setLayoutManager(trainingLayoutManager);
         trainingRecyclerView.setAdapter(new TrainingModeAdapter(modes, new TrainingsPage.ItemClickListener()));
@@ -47,8 +82,7 @@ public class TrainingsPage extends Fragment {
 
         @Override
         public void onClick(View view, int position) {
-            TrainingMode mode = modes.get(position);
-            Toast.makeText(getContext(), mode.getTitle(), Toast.LENGTH_SHORT).show();
+            trainingModeClickListener.onClickTrainingMode(position);
         }
     }
 
@@ -64,6 +98,11 @@ public class TrainingsPage extends Fragment {
         modes.add(sprintF2N);
         modes.add(translateN2F);
         modes.add(translateF2N);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readBundle(Bundle bundle) {
+        refId = (UUID) bundle.getSerializable(REFLECTION_ID);
     }
 }
 

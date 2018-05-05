@@ -26,6 +26,7 @@ import ru.tp.lingany.lingany.pages.TrainingsPage;
 
 
 public class MenuActivity extends AppCompatActivity implements
+        TrainingsPage.TrainingModeClickListener,
         LoadingFragment.RefreshListener,
         SelectCategoryFragment.CategoryClickListener {
 
@@ -56,6 +57,11 @@ public class MenuActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onClickTrainingMode(int position) {
+        trainingsPage.selectTraining(position);
+    }
+
+    @Override
     public void onRefresh() {
         categoriesPage.refresh();
     }
@@ -82,7 +88,7 @@ public class MenuActivity extends AppCompatActivity implements
         final SparseIntArray items = new SparseIntArray(size);
 
         categoriesPage = CategoriesPage.getInstance(refId);
-        trainingsPage = new TrainingsPage();
+        trainingsPage = TrainingsPage.getInstance(refId);
 
         fragments.add(categoriesPage);
         fragments.add(trainingsPage);
