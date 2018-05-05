@@ -24,7 +24,9 @@
             android:inputType="text"
             android:layout_marginTop="@dimen/contentMargin"
             android:layout_gravity="center"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:gravity="center"
+            android:hint="@string/writeTranslation"/>
 
     </LinearLayout>
 

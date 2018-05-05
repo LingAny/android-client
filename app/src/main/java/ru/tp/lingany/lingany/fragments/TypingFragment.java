@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -51,7 +52,7 @@ public class TypingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {;
-        return inflater.inflate(R.layout.fragment_teaching, container, false);
+        return inflater.inflate(R.layout.fragment_typing, container, false);
     }
 
     @Override
@@ -102,15 +103,25 @@ public class TypingFragment extends Fragment {
     private void processAnswer(View view) {
         TextView textView = (TextView) view;
 
+        if (typingData.getTrainings().get(typingData.getTrainingNumber()).getNativeWord().equals(wordTranslation.getText().toString())) {
+            wordTranslation.setTextColor(Color.GREEN);
+
+        } else {
+            wordTranslation.setTextColor(Color.RED);
+//            wordTranslation.setHintTextColor(getResources().getColor(R.color.gray));
+        }
+
         disableButtons();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                wordTranslation.setText("");
+                wordTranslation.setTextColor(Color.GRAY);
                 setNewWords(typingData);
                 enableButtons();
             }
-        }, getResources().getInteger(R.integer.delayNextTraining));
+        }, 10 * getResources().getInteger(R.integer.delayNextTraining));
     }
 
     private void disableButtons() {
