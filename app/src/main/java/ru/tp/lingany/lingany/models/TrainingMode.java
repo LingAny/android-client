@@ -1,6 +1,9 @@
 package ru.tp.lingany.lingany.models;
 
-public class TrainingMode {
+import java.io.Serializable;
+
+
+public class TrainingMode implements Serializable {
 
     private TrainingModeTypes.Type type;
     private String title;

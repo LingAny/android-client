@@ -1,6 +1,7 @@
 package ru.tp.lingany.lingany.pages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
+import ru.tp.lingany.lingany.activities.TrainingModeActivity;
 import ru.tp.lingany.lingany.adapters.TrainingModeAdapter;
 import ru.tp.lingany.lingany.models.TrainingMode;
 import ru.tp.lingany.lingany.models.TrainingModeTypes;
@@ -49,6 +51,12 @@ public class TrainingsPage extends Fragment {
         // do start Training Mode Activity
         TrainingMode mode = modes.get(position);
         Toast.makeText(getContext(), mode.getTitle(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getContext(), TrainingModeActivity.class);
+        intent.putExtra(TrainingModeActivity.EXTRA_REFLECTION_ID, refId);
+        intent.putExtra(TrainingModeActivity.EXTRA_TRAINING_MODE, mode);
+        startActivity(intent);
+
     }
 
     @Override
