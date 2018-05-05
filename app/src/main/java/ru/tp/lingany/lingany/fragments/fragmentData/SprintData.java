@@ -11,6 +11,8 @@ public class SprintData extends FragmentData implements Serializable {
     private String wordTranslationText;
     private String realTranslationText;
     private boolean isFilled;
+    private boolean victories = false;
+    private int markAndCrossLength = 0;
 
     public SprintData(List<Training> trainings) {
         super(trainings);
@@ -65,5 +67,21 @@ public class SprintData extends FragmentData implements Serializable {
 
     public void setFilled(boolean filled) {
         isFilled = filled;
+    }
+
+    public boolean isVictories() {
+        return victories;
+    }
+
+    public void setVictories(boolean victories) {
+        this.victories = victories;
+    }
+
+    public int getMarkAndCrossLength() {
+        return markAndCrossLength;
+    }
+
+    public void setMarkAndCrossLength(int markAndCrossLength) {
+        this.markAndCrossLength = markAndCrossLength;
     }
 }

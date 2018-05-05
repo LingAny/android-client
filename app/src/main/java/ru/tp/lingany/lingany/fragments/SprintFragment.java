@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,25 +26,21 @@ public class SprintFragment extends Fragment {
     private ViewGroup marksContainer;
     private TextView wordToTranslate;
     private TextView wordTranslation;
-
     private SprintData sprintData;
 
-    private boolean victories = false;
-    private int markAndCrossLength = 0;
-
     List<TextView> buttons = new ArrayList<>();
-
     private static final String SPRINT_DATA = "SPRINT_DATA";
 
     public interface SprintListener {
         void onSprintFinished();
     }
+
     private SprintListener sprintListener;
 
     public static SprintFragment newInstance(SprintData sprintData) {
         Bundle bundle = new Bundle();
         if (sprintData != null) {
-            bundle.putSerializable(SPRINT_DATA, (Serializable) sprintData);
+            bundle.putSerializable(SPRINT_DATA, sprintData);
         }
 
         SprintFragment fragment = new SprintFragment();
@@ -96,14 +91,29 @@ public class SprintFragment extends Fragment {
 
     private void setAll(SprintData sprintData) {
         if (sprintData.isFilled()) {
-            setTrainingByData(sprintData);
+            setTrainingAfterSaveInstance(sprintData);
         } else {
-            setNewTrainingData(sprintData);
-            setTrainingByData(sprintData);
+            setNewTraining(sprintData);
         }
     }
 
-    private void setNewTrainingData(SprintData sprintData) {
+    private void setTrainingAfterSaveInstance(SprintData sprintData) {
+        if (sprintData.isVictories()) {
+            for (int i = 0; i < sprintData.getMarkAndCrossLength(); ++i) {
+                final View view = inflater.inflate(R.layout.item_mark, marksContainer, false);
+                marksContainer.addView(view);
+            }
+        } else {
+            for (int i = 0; i < sprintData.getMarkAndCrossLength(); ++i) {
+                final View view = inflater.inflate(R.layout.item_cross, this.marksContainer, false);
+                marksContainer.addView(view);
+            }
+        }
+        setWordToTranslate(sprintData.getWordToTranslateText());
+        setWordTranslation(sprintData.getWordTranslationText());
+    }
+
+    private void setNewTraining(SprintData sprintData) {
         sprintData.setCurrentTrainingNumber(sprintData.getCurrentTrainingNumber() + 1);
         if (sprintData.getCurrentTrainingNumber() >= sprintData.getTrainings().size() - 1) {
             finish();
@@ -111,18 +121,17 @@ public class SprintFragment extends Fragment {
         }
 
         Training training = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
-
         sprintData.setWordToTranslateText(training.getForeignWord());
         sprintData.setRealTranslationText(training.getNativeWord());
+
         int index = RandArray.getRandIndex( 0, sprintData.getTrainings().size() - 1);
         if (index % 2 == 0) {
             sprintData.setWordTranslationText(training.getNativeWord());
         } else {
             sprintData.setWordTranslationText(sprintData.getTrainings().get(index).getNativeWord());
         }
-    }
+        sprintData.setFilled(true);
 
-    private void setTrainingByData(SprintData sprintData) {
         setWordToTranslate(sprintData.getWordToTranslateText());
         setWordTranslation(sprintData.getWordTranslationText());
     }
@@ -136,27 +145,27 @@ public class SprintFragment extends Fragment {
     }
 
     public void addMark() {
-        if (!victories || markAndCrossLength > 2) {
+        if (!sprintData.isVictories() || sprintData.getMarkAndCrossLength() > 2) {
             clearMarkAndCross();
         }
-        victories = true;
-        markAndCrossLength += 1;
+        sprintData.setVictories(true);
+        sprintData.setMarkAndCrossLength(sprintData.getMarkAndCrossLength() + 1);
         final View view = inflater.inflate(R.layout.item_mark, marksContainer, false);
         marksContainer.addView(view);
     }
 
     public void addCross() {
-        if (victories || markAndCrossLength > 2) {
+        if (sprintData.isVictories() || sprintData.getMarkAndCrossLength() > 2) {
             clearMarkAndCross();
         }
-        victories = false;
-        markAndCrossLength += 1;
+        sprintData.setVictories(false);
+        sprintData.setMarkAndCrossLength(sprintData.getMarkAndCrossLength() + 1);
         final View view = inflater.inflate(R.layout.item_cross, this.marksContainer, false);
         marksContainer.addView(view);
     }
 
     public void clearMarkAndCross() {
-        markAndCrossLength = 0;
+        sprintData.setMarkAndCrossLength(0);
         marksContainer.removeAllViews();
     }
 
@@ -213,9 +222,5 @@ public class SprintFragment extends Fragment {
 
     public SprintData getSprintData() {
         return sprintData;
-    }
-
-    public void setSprintData(SprintData sprintData) {
-        this.sprintData = sprintData;
     }
 }

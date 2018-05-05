@@ -43,15 +43,10 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (trainings != null) {
-            savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
-        }
-        int trainingNumber;
         if (mode != null) {
             switch (mode) {
                 case FIND_TRANSLATION:
-                    trainingNumber = translationFragment.getCurrentTrainingNumber();
-                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+//                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
                     break;
                 case SPRINT:
                     SprintData sprintData = sprintFragment.getSprintData();
@@ -70,7 +65,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.SPRINT, 0);
+            changeMode(Mode.SPRINT, new SprintData(trainings));
             loadingFragment.stopLoading();
         }
 
@@ -90,17 +85,16 @@ public class TrainingActivity extends AppCompatActivity implements
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
         if (savedInstanceState != null) {
-            trainings = (List<Training>) savedInstanceState.getSerializable(TRAININGS);
-            mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
-            int currentTraining = (int) savedInstanceState.getSerializable(TRAINING_NUMBER);
 
-            if (mode == null) {
-                mode = Mode.FIND_TRANSLATION;
+            mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
+            if (mode == Mode.SPRINT) {
+                SprintData sprintData = (SprintData) savedInstanceState.getSerializable(SPRINT_DATA);
+                changeMode(mode, sprintData);
+                return;
+            } else if (mode == Mode.FIND_TRANSLATION) {
+
             }
-            if (trainings != null) {
-                changeMode(mode, currentTraining);
-            }
-            return;
+
         }
 
         inflateLoadingFragment();
@@ -122,8 +116,8 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void initializeSprintFragments(int currentTraining) {
-        sprintFragment = SprintFragment.newInstance(new SprintData(trainings));
+    private void initializeSprintFragments(SprintData sprintData) {
+        sprintFragment = SprintFragment.newInstance(sprintData);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -138,12 +132,12 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void changeMode(Mode newMode, int currentTraining) {
+    private void changeMode(Mode newMode, SprintData sprintData) {
         mode = newMode;
         if (newMode == Mode.FIND_TRANSLATION) {
-            initializeTranslationFragments(currentTraining);
+//            initializeTranslationFragments(currentTraining);
         } else if (newMode == Mode.SPRINT) {
-            initializeSprintFragments(currentTraining);
+            initializeSprintFragments(sprintData);
         }
     }
 
@@ -163,11 +157,11 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onFindTranslationFinished() {
-        changeMode(Mode.SPRINT, 0);
+//        changeMode(Mode.SPRINT, 0);
     }
 
     @Override
     public void onSprintFinished() {
-        changeMode(Mode.FIND_TRANSLATION, 0);
+//        changeMode(Mode.FIND_TRANSLATION, 0);
     }
 }
