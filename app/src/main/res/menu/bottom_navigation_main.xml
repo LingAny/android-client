@@ -6,13 +6,20 @@
     <item
         android:id="@+id/action_categories"
         android:enabled="true"
-        android:icon="@drawable/ic_repeat"
+        android:icon="@drawable/reorder_horizontal"
         android:title=""
         />
     <item
         android:id="@+id/action_shape"
         android:enabled="true"
-        android:icon="@drawable/ic_repeat"
+        android:icon="@drawable/select_all"
+        android:title=""
+        />
+
+    <item
+        android:id="@+id/action_hot"
+        android:enabled="true"
+        android:icon="@drawable/fire"
         android:title=""
         />
 </menu>

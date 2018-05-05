@@ -14,6 +14,9 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
+import ru.tp.lingany.lingany.fragments.fragmentData.FragmentData;
+import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
+import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
 import ru.tp.lingany.lingany.sdk.Api;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
@@ -34,6 +37,8 @@ public class TrainingActivity extends AppCompatActivity implements
     public static final String TRAININGS = "TRAININGS";
     public static final String TRAINING_MODE = "TRAINING_MODE";
     public static final String TRAINING_NUMBER = "TRAINING_NUMBER";
+    public static final String SPRINT_DATA = "SPRINT_DATA";
+    public static final String TRAINING_DATA = "TRAINING_DATA";
 
     private List<Training> trainings;
     private LoadingFragment loadingFragment;
@@ -41,19 +46,15 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        if (trainings != null) {
-            savedInstanceState.putSerializable(TRAININGS, (Serializable) trainings);
-        }
-        int trainingNumber;
         if (mode != null) {
             switch (mode) {
                 case FIND_TRANSLATION:
-                    trainingNumber = translationFragment.getCurrentTrainingNumber();
-                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+                    TranslationData translationData =  translationFragment.getTranslationData();
+                    savedInstanceState.putSerializable(TRAINING_DATA, translationData);
                     break;
                 case SPRINT:
-                    trainingNumber = sprintFragment.getCurrentTrainingNumber();
-                    savedInstanceState.putSerializable(TRAINING_NUMBER, trainingNumber);
+                    SprintData sprintData = sprintFragment.getSprintData();
+                    savedInstanceState.putSerializable(SPRINT_DATA, sprintData);
                     break;
                 default:
                     break;
@@ -68,7 +69,7 @@ public class TrainingActivity extends AppCompatActivity implements
         @Override
         public void onResponse(List<Training> response) {
             trainings = response;
-            changeMode(Mode.SPRINT, 0);
+            changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
             loadingFragment.stopLoading();
         }
 
@@ -88,17 +89,17 @@ public class TrainingActivity extends AppCompatActivity implements
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
 
         if (savedInstanceState != null) {
-            trainings = (List<Training>) savedInstanceState.getSerializable(TRAININGS);
-            mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
-            int currentTraining = (int) savedInstanceState.getSerializable(TRAINING_NUMBER);
 
-            if (mode == null) {
-                mode = Mode.FIND_TRANSLATION;
+            mode = (Mode) savedInstanceState.getSerializable(TRAINING_MODE);
+            if (mode == Mode.SPRINT) {
+                SprintData sprintData = (SprintData) savedInstanceState.getSerializable(SPRINT_DATA);
+                changeMode(mode, sprintData);
+                return;
+            } else if (mode == Mode.FIND_TRANSLATION) {
+                TranslationData translationData = (TranslationData) savedInstanceState.getSerializable(TRAINING_DATA);
+                changeMode(mode, translationData);
+                return;
             }
-            if (trainings != null) {
-                changeMode(mode, currentTraining);
-            }
-            return;
         }
 
         inflateLoadingFragment();
@@ -111,8 +112,8 @@ public class TrainingActivity extends AppCompatActivity implements
         Api.getInstance().training().getForCategory(category, listener);
     }
 
-    private void initializeTranslationFragments(int currentTraining) {
-        translationFragment = FindTranslationFragment.newInstance(trainings, currentTraining);
+    private void initializeTranslationFragments(TranslationData data) {
+        translationFragment = FindTranslationFragment.newInstance(data);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -120,8 +121,8 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void initializeSprintFragments(int currentTraining) {
-        sprintFragment = SprintFragment.newInstance(trainings, currentTraining);
+    private void initializeSprintFragments(SprintData sprintData) {
+        sprintFragment = SprintFragment.newInstance(sprintData);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -136,12 +137,12 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void changeMode(Mode newMode, int currentTraining) {
+    private void changeMode(Mode newMode, FragmentData data) {
         mode = newMode;
         if (newMode == Mode.FIND_TRANSLATION) {
-            initializeTranslationFragments(currentTraining);
+            initializeTranslationFragments((TranslationData) data);
         } else if (newMode == Mode.SPRINT) {
-            initializeSprintFragments(currentTraining);
+            initializeSprintFragments((SprintData) data);
         }
     }
 
@@ -161,11 +162,11 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onFindTranslationFinished() {
-        changeMode(Mode.SPRINT, 0);
+        changeMode(Mode.SPRINT, new SprintData(trainings));
     }
 
     @Override
     public void onSprintFinished() {
-        changeMode(Mode.FIND_TRANSLATION, 0);
+        changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
     }
 }

@@ -3,11 +3,12 @@
     <dimen name="min_image_width">160dp</dimen>
     <dimen name="min_image_height">160dp</dimen>
     <dimen name="padding">8dp</dimen>
+    <dimen name="margin">8dp</dimen>
 
     <dimen name="contentPadding">0dp</dimen>
     <dimen name="contentMargin">16dp</dimen>
     <dimen name="contentMarginHalf">8dp</dimen>
-    <dimen name="itemRVHeight">40dp</dimen>
+    <dimen name="itemRVHeight">48dp</dimen>
 
     <dimen name="itemTextHeight">32sp</dimen>
     <dimen name="titleHeight">24sp</dimen>
