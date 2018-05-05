@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
+import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
@@ -28,21 +29,17 @@ public class FindTranslationFragment extends Fragment {
     }
 
     private FindTranslationListener findTranslationFinished;
-    private List<Training> trainings;
-    private Training currentTraining;
-    private int currentTrainingNumber;
-
     private ViewGroup markCrossContainer;
     private TextView wordToTranslate;
     private LayoutInflater inflater;
+    private TranslationData translationData;
 
-    private static final String TRAININGS = "TRAININGS";
-    private static final String CURRENT_TRAINING = "CURRENT_TRAINING";
+    private static final String TRANSLATION_DATA = "TRANSLATION_DATA";
 
-    public static FindTranslationFragment newInstance(List<Training> trainings, int currentTraining) {
+
+    public static FindTranslationFragment newInstance(TranslationData translationData) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(TRAININGS, (Serializable) trainings);
-        bundle.putInt(CURRENT_TRAINING, currentTraining);
+        bundle.putSerializable(TRANSLATION_DATA, (Serializable) translationData);
 
         FindTranslationFragment fragment = new FindTranslationFragment();
         fragment.setArguments(bundle);
@@ -53,11 +50,7 @@ public class FindTranslationFragment extends Fragment {
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
         if (bundle != null) {
-            List<Training> localTrainings = (List<Training>) bundle.getSerializable(TRAININGS);
-            if (localTrainings != null) {
-                trainings = new ArrayList<>(localTrainings);
-            }
-            currentTrainingNumber = (Integer) bundle.getInt(CURRENT_TRAINING);
+            translationData = (TranslationData) bundle.getSerializable(TRANSLATION_DATA);
         }
     }
 
@@ -90,28 +83,44 @@ public class FindTranslationFragment extends Fragment {
                 });
         }
 
-        setAll(currentTrainingNumber);
+        setAll(translationData);
     }
 
-    private void setAll(int trainingNumber) {
-        currentTrainingNumber = trainingNumber;
-        if (currentTrainingNumber >= trainings.size() - 4) {
+    private void setAll(TranslationData translationData) {
+        if (translationData.isFilled()) {
+            setTrainingAfterSaveInstance(translationData);
+        } else {
+            setNewTraining(translationData);
+        }
+    }
+
+    private void setTrainingAfterSaveInstance(TranslationData translationData) {
+        clearMarkAndCross();
+        setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
+        setTranslationButtons(translationData.getCurrentTraining());
+    }
+
+    private void setNewTraining(TranslationData translationData) {
+        translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
+        if (translationData.getCurrentTrainingNumber() >= translationData.getTrainings().size()) {
             finish();
             return;
         }
-        currentTraining = trainings.get(currentTrainingNumber);
+        Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
+        translationData.setCurrentTraining(currentTraining);
 
         clearMarkAndCross();
-        setWordToTranslate(currentTraining.getForeignWord());
-        setTranslationButtons(currentTraining);
+        setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
+        setTranslationButtons(translationData.getCurrentTraining());
+        translationData.setFilled(true);
     }
 
     private void setTranslationButtons(Training training) {
-        List<Integer> indexes = RandArray.getRandIndexes(3, 1, trainings.size() - 1);
+        List<Integer> indexes = RandArray.getRandIndexes(3, 1, translationData.getTrainings().size() - 1, translationData.getCurrentTrainingNumber());
         List<String> words = new ArrayList<>();
 
         for (Integer index: indexes) {
-            words.add(trainings.get(index).getNativeWord());
+            words.add(translationData.getTrainings().get(index).getNativeWord());
         }
         setWordsOnButtons(training.getNativeWord(), words);
     }
@@ -153,7 +162,7 @@ public class FindTranslationFragment extends Fragment {
 
     private void processAnswer(View view) {
         TextView textView = (TextView) view;
-        if (currentTraining != null && currentTraining.getNativeWord() == textView.getText()) {
+        if (translationData.getCurrentTraining() != null && translationData.getCurrentTraining().getNativeWord() == textView.getText()) {
             setMark();
         } else {
             setCross();
@@ -165,7 +174,9 @@ public class FindTranslationFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                setAll(currentTrainingNumber + 1);
+                translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
+                translationData.setFilled(false);
+                setAll(translationData);
                 enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));
@@ -193,7 +204,7 @@ public class FindTranslationFragment extends Fragment {
         findTranslationFinished.onFindTranslationFinished();
     }
 
-    public int getCurrentTrainingNumber() {
-        return currentTrainingNumber;
+    public TranslationData getTranslationData() {
+        return translationData;
     }
 }
