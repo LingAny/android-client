@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -48,9 +47,7 @@ public class TrainingsPage extends Fragment {
     }
 
     public void selectTraining(int position) {
-        // do start Training Mode Activity
         TrainingMode mode = modes.get(position);
-        Toast.makeText(getContext(), mode.getTitle(), Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(getContext(), TrainingModeActivity.class);
         intent.putExtra(TrainingModeActivity.EXTRA_REFLECTION_ID, refId);

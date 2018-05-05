@@ -6,13 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.TrainingModeActivity">
 
-
-    <TextView
-        android:id="@+id/textView"
+    <FrameLayout
+        android:id="@+id/container"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Здесь будет ваша реклама" />
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>
