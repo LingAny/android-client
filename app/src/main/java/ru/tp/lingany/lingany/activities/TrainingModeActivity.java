@@ -54,12 +54,30 @@ public class TrainingModeActivity extends AppCompatActivity implements
                 loadingFragment.showRefresh();
             }
         });
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mix == null) {
+            inflateLoadingFragment();
+            getMixForReflection();
+        } else {
+            // TODO inflate training fragment
+        }
+    }
 
-        inflateLoadingFragment();
-        getMixForReflection();
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 
-        Toast.makeText(this, mode.getTitle(), Toast.LENGTH_SHORT).show();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getMixForRefListenerHandler != null) {
+            getMixForRefListenerHandler.unregister();
+        }
     }
 
     private void inflateLoadingFragment() {
