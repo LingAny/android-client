@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
@@ -97,7 +99,7 @@ public class FindTranslationFragment extends Fragment {
     private void setTrainingAfterSaveInstance(TranslationData translationData) {
         clearMarkAndCross();
         setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
-        setTranslationButtons(translationData.getCurrentTraining());
+        setTranslationButtons(translationData);
     }
 
     private void setNewTraining(TranslationData translationData) {
@@ -111,31 +113,32 @@ public class FindTranslationFragment extends Fragment {
 
         clearMarkAndCross();
         setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
-        setTranslationButtons(translationData.getCurrentTraining());
+        setTranslationButtons(translationData);
         translationData.setFilled(true);
     }
 
-    private void setTranslationButtons(Training training) {
+    private void setTranslationButtons(TranslationData translationData) {
         List<Integer> indexes = RandArray.getRandIndexes(3, 1, translationData.getTrainings().size() - 1, translationData.getCurrentTrainingNumber());
-        List<String> words = new ArrayList<>();
 
+        Map<Integer, String> words = translationData.getRandomWords();
         for (Integer index: indexes) {
-            words.add(translationData.getTrainings().get(index).getNativeWord());
+            words.put(index, translationData.getTrainings().get(index).getNativeWord());
         }
-        setWordsOnButtons(training.getNativeWord(), words);
+        setWordsOnButtons(translationData.getCurrentTraining().getNativeWord(), words);
     }
 
-    public void setWordsOnButtons(String translationWord, List<String> words) {
+    public void setWordsOnButtons(String translationWord, Map<Integer, String> words) {
         int translationPosition = (int) (Math.random() * 3);
-        for (int i = 0, j = 0; i < buttons.size(); ++i) {
+
+        Iterator iterator = words.entrySet().iterator();
+        for (int i = 0; i < buttons.size(); ++i) {
             if (i == translationPosition) {
                 buttons.get(i).setText(translationWord);
             } else {
-                if (words.size() < 1) {
-                    break;
+                if (iterator.hasNext()) {
+                    Map.Entry pair = (Map.Entry) iterator.next();
+                    buttons.get(i).setText((String) pair.getValue());
                 }
-                buttons.get(i).setText(words.get(j));
-                ++j;
             }
         }
     }

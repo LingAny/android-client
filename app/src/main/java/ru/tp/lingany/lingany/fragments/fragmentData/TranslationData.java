@@ -1,7 +1,9 @@
 package ru.tp.lingany.lingany.fragments.fragmentData;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 
@@ -10,10 +12,13 @@ public class TranslationData extends FragmentData implements Serializable {
     private int currentTrainingNumber;
     private boolean isFilled;
 
+    private HashMap<Integer, String> randomWords;
+
 
     public TranslationData(List<Training> trainings) {
         super(trainings);
         isFilled = false;
+        randomWords = new HashMap<>();
     }
 
     public Training getCurrentTraining() {
@@ -38,5 +43,13 @@ public class TranslationData extends FragmentData implements Serializable {
 
     public void setFilled(boolean filled) {
         isFilled = filled;
+    }
+
+    public Map<Integer, String> getRandomWords() {
+        return randomWords;
+    }
+
+    public void setRandomWords(HashMap<Integer, String> randomWords) {
+        this.randomWords = randomWords;
     }
 }
