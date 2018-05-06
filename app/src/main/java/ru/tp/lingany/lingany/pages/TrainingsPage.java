@@ -94,14 +94,14 @@ public class TrainingsPage extends Fragment {
     private void initTrainingModes() {
         modes = new ArrayList<>();
 
-        TrainingMode sprintN2F = new TrainingMode(TrainingModeTypes.Type.SPRINT_N2F);
-        TrainingMode translateF2N = new TrainingMode(TrainingModeTypes.Type.TRANSLATION_F2N);
+        TrainingMode sprintMode = new TrainingMode(TrainingModeTypes.Type.SPRINT);
+        TrainingMode translationMode = new TrainingMode(TrainingModeTypes.Type.TRANSLATION);
         TrainingMode typeMode = new TrainingMode(TrainingModeTypes.Type.TYPING_MODE);
         TrainingMode studyMode = new TrainingMode(TrainingModeTypes.Type.STUDY_MODE);
 
-        modes.add(sprintN2F);
+        modes.add(sprintMode);
         modes.add(typeMode);
-        modes.add(translateF2N);
+        modes.add(translationMode);
         modes.add(studyMode);
     }
 

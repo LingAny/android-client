@@ -106,16 +106,10 @@ public class TrainingModeActivity extends AppCompatActivity implements
         Fragment fragment = null;
         TrainingModeTypes.Type type = mode.getType();
 
-        if (type == TrainingModeTypes.Type.SPRINT_F2N) {
+        if (type == TrainingModeTypes.Type.SPRINT) {
             SprintData data = new SprintData(mix);
             fragment = SprintFragment.newInstance(data);
-        } else if (type == TrainingModeTypes.Type.SPRINT_N2F) {
-            SprintData data = new SprintData(mix);
-            fragment = SprintFragment.newInstance(data);
-        } else if (type == TrainingModeTypes.Type.TRANSLATION_F2N) {
-            TranslationData data = new TranslationData(mix);
-            fragment = FindTranslationFragment.newInstance(data);
-        } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F) {
+        } else if (type == TrainingModeTypes.Type.TRANSLATION) {
             TranslationData data = new TranslationData(mix);
             fragment = FindTranslationFragment.newInstance(data);
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
