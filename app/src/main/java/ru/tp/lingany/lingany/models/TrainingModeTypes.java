@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class TrainingModeTypes {
 
-    public static enum Type { SPRINT_N2F, SPRINT_F2N, TRANSLATION_N2F, TRANSLATION_F2N}
+    public static enum Type { SPRINT_N2F, SPRINT_F2N, TRANSLATION_N2F, TRANSLATION_F2N, TYPING_MODE}
 
     private static HashMap<Type, String> type2TitleMap;
     static {
@@ -13,6 +13,7 @@ public class TrainingModeTypes {
         type2TitleMap.put(Type.SPRINT_F2N, "Sprint, Foreign to Native");
         type2TitleMap.put(Type.TRANSLATION_N2F, "Translation, Native to Foreign");
         type2TitleMap.put(Type.TRANSLATION_F2N, "Translation, Foreign to Native");
+        type2TitleMap.put(Type.TYPING_MODE, "Type");
     }
 
     public static String getTitle(Type type) {

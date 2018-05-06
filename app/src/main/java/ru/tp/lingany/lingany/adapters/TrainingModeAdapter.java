@@ -38,9 +38,11 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         holder.title.setText(mode.getTitle());
         TrainingModeTypes.Type type = mode.getType();
         if (type == TrainingModeTypes.Type.SPRINT_N2F || type == TrainingModeTypes.Type.SPRINT_F2N) {
-            holder.image.setImageResource(R.drawable.mode_timer);
+            holder.image.setImageResource(R.drawable.mode_sprint);
         } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F || type == TrainingModeTypes.Type.TRANSLATION_F2N) {
             holder.image.setImageResource(R.drawable.mode_select);
+        } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
+            holder.image.setImageResource(R.drawable.mode_type);
         } else {
             holder.image.setImageResource(R.drawable.mode_select);
         }

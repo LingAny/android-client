@@ -16,8 +16,10 @@ import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
+import ru.tp.lingany.lingany.fragments.TypingFragment;
 import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
+import ru.tp.lingany.lingany.fragments.fragmentData.TypingData;
 import ru.tp.lingany.lingany.models.TrainingMode;
 import ru.tp.lingany.lingany.models.TrainingModeTypes;
 import ru.tp.lingany.lingany.sdk.Api;
@@ -27,6 +29,7 @@ import ru.tp.lingany.lingany.utils.ListenerHandler;
 public class TrainingModeActivity extends AppCompatActivity implements
         LoadingFragment.RefreshListener,
         SprintFragment.SprintListener,
+        TypingFragment.TypingListener,
         FindTranslationFragment.FindTranslationListener {
 
     private UUID refId;
@@ -112,6 +115,9 @@ public class TrainingModeActivity extends AppCompatActivity implements
         } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F) {
             TranslationData data = new TranslationData(mix);
             fragment = FindTranslationFragment.newInstance(data);
+        } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
+            TypingData data = new TypingData(mix);
+            fragment = TypingFragment.newInstance(data);
         }
 
         getSupportFragmentManager()
@@ -154,6 +160,11 @@ public class TrainingModeActivity extends AppCompatActivity implements
 
     @Override
     public void onSprintFinished() {
+        finish();
+    }
+
+    @Override
+    public void onTypingFinished() {
         finish();
     }
 }
