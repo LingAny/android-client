@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
@@ -45,23 +46,23 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         holder.title.setText(mode.getTitle());
         TrainingModeTypes.Type type = mode.getType();
 
-        new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+//        new InflateImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
 
 
         if (type == TrainingModeTypes.Type.SPRINT) {
-            new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+            new InflateImagesTask(context, holder.image, R.drawable.mode_sprint).execute();
 //            holder.image.setImageResource(R.drawable.mode_sprint);
         } else if (type == TrainingModeTypes.Type.TRANSLATION) {
-            new DownloadImagesTask(context, R.drawable.mode_select).execute(holder.image);
+            new InflateImagesTask(context, holder.image, R.drawable.mode_select).execute();
 //            holder.image.setImageResource(R.drawable.mode_select);
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
-            new DownloadImagesTask(context, R.drawable.mode_type).execute(holder.image);
+            new InflateImagesTask(context, holder.image, R.drawable.mode_type).execute();
 //            holder.image.setImageResource(R.drawable.mode_type);
         } else if (type == TrainingModeTypes.Type.STUDY_MODE) {
-            new DownloadImagesTask(context, R.drawable.mode_study).execute(holder.image);
+            new InflateImagesTask(context, holder.image, R.drawable.mode_study).execute();
 //            holder.image.setImageResource(R.drawable.mode_study);
         } else {
-            new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+            new InflateImagesTask(context, holder.image, R.drawable.mode_sprint).execute();
 //            holder.image.setImageResource(R.drawable.mode_select);
         }
     }
@@ -98,22 +99,28 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         }
     }
 
-    public class DownloadImagesTask extends AsyncTask<ImageView, Void, Integer> {
+    public static class InflateImagesTask extends AsyncTask<Void, Void, Integer> {
 
         private int resId;
-        private ImageView imageView;
 
         private Drawable drawable;
-        private Context context;
 
-        DownloadImagesTask(Context context, int resId) {
+        private WeakReference<Context> referenceContext;
+        private WeakReference<ImageView> referenceImageView;
+
+        InflateImagesTask(Context context, ImageView imageView, int resId) {
+            referenceContext = new WeakReference<>(context);
+            referenceImageView = new WeakReference<>(imageView);
             this.resId = resId;
-            this.context = context;
         }
 
         @Override
-        protected Integer doInBackground(ImageView... imageViews) {
-            this.imageView = imageViews[0];
+        protected Integer doInBackground(Void... voids) {
+            Context context = referenceContext.get();
+            ImageView imageView = referenceImageView.get();
+
+            if (context == null || imageView == null) return -1;
+
             drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
             return 0;
         }
@@ -121,6 +128,11 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         @Override
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
+            Context context = referenceContext.get();
+            ImageView imageView = referenceImageView.get();
+
+            if (context == null || imageView == null) return;
+
             imageView.setImageDrawable(drawable);
         }
     }
