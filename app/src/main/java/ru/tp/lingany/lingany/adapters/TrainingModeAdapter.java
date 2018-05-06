@@ -43,6 +43,8 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
             holder.image.setImageResource(R.drawable.mode_select);
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
             holder.image.setImageResource(R.drawable.mode_type);
+        } else if (type == TrainingModeTypes.Type.STUDY_MODE) {
+            holder.image.setImageResource(R.drawable.mode_study);
         } else {
             holder.image.setImageResource(R.drawable.mode_select);
         }

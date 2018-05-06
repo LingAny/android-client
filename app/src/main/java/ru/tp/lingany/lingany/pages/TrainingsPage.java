@@ -97,10 +97,12 @@ public class TrainingsPage extends Fragment {
         TrainingMode sprintN2F = new TrainingMode(TrainingModeTypes.Type.SPRINT_N2F);
         TrainingMode translateF2N = new TrainingMode(TrainingModeTypes.Type.TRANSLATION_F2N);
         TrainingMode typeMode = new TrainingMode(TrainingModeTypes.Type.TYPING_MODE);
+        TrainingMode studyMode = new TrainingMode(TrainingModeTypes.Type.STUDY_MODE);
 
         modes.add(sprintN2F);
         modes.add(typeMode);
         modes.add(translateF2N);
+        modes.add(studyMode);
     }
 
     @SuppressWarnings("unchecked")
