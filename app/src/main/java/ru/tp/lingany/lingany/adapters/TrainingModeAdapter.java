@@ -4,12 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.models.TrainingMode;
+import ru.tp.lingany.lingany.models.TrainingModeTypes;
 
 
 public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapter.TrainingModeViewHolder> {
@@ -26,14 +28,22 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
 
     @Override
     public TrainingModeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_training_mode, parent, false);
         return new TrainingModeViewHolder(itemView, itemClickListener);
     }
 
     @Override
     public void onBindViewHolder(TrainingModeViewHolder holder, int position) {
-        TrainingMode category = data.get(position);
-        holder.title.setText(category.getTitle());
+        TrainingMode mode = data.get(position);
+        holder.title.setText(mode.getTitle());
+        TrainingModeTypes.Type type = mode.getType();
+        if (type == TrainingModeTypes.Type.SPRINT_N2F || type == TrainingModeTypes.Type.SPRINT_F2N) {
+            holder.image.setImageResource(R.drawable.mode_timer);
+        } else if (type == TrainingModeTypes.Type.TRANSLATION_N2F || type == TrainingModeTypes.Type.TRANSLATION_F2N) {
+            holder.image.setImageResource(R.drawable.mode_select);
+        } else {
+            holder.image.setImageResource(R.drawable.mode_select);
+        }
     }
 
     @Override
@@ -50,6 +60,8 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
 
         public TextView title;
 
+        public ImageView image;
+
         private ItemClickListener listener;
 
         TrainingModeViewHolder(View itemView, ItemClickListener listener){
@@ -57,6 +69,7 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
             this.listener = listener;
             itemView.setOnClickListener(this);
             title = itemView.findViewById(R.id.title);
+            image = itemView.findViewById(R.id.image);
         }
 
         @Override
