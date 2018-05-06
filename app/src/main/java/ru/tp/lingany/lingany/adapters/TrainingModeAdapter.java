@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,8 +46,6 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         TrainingMode mode = data.get(position);
         holder.title.setText(mode.getTitle());
         TrainingModeTypes.Type type = mode.getType();
-
-//        new InflateImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
 
 
         if (type == TrainingModeTypes.Type.SPRINT) {
@@ -116,10 +115,10 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            Context context = referenceContext.get();
+            AppCompatActivity context = (AppCompatActivity) referenceContext.get();
             ImageView imageView = referenceImageView.get();
 
-            if (context == null || imageView == null) return -1;
+            if (context == null || context.isFinishing() || imageView == null) return -1;
 
             drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
             return 0;
@@ -128,10 +127,10 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         @Override
         protected void onPostExecute(Integer result) {
             super.onPostExecute(result);
-            Context context = referenceContext.get();
+            AppCompatActivity context = (AppCompatActivity) referenceContext.get();
             ImageView imageView = referenceImageView.get();
 
-            if (context == null || imageView == null) return;
+            if (context == null || context.isFinishing() || imageView == null) return;
 
             imageView.setImageDrawable(drawable);
         }
