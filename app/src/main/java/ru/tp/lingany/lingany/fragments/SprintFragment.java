@@ -85,11 +85,12 @@ public class SprintFragment extends Fragment {
                         }
                     });
         }
-
-        setAll(sprintData);
     }
 
-    private void setAll(SprintData sprintData) {
+    @Override
+    public void onStart() {
+        super.onStart();
+
         if (sprintData.isFilled()) {
             setTrainingAfterSaveInstance(sprintData);
         } else {
@@ -109,8 +110,10 @@ public class SprintFragment extends Fragment {
                 marksContainer.addView(view);
             }
         }
-        setWordToTranslate(sprintData.getWordToTranslateText());
-        setWordTranslation(sprintData.getWordTranslationText());
+
+        Training currentTraining = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
+        setWordToTranslate(currentTraining.getForeignWord());
+        setWordTranslation(sprintData.getVisibleTranslation());
     }
 
     private void setNewTraining(SprintData sprintData) {
@@ -121,19 +124,16 @@ public class SprintFragment extends Fragment {
         }
 
         Training training = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
-        sprintData.setWordToTranslateText(training.getForeignWord());
-        sprintData.setRealTranslationText(training.getNativeWord());
 
         int index = RandArray.getRandIndex( 0, sprintData.getTrainings().size() - 1);
         if (index % 2 == 0) {
-            sprintData.setWordTranslationText(training.getNativeWord());
+            sprintData.setVisibleTranslation(training.getNativeWord());
         } else {
-            sprintData.setWordTranslationText(sprintData.getTrainings().get(index).getNativeWord());
+            sprintData.setVisibleTranslation(sprintData.getTrainings().get(index).getNativeWord());
         }
-        sprintData.setFilled(true);
 
-        setWordToTranslate(sprintData.getWordToTranslateText());
-        setWordTranslation(sprintData.getWordTranslationText());
+        setWordToTranslate(training.getForeignWord());
+        setWordTranslation(sprintData.getVisibleTranslation());
     }
 
     public void setWordToTranslate(String word) {
@@ -170,18 +170,20 @@ public class SprintFragment extends Fragment {
     }
 
     private void processAnswer(View view) {
+        Training currentTraining = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
         TextView textView = (TextView) view;
+
         if (textView.getId() == R.id.agreeButtonSprint) {
-            if (sprintData.getRealTranslationText().equals(sprintData.getWordTranslationText())) {
+            if (currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
                 addMark();
             } else {
                 addCross();
             }
         } else {
-            if (sprintData.getRealTranslationText().equals(sprintData.getWordTranslationText())) {
-                addCross();
-            } else {
+            if (!currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
                 addMark();
+            } else {
+                addCross();
             }
         }
 
@@ -191,8 +193,7 @@ public class SprintFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                sprintData.setFilled(false);
-                setAll(sprintData);
+                setNewTraining(sprintData);
                 enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));
