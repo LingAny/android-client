@@ -53,6 +53,8 @@ public class TrainingActivity extends AppCompatActivity implements
     private LoadingFragment loadingFragment;
     private Category category;
 
+    private ListenerHandler getForCategoryListenerHandler;
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         if (mode != null) {
@@ -81,22 +83,6 @@ public class TrainingActivity extends AppCompatActivity implements
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private ListenerHandler getForCategoryListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
-        @Override
-        public void onResponse(List<Training> response) {
-            trainings = response;
-//            changeMode(Mode.TEACHING, new TeachingData(trainings));
-            changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
-//            changeMode(Mode.TYPING, new TypingData(trainings));
-            loadingFragment.stopLoading();
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            loadingFragment.showRefresh();
-        }
-    });
-
     @Override
     @SuppressWarnings("unchecked")
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +91,20 @@ public class TrainingActivity extends AppCompatActivity implements
         loadingFragment = new LoadingFragment();
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
+
+        getForCategoryListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
+            @Override
+            public void onResponse(List<Training> response) {
+                trainings = response;
+                changeMode(Mode.TEACHING, new TeachingData(trainings));
+                loadingFragment.stopLoading();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                loadingFragment.showRefresh();
+            }
+        });
 
         if (savedInstanceState != null) {
 
@@ -130,6 +130,14 @@ public class TrainingActivity extends AppCompatActivity implements
 
         inflateLoadingFragment();
         getTrainingsForCategory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getForCategoryListenerHandler != null) {
+            getForCategoryListenerHandler.unregister();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -175,7 +183,7 @@ public class TrainingActivity extends AppCompatActivity implements
                         .replace(R.id.trainingContainer, finalFragment)
                         .commit();
             }
-        }, getResources().getInteger(R.integer.delayNextTraining));
+        }, getResources().getInteger(R.integer.delayInflateAfterLoading));
     }
 
     @Override
@@ -199,7 +207,16 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSprintFinished() {
-        changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(TrainingActivity.this, MenuActivity.class);
+                intent.putExtra(MenuActivity.EXTRA_REFLECTION, category.getReflection().getId().toString());
+                startActivity(intent);
+
+            }
+        }, getResources().getInteger(R.integer.delayInflateAfterLoading));
     }
 
     @Override
