@@ -80,7 +80,7 @@ public class TrainingsPage extends Fragment {
         RecyclerView trainingRecyclerView = view.findViewById(R.id.trainings);
         RecyclerView.LayoutManager trainingLayoutManager = new LinearLayoutManager(getContext());
         trainingRecyclerView.setLayoutManager(trainingLayoutManager);
-        trainingRecyclerView.setAdapter(new TrainingModeAdapter(modes, new TrainingsPage.ItemClickListener()));
+        trainingRecyclerView.setAdapter(new TrainingModeAdapter(modes, new TrainingsPage.ItemClickListener(), getContext()));
     }
 
     private class ItemClickListener implements TrainingModeAdapter.ItemClickListener {

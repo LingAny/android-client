@@ -1,5 +1,9 @@
 package ru.tp.lingany.lingany.adapters;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +23,13 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
     private List<TrainingMode> data;
     private ItemClickListener itemClickListener;
 
+    private Context context;
 
-    public TrainingModeAdapter(List<TrainingMode> data, ItemClickListener listener) {
+
+    public TrainingModeAdapter(List<TrainingMode> data, ItemClickListener listener, Context context) {
         this.data = data;
         this.itemClickListener = listener;
+        this.context = context;
     }
 
 
@@ -37,16 +44,25 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         TrainingMode mode = data.get(position);
         holder.title.setText(mode.getTitle());
         TrainingModeTypes.Type type = mode.getType();
+
+        new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+
+
         if (type == TrainingModeTypes.Type.SPRINT) {
-            holder.image.setImageResource(R.drawable.mode_sprint);
+            new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+//            holder.image.setImageResource(R.drawable.mode_sprint);
         } else if (type == TrainingModeTypes.Type.TRANSLATION) {
-            holder.image.setImageResource(R.drawable.mode_select);
+            new DownloadImagesTask(context, R.drawable.mode_select).execute(holder.image);
+//            holder.image.setImageResource(R.drawable.mode_select);
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
-            holder.image.setImageResource(R.drawable.mode_type);
+            new DownloadImagesTask(context, R.drawable.mode_type).execute(holder.image);
+//            holder.image.setImageResource(R.drawable.mode_type);
         } else if (type == TrainingModeTypes.Type.STUDY_MODE) {
-            holder.image.setImageResource(R.drawable.mode_study);
+            new DownloadImagesTask(context, R.drawable.mode_study).execute(holder.image);
+//            holder.image.setImageResource(R.drawable.mode_study);
         } else {
-            holder.image.setImageResource(R.drawable.mode_select);
+            new DownloadImagesTask(context, R.drawable.mode_sprint).execute(holder.image);
+//            holder.image.setImageResource(R.drawable.mode_select);
         }
     }
 
@@ -79,6 +95,33 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         @Override
         public void onClick(View view) {
             listener.onClick(view, getAdapterPosition());
+        }
+    }
+
+    public class DownloadImagesTask extends AsyncTask<ImageView, Void, Integer> {
+
+        private int resId;
+        private ImageView imageView;
+
+        private Drawable drawable;
+        private Context context;
+
+        DownloadImagesTask(Context context, int resId) {
+            this.resId = resId;
+            this.context = context;
+        }
+
+        @Override
+        protected Integer doInBackground(ImageView... imageViews) {
+            this.imageView = imageViews[0];
+            drawable = ResourcesCompat.getDrawable(context.getResources(), resId, null);
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+            imageView.setImageDrawable(drawable);
         }
     }
 }
