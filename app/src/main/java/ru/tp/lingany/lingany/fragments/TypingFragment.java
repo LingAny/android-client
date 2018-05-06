@@ -121,7 +121,7 @@ public class TypingFragment extends Fragment {
                 setNewWords(typingData);
                 enableButtons();
             }
-        }, 10 * getResources().getInteger(R.integer.delayNextTraining));
+        }, getResources().getInteger(R.integer.delayNextTraining));
     }
 
     private void disableButtons() {
