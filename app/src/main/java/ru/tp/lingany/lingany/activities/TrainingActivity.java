@@ -2,6 +2,7 @@ package ru.tp.lingany.lingany.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.androidnetworking.error.ANError;
@@ -10,6 +11,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
+import android.support.v4.app.Fragment;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
@@ -51,6 +53,8 @@ public class TrainingActivity extends AppCompatActivity implements
     private LoadingFragment loadingFragment;
     private Category category;
 
+    private ListenerHandler getForCategoryListenerHandler;
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         if (mode != null) {
@@ -79,21 +83,6 @@ public class TrainingActivity extends AppCompatActivity implements
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private ListenerHandler getForCategoryListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
-        @Override
-        public void onResponse(List<Training> response) {
-            trainings = response;
-            changeMode(Mode.TEACHING, new TeachingData(trainings));
-//            changeMode(Mode.TYPING, new TypingData(trainings));
-            loadingFragment.stopLoading();
-        }
-
-        @Override
-        public void onError(ANError anError) {
-            loadingFragment.showRefresh();
-        }
-    });
-
     @Override
     @SuppressWarnings("unchecked")
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +91,20 @@ public class TrainingActivity extends AppCompatActivity implements
         loadingFragment = new LoadingFragment();
         Intent intent = getIntent();
         category = (Category) intent.getSerializableExtra(EXTRA_CATEGORY);
+
+        getForCategoryListenerHandler = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<List<Training>>() {
+            @Override
+            public void onResponse(List<Training> response) {
+                trainings = response;
+                changeMode(Mode.TEACHING, new TeachingData(trainings));
+                loadingFragment.stopLoading();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+                loadingFragment.showRefresh();
+            }
+        });
 
         if (savedInstanceState != null) {
 
@@ -129,46 +132,18 @@ public class TrainingActivity extends AppCompatActivity implements
         getTrainingsForCategory();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getForCategoryListenerHandler != null) {
+            getForCategoryListenerHandler.unregister();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private void getTrainingsForCategory() {
         ParsedRequestListener<List<Training>> listener = (ParsedRequestListener<List<Training>>) getForCategoryListenerHandler.asListener();
         Api.getInstance().training().getForCategory(category, listener);
-    }
-
-    private void initializeTranslationFragments(TranslationData data) {
-        translationFragment = FindTranslationFragment.newInstance(data);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.trainingContainer, translationFragment)
-                .commit();
-    }
-
-    private void initializeSprintFragments(SprintData sprintData) {
-        sprintFragment = SprintFragment.newInstance(sprintData);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.trainingContainer, sprintFragment)
-                .commit();
-    }
-
-    private void initializeTeachingFragment(TeachingData teachingData) {
-        teachingFragment = TeachingFragment.newInstance(teachingData);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.trainingContainer, teachingFragment)
-                .commit();
-    }
-
-    private void initializeTypingFragment(TypingData typingData) {
-        typingFragment = TypingFragment.newInstance(typingData);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.trainingContainer, typingFragment)
-                .commit();
     }
 
     private void inflateLoadingFragment() {
@@ -178,17 +153,37 @@ public class TrainingActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    private void changeMode(Mode newMode, FragmentData data) {
+    private void changeMode(final Mode newMode, final FragmentData data) {
+        inflateLoadingFragment();
         mode = newMode;
+
+        Fragment fragment = null;
         if (newMode == Mode.TEACHING) {
-            initializeTeachingFragment((TeachingData) data);
+            teachingFragment = TeachingFragment.newInstance((TeachingData) data);
+            fragment = teachingFragment;
         } else if (newMode == Mode.FIND_TRANSLATION) {
-            initializeTranslationFragments((TranslationData) data);
+            translationFragment = FindTranslationFragment.newInstance((TranslationData) data);
+            fragment = translationFragment;
         } else if (newMode == Mode.SPRINT) {
-            initializeSprintFragments((SprintData) data);
+            sprintFragment = SprintFragment.newInstance((SprintData) data);
+            fragment = sprintFragment;
         } else if (newMode == Mode.TYPING) {
-            initializeTypingFragment((TypingData) data);
+            typingFragment = TypingFragment.newInstance((TypingData) data);
+            fragment = typingFragment;
         }
+
+        final Handler handler = new Handler();
+        final Fragment finalFragment = fragment;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingFragment.startLoading();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.trainingContainer, finalFragment)
+                        .commit();
+            }
+        }, getResources().getInteger(R.integer.delayInflateAfterLoading));
     }
 
     @Override
@@ -212,7 +207,16 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSprintFinished() {
-        changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(TrainingActivity.this, MenuActivity.class);
+                intent.putExtra(MenuActivity.EXTRA_REFLECTION, category.getReflection().getId().toString());
+                startActivity(intent);
+
+            }
+        }, getResources().getInteger(R.integer.delayInflateAfterLoading));
     }
 
     @Override

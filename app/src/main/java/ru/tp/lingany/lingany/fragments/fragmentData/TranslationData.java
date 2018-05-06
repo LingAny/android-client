@@ -8,7 +8,6 @@ import java.util.Map;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 
 public class TranslationData extends FragmentData implements Serializable {
-    private Training currentTraining;
     private int currentTrainingNumber;
     private boolean isFilled;
 
@@ -19,14 +18,7 @@ public class TranslationData extends FragmentData implements Serializable {
         super(trainings);
         isFilled = false;
         randomWords = new HashMap<>();
-    }
-
-    public Training getCurrentTraining() {
-        return currentTraining;
-    }
-
-    public void setCurrentTraining(Training currentTraining) {
-        this.currentTraining = currentTraining;
+        currentTrainingNumber = -1;
     }
 
     public int getCurrentTrainingNumber() {
@@ -35,6 +27,7 @@ public class TranslationData extends FragmentData implements Serializable {
 
     public void setCurrentTrainingNumber(int currentTrainingNumber) {
         this.currentTrainingNumber = currentTrainingNumber;
+        isFilled = true;
     }
 
     public boolean isFilled() {
@@ -47,10 +40,6 @@ public class TranslationData extends FragmentData implements Serializable {
 
     public Map<Integer, String> getRandomWords() {
         return randomWords;
-    }
-
-    public void setRandomWords(HashMap<Integer, String> randomWords) {
-        this.randomWords = randomWords;
     }
 
     public int getAnswerPosition() {

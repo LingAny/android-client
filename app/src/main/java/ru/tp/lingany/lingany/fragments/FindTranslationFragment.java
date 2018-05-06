@@ -84,11 +84,12 @@ public class FindTranslationFragment extends Fragment {
                     }
                 });
         }
-
-        setAll(translationData);
     }
 
-    private void setAll(TranslationData translationData) {
+    @Override
+    public void onStart() {
+        super.onStart();
+
         if (translationData.isFilled()) {
             setTrainingAfterSaveInstance(translationData);
         } else {
@@ -98,8 +99,9 @@ public class FindTranslationFragment extends Fragment {
 
     private void setTrainingAfterSaveInstance(TranslationData translationData) {
         clearMarkAndCross();
-        setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
-        setWordsOnButtons(translationData.getCurrentTraining().getNativeWord(), translationData.getRandomWords());
+        Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
+        setWordToTranslate(currentTraining.getForeignWord());
+        setWordsOnButtons(currentTraining.getNativeWord(), translationData.getRandomWords());
     }
 
     private void setNewTraining(TranslationData translationData) {
@@ -110,15 +112,15 @@ public class FindTranslationFragment extends Fragment {
             return;
         }
         Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
-        translationData.setCurrentTraining(currentTraining);
 
         clearMarkAndCross();
-        setWordToTranslate(translationData.getCurrentTraining().getForeignWord());
+        setWordToTranslate(currentTraining.getForeignWord());
         setTranslationButtons(translationData);
         translationData.setFilled(true);
     }
 
     private void setTranslationButtons(TranslationData translationData) {
+        Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
         List<Integer> indexes = RandArray.getRandIndexes(3, 0, translationData.getTrainings().size() - 1, translationData.getCurrentTrainingNumber());
 
         Map<Integer, String> words = translationData.getRandomWords();
@@ -128,7 +130,7 @@ public class FindTranslationFragment extends Fragment {
 
         int answerPosition = (int) (Math.random() * 3);
         translationData.setAnswerPosition(answerPosition);
-        setWordsOnButtons(translationData.getCurrentTraining().getNativeWord(), words);
+        setWordsOnButtons(currentTraining.getNativeWord(), words);
     }
 
     public void setWordsOnButtons(String translationWord, Map<Integer, String> words) {
@@ -167,8 +169,10 @@ public class FindTranslationFragment extends Fragment {
     }
 
     private void processAnswer(View view) {
+        Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
         TextView textView = (TextView) view;
-        if (translationData.getCurrentTraining() != null && translationData.getCurrentTraining().getNativeWord() == textView.getText()) {
+
+        if (currentTraining != null && currentTraining.getNativeWord() == textView.getText()) {
             setMark();
         } else {
             setCross();
@@ -180,9 +184,7 @@ public class FindTranslationFragment extends Fragment {
             @Override
             public void run() {
                 //Do something after 2000ms
-                translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
-                translationData.setFilled(false);
-                setAll(translationData);
+                setNewTraining(translationData);
                 enableButtons();
             }
         }, getResources().getInteger(R.integer.delayNextTraining));

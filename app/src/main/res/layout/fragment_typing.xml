@@ -37,7 +37,7 @@
         android:layout_height="64dp"
         android:textSize="24sp"
         android:layout_margin="@dimen/contentMargin"
-        android:text="@string/rememberButton"
+        android:text="@string/confirmButton"
         />
 
 </FrameLayout>
