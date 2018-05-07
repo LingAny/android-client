@@ -62,7 +62,7 @@ public class SelectLangFragment extends Fragment {
 
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
         langRecyclerView.setLayoutManager(categoryLayoutManager);
-        langRecyclerView.setAdapter(new LanguagesAdapter(languages, new ItemClickListener()));
+        langRecyclerView.setAdapter(new LanguagesAdapter(languages, new ItemClickListener(), getContext()));
     }
 
     @Override
