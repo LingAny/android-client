@@ -9,10 +9,17 @@
         android:id="@+id/title"
         android:textSize="@dimen/titleHeight"
         android:padding="@dimen/padding"
+        android:paddingStart="32dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
+        android:gravity="start"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:text="Test title"
         />
 
     <!-- A RecyclerView with some commonly used attributes -->
