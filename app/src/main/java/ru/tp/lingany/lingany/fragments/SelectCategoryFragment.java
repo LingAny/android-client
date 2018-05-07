@@ -55,7 +55,7 @@ public class SelectCategoryFragment extends Fragment {
         RecyclerView categoryRecyclerView = view.findViewById(R.id.categories);
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
         categoryRecyclerView.setLayoutManager(categoryLayoutManager);
-        categoryRecyclerView.setAdapter(new CategoryAdapter(categories, new ItemClickListener()));
+        categoryRecyclerView.setAdapter(new CategoryAdapter(categories, new ItemClickListener(), getContext()));
     }
 
     @Override
