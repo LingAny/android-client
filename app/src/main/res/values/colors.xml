@@ -8,4 +8,18 @@
     <color name="green">#ff669900</color>
     <color name="gray">#ccc</color>
     <color name="black">#000000</color>
+
+
+    <color name="flag_teal_500">#009688</color>
+    <color name="flag_cyan_500">#00BCD4</color>
+    <color name="flag_light_blue_500">#03A9F4</color>
+
+
+    <color name="flag_deep_purple_500">#673AB7</color>
+    <color name="flag_indigo_500">#3F51B5</color>
+    <color name="flag_blue_500">#2196F3</color>
+
+    <color name="flag_blue_grey_500">#607D8B</color>
+
+
 </resources>

@@ -14,6 +14,7 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
@@ -63,6 +64,7 @@ public class SelectReflectionActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_reflection);
+        disableAppBarShadow();
 
         loadingFragment = new LoadingFragment();
 
@@ -157,6 +159,7 @@ public class SelectReflectionActivity extends AppCompatActivity implements
     private void selectForeignLang(int position) {
         foreignLang = foreignLanguages.get(position);
         inflateLoadingFragment();
+        enableAppBarShadow();
         getReflectionByLanguages();
     }
 
@@ -234,5 +237,13 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
     private void dropLangType() {
         langType = LangTypes.NONE;
+    }
+
+    private void disableAppBarShadow() {
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+    }
+
+    private void enableAppBarShadow() {
+        Objects.requireNonNull(getSupportActionBar()).setElevation(4);
     }
 }
