@@ -14,16 +14,15 @@ import java.util.List;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.api.languages.Language;
 import ru.tp.lingany.lingany.utils.FlagColorGenerator;
+import ru.tp.lingany.lingany.utils.InflateImageTask;
 
 
 public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.LanguageViewHolder> {
 
+    private Context context;
     private List<Language> data;
     private ItemClickListener itemClickListener;
-
     private FlagColorGenerator colorGenerator;
-
-    private Context context;
 
     public LanguagesAdapter(List<Language> data, ItemClickListener listener, Context context) {
         this.data = data;
@@ -42,10 +41,8 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
         Language lang = data.get(position);
         holder.title.setText(lang.getTitle());
-        holder.image.setImageResource(R.drawable.lang_flag);
+        new InflateImageTask(context, holder.image,R.drawable.lang_flag).execute();
         holder.image.setColorFilter(context.getResources().getColor(colorGenerator.getColorResId()));
-//        Resources resources = context.getResources();
-//        holder.image.setImageDrawable(resources.getDrawable(R.drawable.lang_flag));
     }
 
     @Override
