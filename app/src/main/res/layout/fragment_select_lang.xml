@@ -20,6 +20,7 @@
         android:background="@color/colorPrimary"
         android:textColor="@color/white"
         android:text="Test title"
+        android:elevation="4dp"
         />
 
     <!-- A RecyclerView with some commonly used attributes -->
