@@ -41,7 +41,7 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         TrainingModeTypes.Type type = mode.getType();
 
         if (type == TrainingModeTypes.Type.SPRINT) {
-            new InflateImageTask(context, holder.image,R.drawable.mode_sprint).execute();
+            new InflateImageTask(context, holder.image,R.drawable.mode_timer).execute();
         } else if (type == TrainingModeTypes.Type.TRANSLATION) {
             new InflateImageTask(context, holder.image,R.drawable.mode_select).execute();
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
@@ -49,7 +49,7 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         } else if (type == TrainingModeTypes.Type.STUDY_MODE) {
             new InflateImageTask(context, holder.image,R.drawable.mode_study).execute();
         } else {
-            new InflateImageTask(context, holder.image,R.drawable.mode_sprint).execute();
+            new InflateImageTask(context, holder.image,R.drawable.mode_timer).execute();
         }
     }
 
