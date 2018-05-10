@@ -23,6 +23,7 @@
                 android:layout_height="@dimen/categoryImageHeight"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin"
+                android:layout_marginStart="@dimen/margin"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerCrop" />
 
@@ -38,7 +39,7 @@
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/doubleMargin"
+                    android:layout_margin="@dimen/margin"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/black"
                     />
