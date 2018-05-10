@@ -3,6 +3,7 @@ package ru.tp.lingany.lingany.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.androidnetworking.error.ANError;
@@ -11,7 +12,6 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.util.List;
 
 import ru.tp.lingany.lingany.R;
-import android.support.v4.app.Fragment;
 import ru.tp.lingany.lingany.fragments.FindTranslationFragment;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SprintFragment;
@@ -207,16 +207,7 @@ public class TrainingActivity extends AppCompatActivity implements
 
     @Override
     public void onSprintFinished() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(TrainingActivity.this, MenuActivity.class);
-                intent.putExtra(MenuActivity.EXTRA_REFLECTION, category.getReflection().getId().toString());
-                startActivity(intent);
-
-            }
-        }, getResources().getInteger(R.integer.delayInflateAfterLoading));
+        finish();
     }
 
     @Override
@@ -228,5 +219,4 @@ public class TrainingActivity extends AppCompatActivity implements
     public void onTypingFinished() {
         changeMode(Mode.FIND_TRANSLATION, new TranslationData(trainings));
     }
-
 }
