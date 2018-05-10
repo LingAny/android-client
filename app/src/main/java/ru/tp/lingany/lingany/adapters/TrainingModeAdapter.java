@@ -13,7 +13,7 @@ import java.util.List;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.models.TrainingMode;
 import ru.tp.lingany.lingany.models.TrainingModeTypes;
-import ru.tp.lingany.lingany.utils.InflateImageTask;
+import ru.tp.lingany.lingany.utils.PicassoImageInflater;
 
 
 public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapter.TrainingModeViewHolder> {
@@ -41,15 +41,15 @@ public class TrainingModeAdapter extends RecyclerView.Adapter<TrainingModeAdapte
         TrainingModeTypes.Type type = mode.getType();
 
         if (type == TrainingModeTypes.Type.SPRINT) {
-            new InflateImageTask(context, holder.image,R.drawable.mode_timer).execute();
+            PicassoImageInflater.inflate(holder.image, R.drawable.mode_timer);
         } else if (type == TrainingModeTypes.Type.TRANSLATION) {
-            new InflateImageTask(context, holder.image,R.drawable.mode_select).execute();
+            PicassoImageInflater.inflate(holder.image, R.drawable.mode_select);
         } else if (type == TrainingModeTypes.Type.TYPING_MODE) {
-            new InflateImageTask(context, holder.image,R.drawable.mode_type).execute();
+            PicassoImageInflater.inflate(holder.image, R.drawable.mode_type);
         } else if (type == TrainingModeTypes.Type.STUDY_MODE) {
-            new InflateImageTask(context, holder.image,R.drawable.mode_study).execute();
+            PicassoImageInflater.inflate(holder.image, R.drawable.mode_study);
         } else {
-            new InflateImageTask(context, holder.image,R.drawable.mode_timer).execute();
+            PicassoImageInflater.inflate(holder.image, R.drawable.mode_timer);
         }
     }
 

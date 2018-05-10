@@ -41,8 +41,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguagesAdapter.Lang
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
         Language lang = data.get(position);
         holder.title.setText(lang.getTitle());
-        new InflateImageTask(context, holder.image,R.drawable.lang_flag).execute();
         holder.image.setColorFilter(context.getResources().getColor(colorGenerator.getColorResId()));
+//        PicassoImageInflater.inflate(holder.image, R.drawable.lang_flag);
+        new InflateImageTask(context, holder.image,R.drawable.lang_flag).execute();
     }
 
     @Override

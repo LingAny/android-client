@@ -13,7 +13,7 @@ import java.util.List;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.sdk.api.categories.Category;
 import ru.tp.lingany.lingany.utils.IconCategoryGenerator;
-import ru.tp.lingany.lingany.utils.InflateImageTask;
+import ru.tp.lingany.lingany.utils.PicassoImageInflater;
 
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
@@ -41,7 +41,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
         Category category = data.get(position);
         holder.title.setText(category.getTitle());
-        new InflateImageTask(context, holder.image, iconCategoryGenerator.getIconResId()).execute();
+        PicassoImageInflater.inflate(holder.image, iconCategoryGenerator.getIconResId());
+//        new InflateImageTask(context, holder.image, iconCategoryGenerator.getIconResId()).execute();
     }
 
     @Override
