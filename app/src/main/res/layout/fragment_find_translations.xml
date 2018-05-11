@@ -47,6 +47,8 @@
             <Button
                 android:id="@+id/leftUpperButton"
                 android:layout_width="match_parent"
+                android:background="@drawable/fragment_translation_button_bg"
+                android:textColor="@color/white"
                 android:layout_height="64dp"
                 android:layout_marginTop="@dimen/contentMargin"
                 android:layout_marginBottom="@dimen/contentMarginHalf"
@@ -58,6 +60,8 @@
             <Button
                 android:id="@+id/leftDownButton"
                 android:layout_width="match_parent"
+                android:background="@drawable/fragment_translation_button_bg"
+                android:textColor="@color/white"
                 android:layout_height="64dp"
                 android:layout_marginTop="@dimen/contentMarginHalf"
                 android:layout_marginBottom="@dimen/contentMargin"
@@ -77,6 +81,8 @@
             <Button
                 android:id="@+id/rightUpperButton"
                 android:layout_width="match_parent"
+                android:background="@drawable/fragment_translation_button_bg"
+                android:textColor="@color/white"
                 android:layout_height="64dp"
                 android:layout_marginTop="@dimen/contentMargin"
                 android:layout_marginBottom="@dimen/contentMarginHalf"
@@ -89,6 +95,8 @@
             <Button
                 android:id="@+id/rightDownButton"
                 android:layout_width="match_parent"
+                android:background="@drawable/fragment_translation_button_bg"
+                android:textColor="@color/white"
                 android:layout_height="64dp"
                 android:layout_marginTop="@dimen/contentMarginHalf"
                 android:layout_marginBottom="@dimen/contentMargin"
