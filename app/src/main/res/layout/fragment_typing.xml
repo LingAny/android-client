@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:textSize="40sp"
             />
 
         <EditText
@@ -26,6 +27,7 @@
             android:inputType="text"
             android:layout_marginTop="@dimen/contentMargin"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:textSize="30sp"
             android:gravity="center"
             android:hint="@string/writeTranslation"/>
@@ -36,16 +38,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/fragmentButtonMarginEnd"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/confirmButtonTyping"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="@dimen/fragmentButtonMarginEnd"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/fragmentButtonSinglWidth"
+            android:layout_height="@dimen/fragmentButtonHeight"
+            android:background="@drawable/fragment_type_button_bg"
+            android:textColor="@color/white"
             android:textSize="24sp"
-            android:layout_margin="@dimen/contentMargin"
+            android:textAlignment="center"
             android:text="@string/confirmButton"
             />
 
