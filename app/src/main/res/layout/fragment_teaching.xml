@@ -36,15 +36,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/fragmentButtonMarginEnd"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/rememberButton"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_width="@dimen/fragmentButtonSinglWidth"
+            android:layout_height="@dimen/fragmentButtonHeight"
+            android:background="@drawable/fragment_study_button_bg"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/fragmentButtonMarginEnd"
             android:text="@string/rememberButton"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
     </LinearLayout>
