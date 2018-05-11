@@ -55,7 +55,9 @@
             android:layout_marginTop="@dimen/contentMargin"
             android:layout_weight="1"
             android:text="@string/agreeButton"
-            android:textSize="23sp" />
+            android:background="@drawable/fragment_sprint_button_bg"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/notAgreeButtonSprint"
@@ -67,6 +69,8 @@
             android:layout_marginTop="@dimen/contentMargin"
             android:layout_weight="1"
             android:text="@string/notAgreeButton"
+            android:background="@drawable/fragment_sprint_button_bg"
+            android:textColor="@color/white"
             android:textSize="24sp" />
     </LinearLayout>
 
