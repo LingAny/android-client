@@ -19,5 +19,7 @@
     <dimen name="categoryImageHeight">64dp</dimen>
 
     <dimen name="fragmentButtonMarginEnd">32dp</dimen>
+    <dimen name="fragmentButtonHeight">64dp</dimen>
+    <dimen name="fragmentButtonSinglWidth">256dp</dimen>
 
 </resources>
