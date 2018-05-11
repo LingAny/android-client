@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:background="@drawable/fragment_sprint_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/contentMarginBottom"
         android:orientation="vertical">
 
         <TextView
@@ -14,60 +16,56 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="30sp"
-            />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/wordTranslationSprint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="30sp"
             android:layout_marginTop="@dimen/contentMargin"
-            />
+            android:textSize="30sp" />
 
         <LinearLayout
             android:id="@+id/containerMarkAndCrossSprint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/contentMargin">
-        </LinearLayout>
+            android:layout_marginTop="@dimen/contentMargin"
+            android:orientation="horizontal"></LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/fragmentButtonMarginEnd"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/agreeButtonSprint"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:textSize="23sp"
-            android:layout_marginTop="@dimen/contentMargin"
             android:layout_marginBottom="@dimen/contentMargin"
+            android:layout_marginEnd="@dimen/contentMargin"
             android:layout_marginStart="@dimen/contentMargin"
-            android:layout_marginEnd="@dimen/contentMarginHalf"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:layout_weight="1"
             android:text="@string/agreeButton"
-            />
+            android:textSize="23sp" />
 
         <Button
             android:id="@+id/notAgreeButtonSprint"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:textSize="24sp"
-            android:layout_marginTop="@dimen/contentMargin"
             android:layout_marginBottom="@dimen/contentMargin"
-            android:layout_marginStart="@dimen/contentMarginHalf"
             android:layout_marginEnd="@dimen/contentMargin"
+            android:layout_marginStart="@dimen/contentMargin"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:layout_weight="1"
             android:text="@string/notAgreeButton"
-            />
+            android:textSize="24sp" />
     </LinearLayout>
 
 </FrameLayout>
