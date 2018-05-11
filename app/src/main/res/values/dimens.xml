@@ -9,6 +9,7 @@
     <dimen name="contentPadding">0dp</dimen>
     <dimen name="contentMargin">16dp</dimen>
     <dimen name="contentMarginHalf">8dp</dimen>
+    <dimen name="contentMarginBottom">64dp</dimen>
     <dimen name="itemRVHeight">48dp</dimen>
 
     <dimen name="itemTextHeight">32sp</dimen>
@@ -16,5 +17,7 @@
 
     <dimen name="categoryImageWidth">64dp</dimen>
     <dimen name="categoryImageHeight">64dp</dimen>
+
+    <dimen name="fragmentButtonMarginEnd">32dp</dimen>
 
 </resources>
