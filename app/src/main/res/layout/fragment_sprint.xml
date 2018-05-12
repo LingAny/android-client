@@ -37,7 +37,8 @@
             android:background="@drawable/fragment_content_score_bg"
             android:gravity="center"
             android:layout_marginTop="@dimen/contentMargin"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+        </LinearLayout>
 
     </LinearLayout>
 

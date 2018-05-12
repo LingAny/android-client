@@ -33,7 +33,7 @@
             />
 
         <LinearLayout
-            android:id="@+id/containerStudyWord"
+            android:id="@+id/footerStudyWord"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/fragment_content_score_bg"

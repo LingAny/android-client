@@ -9,6 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/contentMarginBottom"
+        android:layout_marginLeft="@dimen/contentMargin"
+        android:layout_marginRight="@dimen/contentMargin"
+        android:background="@drawable/fragment_content_bg"
         android:orientation="vertical">
 
         <TextView
@@ -16,8 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textSize="40sp"
+            android:textSize="45sp"
             />
 
         <EditText
@@ -27,10 +29,18 @@
             android:inputType="text"
             android:layout_marginTop="@dimen/contentMargin"
             android:layout_gravity="center"
-            android:textColor="@color/white"
             android:textSize="30sp"
             android:gravity="center"
             android:hint="@string/writeTranslation"/>
+
+        <LinearLayout
+            android:id="@+id/footerTypingWord"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/fragment_content_score_bg"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:orientation="horizontal"></LinearLayout>
 
     </LinearLayout>
 
