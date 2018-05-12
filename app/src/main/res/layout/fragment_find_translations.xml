@@ -9,6 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/contentMarginBottom"
+        android:layout_marginLeft="@dimen/contentMargin"
+        android:layout_marginRight="@dimen/contentMargin"
+        android:background="@drawable/fragment_content_bg"
         android:orientation="vertical">
 
         <TextView
@@ -16,18 +19,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/white"
             android:layout_marginTop="@dimen/contentMargin"
-            android:textSize="40sp"
+            android:textSize="45sp"
             />
 
         <LinearLayout
             android:id="@+id/containerMarkAndCross"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/contentMargin">
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/fragment_content_score_bg"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/contentMargin"
+            android:orientation="horizontal">
         </LinearLayout>
     </LinearLayout>
 
