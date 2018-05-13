@@ -1,11 +1,11 @@
 <resources>
 
     <string name="loading">Загрузка</string>
-    <string name="chooseNativeLang">Выберите родной язык</string>
-    <string name="chooseForeignLang">Выберите иностранный язык</string>
+    <string name="chooseNativeLang">Родной язык</string>
+    <string name="chooseForeignLang">Иностранный язык</string>
     <string name="categories">Категории</string>
 
-    <string name="headerTrainingFindTranslation">Перевод</string>
+    <string name="headerTrainingTranslation">Перевод</string>
     <string name="headerTrainingSprint">Спринт</string>
 
 </resources>

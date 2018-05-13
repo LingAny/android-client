@@ -14,13 +14,14 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectLangFragment;
 import ru.tp.lingany.lingany.sdk.Api;
-import ru.tp.lingany.lingany.sdk.languages.Language;
-import ru.tp.lingany.lingany.sdk.reflections.Reflection;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.reflections.Reflection;
 import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
@@ -63,6 +64,7 @@ public class SelectReflectionActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_reflection);
+        disableAppBarShadow();
 
         loadingFragment = new LoadingFragment();
 
@@ -157,6 +159,7 @@ public class SelectReflectionActivity extends AppCompatActivity implements
     private void selectForeignLang(int position) {
         foreignLang = foreignLanguages.get(position);
         inflateLoadingFragment();
+        enableAppBarShadow();
         getReflectionByLanguages();
     }
 
@@ -207,8 +210,8 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SelectReflectionActivity.this, CategoryActivity.class);
-                intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflection.getId().toString());
+                Intent intent = new Intent(SelectReflectionActivity.this, MenuActivity.class);
+                intent.putExtra(MenuActivity.EXTRA_REFLECTION, reflection.getId().toString());
                 startActivity(intent);
             }
         }, getResources().getInteger(R.integer.delayInflateAfterLoading));
@@ -234,5 +237,13 @@ public class SelectReflectionActivity extends AppCompatActivity implements
 
     private void dropLangType() {
         langType = LangTypes.NONE;
+    }
+
+    private void disableAppBarShadow() {
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+    }
+
+    private void enableAppBarShadow() {
+        Objects.requireNonNull(getSupportActionBar()).setElevation(4);
     }
 }

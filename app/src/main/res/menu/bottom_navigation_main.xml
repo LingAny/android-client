@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu"
+    >
+    <item
+        android:id="@+id/action_categories"
+        android:enabled="true"
+        android:icon="@drawable/reorder_horizontal"
+        android:title=""
+        />
+    <item
+        android:id="@+id/action_shape"
+        android:enabled="true"
+        android:icon="@drawable/select_all"
+        android:title=""
+        />
+
+    <item
+        android:id="@+id/action_hot"
+        android:enabled="true"
+        android:icon="@drawable/fire"
+        android:title=""
+        />
+</menu>

@@ -10,16 +10,20 @@
     <string name="reflectionId">reflectionId</string>
 
     <string name="loading">Loading</string>
-    <string name="chooseNativeLang">Choose native language</string>
-    <string name="chooseForeignLang">Choose foreign language</string>
+    <string name="chooseNativeLang">Native language</string>
+    <string name="chooseForeignLang">Foreign language</string>
     <string name="categories">Categories</string>
 
     <string name="pleaseWait">Please wait</string>
 
-    <string name="headerTrainingFindTranslation">Find translation</string>
+    <string name="headerTrainingTranslation">Find translation</string>
     <string name="headerTrainingSprint">Sprint</string>
 
     <string name="agreeButton">Yes</string>
     <string name="notAgreeButton">No</string>
+    <string name="rememberButton">Remember</string>
+    <string name="confirmButton">Confirm</string>
+    <string name="writeTranslation">write translation</string>
+
 
 </resources>

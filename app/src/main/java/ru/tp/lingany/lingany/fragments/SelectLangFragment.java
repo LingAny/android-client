@@ -18,7 +18,7 @@ import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.LanguagesAdapter;
-import ru.tp.lingany.lingany.sdk.languages.Language;
+import ru.tp.lingany.lingany.sdk.api.languages.Language;
 
 public class SelectLangFragment extends Fragment {
 
@@ -62,7 +62,7 @@ public class SelectLangFragment extends Fragment {
 
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
         langRecyclerView.setLayoutManager(categoryLayoutManager);
-        langRecyclerView.setAdapter(new LanguagesAdapter(languages, new ItemClickListener()));
+        langRecyclerView.setAdapter(new LanguagesAdapter(languages, new ItemClickListener(), getContext()));
     }
 
     @Override

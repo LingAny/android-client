@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.adapters.CategoryAdapter;
-import ru.tp.lingany.lingany.sdk.categories.Category;
+import ru.tp.lingany.lingany.sdk.api.categories.Category;
 
 
 public class SelectCategoryFragment extends Fragment {
@@ -52,10 +52,10 @@ public class SelectCategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         readBundle(Objects.requireNonNull(getArguments()));
 
-        RecyclerView langRecyclerView = view.findViewById(R.id.categories);
+        RecyclerView categoryRecyclerView = view.findViewById(R.id.categories);
         RecyclerView.LayoutManager categoryLayoutManager = new LinearLayoutManager(getContext());
-        langRecyclerView.setLayoutManager(categoryLayoutManager);
-        langRecyclerView.setAdapter(new CategoryAdapter(categories, new ItemClickListener()));
+        categoryRecyclerView.setLayoutManager(categoryLayoutManager);
+        categoryRecyclerView.setAdapter(new CategoryAdapter(categories, new ItemClickListener(), getContext()));
     }
 
     @Override

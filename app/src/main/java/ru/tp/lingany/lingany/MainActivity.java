@@ -9,7 +9,7 @@ import android.util.Log;
 
 import java.util.UUID;
 
-import ru.tp.lingany.lingany.activities.CategoryActivity;
+import ru.tp.lingany.lingany.activities.MenuActivity;
 import ru.tp.lingany.lingany.activities.SelectReflectionActivity;
 
 
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             String refIdKey = getString(R.string.reflectionId);
             String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
-            Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
-            intent.putExtra(CategoryActivity.EXTRA_REFLECTION, reflectionId);
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            intent.putExtra(MenuActivity.EXTRA_REFLECTION, reflectionId);
             startActivity(intent);
         }
 
