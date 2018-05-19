@@ -13,7 +13,7 @@ public class SprintData extends FragmentData implements Serializable {
     private boolean victories = false;
     private int markAndCrossLength = 0;
     private String visibleTranslation;
-    private String currentTime;
+    private long currentTime;
 
     public SprintData(List<Training> trainings) {
         super(trainings);
@@ -56,5 +56,13 @@ public class SprintData extends FragmentData implements Serializable {
 
     public void setVisibleTranslation(String visibleTranslation) {
         this.visibleTranslation = visibleTranslation;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
     }
 }

@@ -91,14 +91,14 @@ public class SprintFragment extends Fragment {
                     });
         }
 
-        int maxTimerValue = 10000;
-        int timerInterval = 1000;
-
+        long maxTimerValue = 5000;
+        long timerInterval = 1000;
         timer = new CountDownTimer(maxTimerValue, timerInterval) {
 
             public void onTick(long millisUntilFinished) {
-//                Long seconds = millisUntilFinished / 1000;
-                timerView.setText(String.valueOf(millisUntilFinished / 1000));
+                long timeEstimates = millisUntilFinished / 1000;
+                sprintData.setCurrentTime(timeEstimates);
+                timerView.setText(String.valueOf(timeEstimates));
             }
 
             public void onFinish() {
@@ -211,6 +211,7 @@ public class SprintFragment extends Fragment {
         }
 
         disableButtons();
+        timer.cancel();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -246,5 +247,9 @@ public class SprintFragment extends Fragment {
 
     public SprintData getSprintData() {
         return sprintData;
+    }
+
+    public void stopTimer() {
+        timer.cancel();
     }
 }
