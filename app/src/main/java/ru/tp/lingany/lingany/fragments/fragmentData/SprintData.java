@@ -1,5 +1,7 @@
 package ru.tp.lingany.lingany.fragments.fragmentData;
 
+import android.os.CountDownTimer;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class SprintData extends FragmentData implements Serializable {
     private boolean victories = false;
     private int markAndCrossLength = 0;
     private String visibleTranslation;
+    private String currentTime;
 
     public SprintData(List<Training> trainings) {
         super(trainings);

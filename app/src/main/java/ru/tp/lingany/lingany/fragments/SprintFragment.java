@@ -2,6 +2,7 @@ package ru.tp.lingany.lingany.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +28,9 @@ public class SprintFragment extends Fragment {
     private TextView wordToTranslate;
     private TextView wordTranslation;
     private SprintData sprintData;
+
+    private TextView timerView;
+    private CountDownTimer timer;
 
     List<TextView> buttons = new ArrayList<>();
     private static final String SPRINT_DATA = "SPRINT_DATA";
@@ -70,6 +74,7 @@ public class SprintFragment extends Fragment {
         marksContainer = Objects.requireNonNull(getView()).findViewById(R.id.containerMarkAndCrossSprint);
         wordToTranslate = getView().findViewById(R.id.wordToTranslateSprint);
         wordTranslation = getView().findViewById(R.id.wordTranslationSprint);
+        timerView = getView().findViewById(R.id.timerSprint);
 
         TextView agreeButton = Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
         TextView notAgreeButton = getView().findViewById(R.id.notAgreeButtonSprint);
@@ -85,6 +90,22 @@ public class SprintFragment extends Fragment {
                         }
                     });
         }
+
+        int maxTimerValue = 10000;
+        int timerInterval = 1000;
+
+        timer = new CountDownTimer(maxTimerValue, timerInterval) {
+
+            public void onTick(long millisUntilFinished) {
+//                Long seconds = millisUntilFinished / 1000;
+                timerView.setText(String.valueOf(millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                setNewTraining(sprintData);
+                timer.start();
+            }
+        };
     }
 
     @Override
@@ -114,6 +135,7 @@ public class SprintFragment extends Fragment {
         Training currentTraining = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
         setWordToTranslate(currentTraining.getForeignWord());
         setWordTranslation(sprintData.getVisibleTranslation());
+        timer.start();
     }
 
     private void setNewTraining(SprintData sprintData) {
@@ -134,6 +156,7 @@ public class SprintFragment extends Fragment {
 
         setWordToTranslate(training.getForeignWord());
         setWordTranslation(sprintData.getVisibleTranslation());
+        timer.start();
     }
 
     public void setWordToTranslate(String word) {
