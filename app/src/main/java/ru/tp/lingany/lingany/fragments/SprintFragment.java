@@ -120,6 +120,7 @@ public class SprintFragment extends Fragment {
     }
 
     private void setTrainingAfterSaveInstance(SprintData sprintData) {
+        sprintData.setMarkAndCrossLength(0);
         if (sprintData.isVictories()) {
             for (int i = 0; i < sprintData.getMarkAndCrossLength(); ++i) {
                 final View view = inflater.inflate(R.layout.item_mark, marksContainer, false);
