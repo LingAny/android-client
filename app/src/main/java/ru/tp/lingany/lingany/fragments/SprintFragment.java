@@ -27,6 +27,7 @@ public class SprintFragment extends Fragment {
     private ViewGroup marksContainer;
     private TextView wordToTranslate;
     private TextView wordTranslation;
+    private TextView wordCounter;
     private SprintData sprintData;
 
     private TextView timerView;
@@ -34,6 +35,9 @@ public class SprintFragment extends Fragment {
 
     List<TextView> buttons = new ArrayList<>();
     private static final String SPRINT_DATA = "SPRINT_DATA";
+
+    private Integer currentTrainingNumber;
+    private Integer maxTrainingNumber;
 
     public interface SprintListener {
         void onSprintFinished();
@@ -74,6 +78,7 @@ public class SprintFragment extends Fragment {
         marksContainer = Objects.requireNonNull(getView()).findViewById(R.id.containerMarkAndCrossSprint);
         wordToTranslate = getView().findViewById(R.id.wordToTranslateSprint);
         wordTranslation = getView().findViewById(R.id.wordTranslationSprint);
+        wordCounter = getView().findViewById(R.id.containerFooterContextSprintCounter);
         timerView = getView().findViewById(R.id.timerSprint);
 
         TextView agreeButton = Objects.requireNonNull(getView()).findViewById(R.id.agreeButtonSprint);
@@ -140,15 +145,18 @@ public class SprintFragment extends Fragment {
     }
 
     private void setNewTraining(SprintData sprintData) {
-        sprintData.setCurrentTrainingNumber(sprintData.getCurrentTrainingNumber() + 1);
-        if (sprintData.getCurrentTrainingNumber() >= sprintData.getTrainings().size() - 1) {
+        currentTrainingNumber = sprintData.getCurrentTrainingNumber() + 1;
+        maxTrainingNumber = sprintData.getTrainings().size();
+
+        sprintData.setCurrentTrainingNumber(currentTrainingNumber);
+        if (currentTrainingNumber > maxTrainingNumber - 1) {
             finish();
             return;
         }
 
-        Training training = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
+        Training training = sprintData.getTrainings().get(currentTrainingNumber);
 
-        int index = RandArray.getRandIndex( 0, sprintData.getTrainings().size() - 1);
+        int index = RandArray.getRandIndex( 0, maxTrainingNumber - 1);
         if (index % 2 == 0) {
             sprintData.setVisibleTranslation(training.getNativeWord());
         } else {
@@ -157,7 +165,13 @@ public class SprintFragment extends Fragment {
 
         setWordToTranslate(training.getForeignWord());
         setWordTranslation(sprintData.getVisibleTranslation());
+        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
         timer.start();
+    }
+
+    public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        String resultString = currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
+        wordCounter.setText(resultString);
     }
 
     public void setWordToTranslate(String word) {
