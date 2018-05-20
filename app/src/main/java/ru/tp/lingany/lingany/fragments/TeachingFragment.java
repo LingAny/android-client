@@ -22,7 +22,11 @@ public class TeachingFragment extends Fragment {
     private TextView wordTranslation;
     private TeachingData teachingData;
     private TextView rememberButton;
+    private TextView wordCounter;
     private static final String TEACHING_DATA = "TEACHING_DATA";
+
+    private Integer currentTrainingNumber;
+    private Integer maxTrainingNumber;
 
     public interface TeachingListener {
         void onTeachingFinished();
@@ -60,6 +64,7 @@ public class TeachingFragment extends Fragment {
         wordToTranslate = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.wordToTranslateTeaching);
         wordTranslation = (TextView) getView().findViewById(R.id.wordTranslationTeaching);
         rememberButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.rememberButton);
+        wordCounter = getView().findViewById(R.id.containerContextWordCounterStudyWord);
         rememberButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -88,6 +93,9 @@ public class TeachingFragment extends Fragment {
 
 
     private void setNewWords(TeachingData teachingData) {
+        currentTrainingNumber = teachingData.getTrainingNumber() + 1;
+        maxTrainingNumber = teachingData.getTrainings().size();
+
         teachingData.setTrainingNumber(teachingData.getTrainingNumber() + 1);
 
         if (teachingData.getTrainingNumber() >= teachingData.getTrainings().size()) {
@@ -97,6 +105,12 @@ public class TeachingFragment extends Fragment {
 
         wordToTranslate.setText(teachingData.getTrainings().get(teachingData.getTrainingNumber()).getForeignWord());
         wordTranslation.setText(teachingData.getTrainings().get(teachingData.getTrainingNumber()).getNativeWord());
+        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
+    }
+
+    public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        String resultString = currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
+        wordCounter.setText(resultString);
     }
 
 
