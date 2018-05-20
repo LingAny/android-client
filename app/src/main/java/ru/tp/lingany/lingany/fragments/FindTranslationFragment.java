@@ -33,8 +33,12 @@ public class FindTranslationFragment extends Fragment {
     private FindTranslationListener findTranslationFinished;
     private ViewGroup markCrossContainer;
     private TextView wordToTranslate;
+    private TextView wordCounter;
     private LayoutInflater inflater;
     private TranslationData translationData;
+
+    private Integer currentTrainingNumber;
+    private Integer maxTrainingNumber;
 
     private static final String TRANSLATION_DATA = "TRANSLATION_DATA";
 
@@ -73,6 +77,7 @@ public class FindTranslationFragment extends Fragment {
         buttons.add((TextView) getView().findViewById(R.id.rightDownButton));
 
         markCrossContainer = Objects.requireNonNull(getView()).findViewById(R.id.containerMarkAndCross);
+        wordCounter = getView().findViewById(R.id.containerContextWordCounterFindTranslation);
         wordToTranslate = getView().findViewById(R.id.wordToTranslate);
 
         for (View button:buttons) {
@@ -105,6 +110,9 @@ public class FindTranslationFragment extends Fragment {
     }
 
     private void setNewTraining(TranslationData translationData) {
+        currentTrainingNumber = translationData.getCurrentTrainingNumber() + 1;
+        maxTrainingNumber = translationData.getTrainings().size();
+
         translationData.clearRandomWords();
         translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
         if (translationData.getCurrentTrainingNumber() >= translationData.getTrainings().size()) {
@@ -116,7 +124,13 @@ public class FindTranslationFragment extends Fragment {
         clearMarkAndCross();
         setWordToTranslate(currentTraining.getForeignWord());
         setTranslationButtons(translationData);
+        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
         translationData.setFilled(true);
+    }
+
+    public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        String resultString = currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
+        wordCounter.setText(resultString);
     }
 
     private void setTranslationButtons(TranslationData translationData) {
