@@ -24,7 +24,11 @@ public class TypingFragment extends Fragment {
     private EditText wordTranslation;
     private TypingData typingData;
     private TextView confirmButton;
+    private TextView wordCounter;
     private static final String TYPING_DATA = "TYPING_DATA";
+
+    private Integer currentTrainingNumber;
+    private Integer maxTrainingNumber;
 
     public interface TypingListener {
         void onTypingFinished();
@@ -62,6 +66,7 @@ public class TypingFragment extends Fragment {
         wordToTranslate = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.wordToTranslateTyping);
         wordTranslation = (EditText) getView().findViewById(R.id.typeTranslation);
         confirmButton = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.confirmButtonTyping);
+        wordCounter = getView().findViewById(R.id.containerContextWordCounterTypingWord);
         confirmButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -89,6 +94,9 @@ public class TypingFragment extends Fragment {
 
 
     private void setNewWords(TypingData typingData) {
+        currentTrainingNumber = typingData.getTrainingNumber() + 1;
+        maxTrainingNumber = typingData.getTrainings().size();
+
         typingData.setTrainingNumber(typingData.getTrainingNumber() + 1);
 
         if (typingData.getTrainingNumber() >= typingData.getTrainings().size()) {
@@ -97,6 +105,12 @@ public class TypingFragment extends Fragment {
         }
 
         wordToTranslate.setText(typingData.getTrainings().get(typingData.getTrainingNumber()).getForeignWord());
+        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
+    }
+
+    public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        String resultString = currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
+        wordCounter.setText(resultString);
     }
 
 
