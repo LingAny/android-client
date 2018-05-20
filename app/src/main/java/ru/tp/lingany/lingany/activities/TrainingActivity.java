@@ -67,6 +67,7 @@ public class TrainingActivity extends AppCompatActivity implements
                     savedInstanceState.putSerializable(TRAINING_DATA, translationData);
                     break;
                 case SPRINT:
+                    sprintFragment.stopTimer();
                     SprintData sprintData = sprintFragment.getSprintData();
                     savedInstanceState.putSerializable(SPRINT_DATA, sprintData);
                     break;
@@ -96,7 +97,8 @@ public class TrainingActivity extends AppCompatActivity implements
             @Override
             public void onResponse(List<Training> response) {
                 trainings = response;
-                changeMode(Mode.TEACHING, new TeachingData(trainings));
+//                changeMode(Mode.TEACHING, new TeachingData(trainings));
+                changeMode(Mode.SPRINT, new SprintData(trainings));
                 loadingFragment.stopLoading();
             }
 

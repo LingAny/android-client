@@ -3,6 +3,13 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@drawable/fragment_sprint_bg_2">
+    <TextView
+        android:id="@+id/timerSprint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="@dimen/contentMargin"
+        android:textSize="40sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <TextView
             android:id="@+id/wordTranslationSprint"
@@ -28,7 +35,7 @@
             android:layout_gravity="center"
             android:textColor="@color/green"
             android:layout_marginTop="@dimen/contentMargin"
-            android:textSize="30sp" />
+            android:textSize="32sp" />
 
         <LinearLayout
             android:id="@+id/containerMarkAndCrossSprint"
