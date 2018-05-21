@@ -1,15 +1,21 @@
 package ru.tp.lingany.lingany.fragments.fragmentData;
 
 
+import java.util.UUID;
+
 public class TranslatorData {
     private boolean isFilled;
     private String nativeLanguage;
     private String foreignLanguage;
-    private String reflectionId;
+    private UUID reflectionId;
 
     private String wordToTranslate;
     private String wordTranslation;
     private boolean isLanguageChanged;
+
+    public TranslatorData(UUID reflectionId) {
+        this.nativeLanguage = nativeLanguage;
+    }
 
     public boolean isFilled() {
         return isFilled;
@@ -31,11 +37,11 @@ public class TranslatorData {
         this.foreignLanguage = foreignLanguage;
     }
 
-    public String getReflectionId() {
+    public UUID getReflectionId() {
         return reflectionId;
     }
 
-    public void setReflectionId(String reflectionId) {
+    public void setReflectionId(UUID reflectionId) {
         this.reflectionId = reflectionId;
     }
 

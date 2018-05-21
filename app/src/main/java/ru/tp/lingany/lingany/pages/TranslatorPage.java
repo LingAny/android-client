@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslatorData;
@@ -31,6 +32,21 @@ public class TranslatorPage extends Fragment {
     private TranslatorData translatorData;
 
     private static final String TRANSLATOR_DATA = "TRANSLATOR_DATA";
+    private static final String REFLECTION_ID_TRANSLATOR = "REFLECTION_ID_TRANSLATOR";
+    private static final String NATIVE_LANGUAGE_TRANSLATOR = "NATIVE_LANGUAGE_TRANSLATOR";
+    private static final String FOREIGN_LANGUAGE_TRANSLATOR = "FOREIGN_LANGUAGE_TRANSLATOR";
+
+    public static TranslatorPage getInstance(UUID refId) {
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(REFLECTION_ID_TRANSLATOR, refId);
+//        bundle.putString(NATIVE_LANGUAGE_TRANSLATOR, nativeLanguage);
+//        bundle.putString(FOREIGN_LANGUAGE_TRANSLATOR, foreignLanguage);
+
+        TranslatorPage fragment = new TranslatorPage();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -87,12 +103,13 @@ public class TranslatorPage extends Fragment {
             return;
         }
         String reflection_id = prefs.getString(getString(R.string.reflectionId), "");
+        UUID ref_uuid = UUID.fromString(reflection_id);
         String nativeLanguage = prefs.getString(getString(R.string.nativeLang), "");
         String foreignLanguage = prefs.getString(getString(R.string.foreignLang), "");
 
         translatorData.setForeignLanguage(foreignLanguage);
         translatorData.setNativeLanguage(nativeLanguage);
-        translatorData.setReflectionId(reflection_id);
+        translatorData.setReflectionId(ref_uuid);
     }
 
     @Override
@@ -137,6 +154,9 @@ public class TranslatorPage extends Fragment {
 
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
-        translatorData = (TranslatorData) bundle.getSerializable(TRANSLATOR_DATA);
+        UUID refId = (UUID) bundle.getSerializable(REFLECTION_ID_TRANSLATOR);
+//        String foreignLanguage = bundle.getString(FOREIGN_LANGUAGE_TRANSLATOR);
+//        String nativeLanguage = bundle.getString(NATIVE_LANGUAGE_TRANSLATOR);
+        translatorData = new TranslatorData(refId);
     }
 }
