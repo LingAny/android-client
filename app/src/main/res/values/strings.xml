@@ -25,5 +25,10 @@
     <string name="confirmButton">Confirm</string>
     <string name="writeTranslation">write translation</string>
 
+    <string name="translatorHint">text</string>
+    <string name="changeLanguageButton">Change</string>
+    <string name="translateButton">Translate</string>
+
+
 
 </resources>
