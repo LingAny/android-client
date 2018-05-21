@@ -107,9 +107,10 @@ public class TranslatorPage extends Fragment {
         String nativeLanguage = prefs.getString(getString(R.string.nativeLang), "");
         String foreignLanguage = prefs.getString(getString(R.string.foreignLang), "");
 
+        translatorData = new TranslatorData(ref_uuid);
+//        translatorData.setReflectionId(ref_uuid);
         translatorData.setForeignLanguage(foreignLanguage);
         translatorData.setNativeLanguage(nativeLanguage);
-        translatorData.setReflectionId(ref_uuid);
     }
 
     @Override
@@ -154,9 +155,9 @@ public class TranslatorPage extends Fragment {
 
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
-        UUID refId = (UUID) bundle.getSerializable(REFLECTION_ID_TRANSLATOR);
+//        UUID refId = (UUID) bundle.getSerializable(REFLECTION_ID_TRANSLATOR);
 //        String foreignLanguage = bundle.getString(FOREIGN_LANGUAGE_TRANSLATOR);
 //        String nativeLanguage = bundle.getString(NATIVE_LANGUAGE_TRANSLATOR);
-        translatorData = new TranslatorData(refId);
+//        translatorData = new TranslatorData(refId);
     }
 }

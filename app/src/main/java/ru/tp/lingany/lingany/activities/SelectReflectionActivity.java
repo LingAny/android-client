@@ -201,9 +201,9 @@ public class SelectReflectionActivity extends AppCompatActivity implements
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(getString(R.string.reflectionId), reflection.getId().toString());
-        editor.putBoolean(getString(R.string.isInitRef), true);
         editor.putString(getString(R.string.nativeLang), reflection.getNativeLanguage().getTitle());
         editor.putString(getString(R.string.foreignLang), reflection.getForeignLanguage().getTitle());
+        editor.putBoolean(getString(R.string.isInitRef), true);
         editor.apply();
     }
 
