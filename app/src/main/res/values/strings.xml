@@ -8,6 +8,8 @@
     <string name="api_training">/training</string>
     <string name="isInitRef">isInitRef</string>
     <string name="reflectionId">reflectionId</string>
+    <string name="nativeLang">nativeLang</string>
+    <string name="foreignLang">foreignLang</string>
 
     <string name="loading">Loading</string>
     <string name="chooseNativeLang">Native language</string>
