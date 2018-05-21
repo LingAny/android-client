@@ -16,12 +16,9 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
-import ru.tp.lingany.lingany.fragments.TypingFragment;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslatorData;
-import ru.tp.lingany.lingany.fragments.fragmentData.TypingData;
 
 
 public class TranslatorPage extends Fragment {
@@ -72,7 +69,9 @@ public class TranslatorPage extends Fragment {
     }
 
     private void processChangeLanguage(View view) {
-
+        translatorData.changeLanguage();
+        firstLanguage.setText(translatorData.getForeignLanguage());
+        secondLanguage.setText(translatorData.getNativeLanguage());
     }
 
     private void processTranslate(View view) {
@@ -106,8 +105,14 @@ public class TranslatorPage extends Fragment {
     }
 
     private void setTrainingAfterSaveInstance(TranslatorData translatorData) {
-        firstLanguage.setText(translatorData.getForeignLanguage());
-        secondLanguage.setText(translatorData.getNativeLanguage());
+        if (translatorData.isLanguageChanged()) {
+            firstLanguage.setText(translatorData.getNativeLanguage());
+            secondLanguage.setText(translatorData.getForeignLanguage());
+        } else {
+            firstLanguage.setText(translatorData.getForeignLanguage());
+            secondLanguage.setText(translatorData.getNativeLanguage());
+        }
+
         wordToTranslate.setText(translatorData.getWordToTranslate());
         wordTranslation.setText(translatorData.getWordTranslation());
     }

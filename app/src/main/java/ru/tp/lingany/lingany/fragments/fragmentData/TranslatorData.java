@@ -9,6 +9,7 @@ public class TranslatorData {
 
     private String wordToTranslate;
     private String wordTranslation;
+    private boolean isLanguageChanged;
 
     public boolean isFilled() {
         return isFilled;
@@ -52,5 +53,28 @@ public class TranslatorData {
 
     public void setWordTranslation(String wordTranslation) {
         this.wordTranslation = wordTranslation;
+    }
+
+    public boolean isLanguageChanged() {
+        return isLanguageChanged;
+    }
+
+    public void setLanguageChanged(boolean languageChanged) {
+        isLanguageChanged = languageChanged;
+    }
+
+    public void changeLanguage() {
+        boolean oldIsLanguageChanged = isLanguageChanged;
+        String oldNativeLanguage = nativeLanguage;
+        String oldForeignLanguage = foreignLanguage;
+
+        if (oldIsLanguageChanged) {
+            isLanguageChanged = false;
+        } else {
+            isLanguageChanged = true;
+        }
+
+        foreignLanguage = oldNativeLanguage;
+        nativeLanguage = oldForeignLanguage;
     }
 }
