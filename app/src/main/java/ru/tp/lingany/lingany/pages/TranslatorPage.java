@@ -97,14 +97,18 @@ public class TranslatorPage extends Fragment {
         wordListener = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<Word>() {
             @Override
             public void onResponse(Word response) {
+                System.out.println("Good");
                 translatorData.setForeignLanguage(response.getTranslation());
                 wordTranslation.setText(response.getTranslation());
 //                loadingFragment.stopLoading();
+                enableButtons();
             }
 
             @Override
             public void onError(ANError anError) {
 //                loadingFragment.showRefresh();
+                System.out.println("erorr");
+                enableButtons();
             }
         });
     }
@@ -115,10 +119,13 @@ public class TranslatorPage extends Fragment {
         secondLanguage.setText(translatorData.getNativeLanguage());
     }
 
+    @SuppressWarnings("unchecked")
     private void processTranslate(View view) {
+//        disableButtons();
+        translatorData.setWordToTranslate(wordToTranslate.getText().toString());
         ParsedRequestListener<Word> listener = (ParsedRequestListener<Word>) wordListener.asListener();
         Api.getInstance().word().getTranslationByText(translatorData.getReflectionId().toString(),
-                translatorData.getForeignLanguage(), listener);
+                translatorData.getWordToTranslate(), listener);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class TranslatorData {
     private boolean isLanguageChanged;
 
     public TranslatorData(UUID reflectionId) {
-        this.nativeLanguage = nativeLanguage;
+        this.reflectionId = reflectionId;
     }
 
     public boolean isFilled() {

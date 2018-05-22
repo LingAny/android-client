@@ -14,13 +14,14 @@ public class WordService {
     }
 
     public void getTranslationByText(String refId, String text, ParsedRequestListener<Word> listener) {
-        AndroidNetworking.get(url + "{refId}" + "{text}")
-                .addPathParameter("refId", refId)
+        String string21 = url + "text/{refId}/{text}";
+        AndroidNetworking.get(url + "text/{text}/{refId}")
                 .addPathParameter("text", text)
+                .addPathParameter("refId", refId)
                 .setTag(this)
                 .setPriority(Priority.HIGH)
                 .build()
-                .getAsObject(Reflection.class, listener);
+                .getAsObject(Word.class, listener);
     }
 }
 
