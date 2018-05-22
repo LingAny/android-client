@@ -14,12 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import ru.tp.lingany.lingany.R;
+import ru.tp.lingany.lingany.activities.TrainingActivity;
+import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
 import ru.tp.lingany.lingany.fragments.fragmentData.TranslatorData;
+import ru.tp.lingany.lingany.sdk.Api;
+import ru.tp.lingany.lingany.sdk.api.trainings.Training;
+import ru.tp.lingany.lingany.sdk.api.word.Word;
+import ru.tp.lingany.lingany.utils.ListenerHandler;
 
 
 public class TranslatorPage extends Fragment {
@@ -30,6 +40,8 @@ public class TranslatorPage extends Fragment {
     private TextView wordTranslation;
     private Button translateButton;
     private TranslatorData translatorData;
+    private ListenerHandler wordListener;
+
 
     private static final String TRANSLATOR_DATA = "TRANSLATOR_DATA";
     private static final String REFLECTION_ID_TRANSLATOR = "REFLECTION_ID_TRANSLATOR";
@@ -81,6 +93,20 @@ public class TranslatorPage extends Fragment {
 
         firstLanguage.setText(translatorData.getForeignLanguage());
         secondLanguage.setText(translatorData.getNativeLanguage());
+
+        wordListener = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<Word>() {
+            @Override
+            public void onResponse(Word response) {
+                translatorData.setForeignLanguage(response.getTranslation());
+                wordTranslation.setText(response.getTranslation());
+//                loadingFragment.stopLoading();
+            }
+
+            @Override
+            public void onError(ANError anError) {
+//                loadingFragment.showRefresh();
+            }
+        });
     }
 
     private void processChangeLanguage(View view) {
@@ -90,7 +116,9 @@ public class TranslatorPage extends Fragment {
     }
 
     private void processTranslate(View view) {
-
+        ParsedRequestListener<Word> listener = (ParsedRequestListener<Word>) wordListener.asListener();
+        Api.getInstance().word().getTranslationByText(translatorData.getReflectionId().toString(),
+                translatorData.getForeignLanguage(), listener);
     }
 
     @Override
