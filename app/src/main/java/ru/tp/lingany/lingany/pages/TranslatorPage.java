@@ -33,15 +33,11 @@ public class TranslatorPage extends Fragment {
 
     private static final String TRANSLATOR_DATA = "TRANSLATOR_DATA";
     private static final String REFLECTION_ID_TRANSLATOR = "REFLECTION_ID_TRANSLATOR";
-    private static final String NATIVE_LANGUAGE_TRANSLATOR = "NATIVE_LANGUAGE_TRANSLATOR";
-    private static final String FOREIGN_LANGUAGE_TRANSLATOR = "FOREIGN_LANGUAGE_TRANSLATOR";
 
     public static TranslatorPage getInstance(UUID refId) {
         Bundle bundle = new Bundle();
 
         bundle.putSerializable(REFLECTION_ID_TRANSLATOR, refId);
-//        bundle.putString(NATIVE_LANGUAGE_TRANSLATOR, nativeLanguage);
-//        bundle.putString(FOREIGN_LANGUAGE_TRANSLATOR, foreignLanguage);
 
         TranslatorPage fragment = new TranslatorPage();
         fragment.setArguments(bundle);
@@ -82,6 +78,9 @@ public class TranslatorPage extends Fragment {
                     }
                 }
         );
+
+        firstLanguage.setText(translatorData.getForeignLanguage());
+        secondLanguage.setText(translatorData.getNativeLanguage());
     }
 
     private void processChangeLanguage(View view) {
@@ -108,7 +107,6 @@ public class TranslatorPage extends Fragment {
         String foreignLanguage = prefs.getString(getString(R.string.foreignLang), "");
 
         translatorData = new TranslatorData(ref_uuid);
-//        translatorData.setReflectionId(ref_uuid);
         translatorData.setForeignLanguage(foreignLanguage);
         translatorData.setNativeLanguage(nativeLanguage);
     }
@@ -155,9 +153,13 @@ public class TranslatorPage extends Fragment {
 
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
-//        UUID refId = (UUID) bundle.getSerializable(REFLECTION_ID_TRANSLATOR);
-//        String foreignLanguage = bundle.getString(FOREIGN_LANGUAGE_TRANSLATOR);
+//        String reflection_id = bundle.getString(REFLECTION_ID_TRANSLATOR);
+//        UUID ref_uuid = UUID.fromString(reflection_id);
 //        String nativeLanguage = bundle.getString(NATIVE_LANGUAGE_TRANSLATOR);
-//        translatorData = new TranslatorData(refId);
+//        String foreignLanguage = bundle.getString(FOREIGN_LANGUAGE_TRANSLATOR);
+//
+//        translatorData = new TranslatorData(ref_uuid);
+//        translatorData.setForeignLanguage(foreignLanguage);
+//        translatorData.setNativeLanguage(nativeLanguage);
     }
 }
