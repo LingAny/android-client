@@ -22,4 +22,6 @@
     <dimen name="fragmentButtonHeight">64dp</dimen>
     <dimen name="fragmentButtonSinglWidth">256dp</dimen>
 
+    <dimen name="fragmentButtonChangeLanguage">64dp</dimen>
+
 </resources>

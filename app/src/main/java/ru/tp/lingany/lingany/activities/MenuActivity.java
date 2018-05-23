@@ -23,6 +23,7 @@ import ru.tp.lingany.lingany.fragments.LoadingFragment;
 import ru.tp.lingany.lingany.fragments.SelectCategoryFragment;
 import ru.tp.lingany.lingany.pages.CategoriesPage;
 import ru.tp.lingany.lingany.pages.TrainingsPage;
+import ru.tp.lingany.lingany.pages.TranslatorPage;
 
 
 public class MenuActivity extends AppCompatActivity implements
@@ -40,6 +41,7 @@ public class MenuActivity extends AppCompatActivity implements
 
     private CategoriesPage categoriesPage;
     private TrainingsPage trainingsPage;
+    private TranslatorPage translatorPage;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -89,10 +91,12 @@ public class MenuActivity extends AppCompatActivity implements
 
         categoriesPage = CategoriesPage.getInstance(refId);
         trainingsPage = TrainingsPage.getInstance(refId);
+        translatorPage = TranslatorPage.getInstance(refId);
 
         fragments.add(categoriesPage);
         fragments.add(trainingsPage);
-        fragments.add(new LoadingFragment());
+//        fragments.add(new LoadingFragment());
+        fragments.add(translatorPage);
 
         items.put(R.id.action_categories, 0);
         items.put(R.id.action_shape, 1);

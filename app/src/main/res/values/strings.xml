@@ -8,6 +8,8 @@
     <string name="api_training">/training</string>
     <string name="isInitRef">isInitRef</string>
     <string name="reflectionId">reflectionId</string>
+    <string name="nativeLang">nativeLang</string>
+    <string name="foreignLang">foreignLang</string>
 
     <string name="loading">Loading</string>
     <string name="chooseNativeLang">Native language</string>
@@ -24,6 +26,13 @@
     <string name="rememberButton">Remember</string>
     <string name="confirmButton">Confirm</string>
     <string name="writeTranslation">write translation</string>
+
+    <string name="translatorHint">text</string>
+    <string name="changeLanguageButton">Change</string>
+    <string name="translateButton">Translate</string>
+
+    <string name="badConnection">Bad network connection</string>
+    <string name="emptyString"> </string>
 
     <string name="scoreString">Score:</string>
 

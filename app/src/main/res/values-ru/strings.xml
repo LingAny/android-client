@@ -8,4 +8,6 @@
     <string name="headerTrainingTranslation">Перевод</string>
     <string name="headerTrainingSprint">Спринт</string>
 
+    <string name="badConnection">Плохое соединение с интернетом</string>
+
 </resources>
