@@ -1,9 +1,10 @@
 package ru.tp.lingany.lingany.fragments.fragmentData;
 
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class TranslatorData {
+public class TranslatorData implements Serializable {
     private boolean isFilled;
     private String nativeLanguage;
     private String foreignLanguage;
