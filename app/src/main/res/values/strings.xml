@@ -34,4 +34,6 @@
     <string name="badConnection">Bad network connection</string>
     <string name="emptyString"> </string>
 
+    <string name="scoreString">Score:</string>
+
 </resources>

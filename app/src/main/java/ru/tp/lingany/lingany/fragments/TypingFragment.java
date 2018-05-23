@@ -19,6 +19,8 @@ import java.util.Objects;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.fragmentData.TypingData;
 
+import static android.view.View.INVISIBLE;
+
 public class TypingFragment extends Fragment {
     private TextView wordToTranslate;
     private EditText wordTranslation;
@@ -29,6 +31,7 @@ public class TypingFragment extends Fragment {
 
     private Integer currentTrainingNumber;
     private Integer maxTrainingNumber;
+    private Integer traningScore = 0;
 
     public interface TypingListener {
         void onTypingFinished();
@@ -99,34 +102,32 @@ public class TypingFragment extends Fragment {
 
         typingData.setTrainingNumber(typingData.getTrainingNumber() + 1);
 
-        if (typingData.getTrainingNumber() >= typingData.getTrainings().size()) {
-            finish();
+        if (currentTrainingNumber.equals(maxTrainingNumber)) {
+            setScore();
             return;
         }
 
         wordToTranslate.setText(typingData.getTrainings().get(typingData.getTrainingNumber()).getForeignWord());
-        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
+        wordCounter.setText(makeFractionString(currentTrainingNumber + 1, maxTrainingNumber));
     }
 
-    public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
-        String resultString = currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
-        wordCounter.setText(resultString);
+    private void setScore() {
+        Integer maxTrainingNumber = typingData.getTrainings().size();
+
+        typingData.setTrainingNumber(typingData.getTrainingNumber() + 1);
+        confirmButton.setVisibility(INVISIBLE);
+        wordToTranslate.setText(getResources().getString(R.string.scoreString));
+        wordTranslation.setText(makeFractionString(traningScore, maxTrainingNumber));
+        wordCounter.setText(null);
+        View my_view = getView();
+        processAnswer(my_view);
     }
 
+    private String makeFractionString(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        return currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
+    }
 
-    private void processAnswer(View view) {
-        TextView textView = (TextView) view;
-
-        if (typingData.getTrainings().get(typingData.getTrainingNumber()).getNativeWord().equals(wordTranslation.getText().toString())) {
-            wordTranslation.setTextColor(Color.GREEN);
-
-        } else {
-            wordTranslation.setTextColor(Color.RED);
-//            wordTranslation.setHintTextColor(getResources().getColor(R.color.gray));
-        }
-
-        disableButtons();
-        final Handler handler = new Handler();
+    private void showTraningWords(Handler handler, Integer timeout) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -135,7 +136,39 @@ public class TypingFragment extends Fragment {
                 setNewWords(typingData);
                 enableButtons();
             }
-        }, getResources().getInteger(R.integer.delayNextTraining));
+        }, timeout);
+    }
+
+    private void finishTraningDelay(Handler handler, Integer timeout) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, timeout);
+    }
+
+    private void processAnswer(View view) {
+//        TextView textView = (TextView) view;
+
+        disableButtons();
+        final Handler handler = new Handler();
+
+        if (typingData.getTrainingNumber() + 1 <= typingData.getTrainings().size()) {
+
+            if (typingData.getTrainings().get(typingData.getTrainingNumber()).getNativeWord().equals(wordTranslation.getText().toString())) {
+                wordTranslation.setTextColor(Color.GREEN);
+                traningScore++;
+
+            } else {
+                wordTranslation.setTextColor(Color.RED);
+//            wordTranslation.setHintTextColor(getResources().getColor(R.color.gray));
+            }
+
+            showTraningWords(handler, getResources().getInteger(R.integer.delayNextTraining));
+        } else {
+            finishTraningDelay(handler, getResources().getInteger(R.integer.delayFinishTraining));
+        }
     }
 
     private void disableButtons() {

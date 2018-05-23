@@ -5,6 +5,7 @@
     <integer name="delayInflateAfterLoading">400</integer>
     <integer name="delayNextTraining">200</integer>
     <integer name="delayBadConnection">2000</integer>
+    <integer name="delayFinishTraining">800</integer>
 
     <integer name="bottomNavBarIconSize">32</integer>
     <integer name="bottomNavBarItemHeight">48</integer>
