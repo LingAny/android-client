@@ -25,5 +25,6 @@
     <string name="confirmButton">Confirm</string>
     <string name="writeTranslation">write translation</string>
 
+    <string name="scoreString">Score:</string>
 
 </resources>
