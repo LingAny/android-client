@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
@@ -35,7 +36,7 @@ import ru.tp.lingany.lingany.utils.ListenerHandler;
 public class TranslatorPage extends Fragment {
     private TextView firstLanguage;
     private TextView secondLanguage;
-    private Button changeLanguage;
+    private ImageButton changeLanguage;
     private EditText wordToTranslate;
     private TextView wordTranslation;
     private Button translateButton;
@@ -68,11 +69,12 @@ public class TranslatorPage extends Fragment {
 
         firstLanguage = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.firstLanguage);
         secondLanguage = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.secondLanguage);
-        changeLanguage = (Button) Objects.requireNonNull(getView()).findViewById(R.id.changeLanguage);
+        changeLanguage = (ImageButton) Objects.requireNonNull(getView()).findViewById(R.id.changeLanguage);
         wordToTranslate = (EditText) getView().findViewById(R.id.typeWordToTranslateTranslator);
         wordTranslation = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.wordTranslationTranslator);
         translateButton = (Button) Objects.requireNonNull(getView()).findViewById(R.id.translateButton);
 
+        getInfoFromSharedPref();
         changeLanguage.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -91,6 +93,7 @@ public class TranslatorPage extends Fragment {
                 }
         );
 
+
         firstLanguage.setText(translatorData.getForeignLanguage());
         secondLanguage.setText(translatorData.getNativeLanguage());
 
@@ -98,7 +101,7 @@ public class TranslatorPage extends Fragment {
             @Override
             public void onResponse(Word response) {
                 System.out.println("Good");
-                translatorData.setForeignLanguage(response.getTranslation());
+                translatorData.setWordTranslation(response.getTranslation());
                 wordTranslation.setText(response.getTranslation());
 //                loadingFragment.stopLoading();
                 enableButtons();
@@ -111,6 +114,22 @@ public class TranslatorPage extends Fragment {
                 enableButtons();
             }
         });
+    }
+
+    private void getInfoFromSharedPref() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
+        if (!isInitRef) {
+            return;
+        }
+        String reflection_id = prefs.getString(getString(R.string.reflectionId), "");
+        UUID ref_uuid = UUID.fromString(reflection_id);
+        String nativeLanguage = prefs.getString(getString(R.string.nativeLang), "");
+        String foreignLanguage = prefs.getString(getString(R.string.foreignLang), "");
+
+        this.translatorData = new TranslatorData(ref_uuid);
+        translatorData.setForeignLanguage(foreignLanguage);
+        translatorData.setNativeLanguage(nativeLanguage);
     }
 
     private void processChangeLanguage(View view) {
@@ -137,26 +156,14 @@ public class TranslatorPage extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
-        if (!isInitRef) {
-            return;
-        }
-        String reflection_id = prefs.getString(getString(R.string.reflectionId), "");
-        UUID ref_uuid = UUID.fromString(reflection_id);
-        String nativeLanguage = prefs.getString(getString(R.string.nativeLang), "");
-        String foreignLanguage = prefs.getString(getString(R.string.foreignLang), "");
 
-        translatorData = new TranslatorData(ref_uuid);
-        translatorData.setForeignLanguage(foreignLanguage);
-        translatorData.setNativeLanguage(nativeLanguage);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        if (translatorData.isFilled()) {
+        if (translatorData != null && translatorData.isFilled()) {
             setTrainingAfterSaveInstance(translatorData);
         }
     }
