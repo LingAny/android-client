@@ -21,6 +21,8 @@ import ru.tp.lingany.lingany.fragments.fragmentData.SprintData;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
+import static android.view.View.INVISIBLE;
+
 public class SprintFragment extends Fragment {
 
     private LayoutInflater inflater;
@@ -38,6 +40,7 @@ public class SprintFragment extends Fragment {
 
     private Integer currentTrainingNumber;
     private Integer maxTrainingNumber;
+    private Integer traningScore = 0;
 
     public interface SprintListener {
         void onSprintFinished();
@@ -148,9 +151,10 @@ public class SprintFragment extends Fragment {
         currentTrainingNumber = sprintData.getCurrentTrainingNumber() + 1;
         maxTrainingNumber = sprintData.getTrainings().size();
 
-        sprintData.setCurrentTrainingNumber(currentTrainingNumber);
-        if (currentTrainingNumber > maxTrainingNumber - 1) {
-            finish();
+        sprintData.setCurrentTrainingNumber(sprintData.getCurrentTrainingNumber() + 1);
+
+        if (currentTrainingNumber.equals(maxTrainingNumber)) {
+            setScore();
             return;
         }
 
@@ -165,8 +169,26 @@ public class SprintFragment extends Fragment {
 
         setWordToTranslate(training.getForeignWord());
         setWordTranslation(sprintData.getVisibleTranslation());
-        setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
+        wordCounter.setText(makeFractionString(currentTrainingNumber + 1, maxTrainingNumber));
         timer.start();
+    }
+
+    private void setScore() {
+        Integer maxTrainingNumber = sprintData.getTrainings().size();
+        sprintData.setCurrentTrainingNumber(sprintData.getCurrentTrainingNumber() + 1);
+
+        for (View button:buttons) {
+            button.setVisibility(INVISIBLE);
+        }
+
+        wordToTranslate.setText(getResources().getString(R.string.scoreString));
+        wordTranslation.setText(makeFractionString(traningScore, maxTrainingNumber));
+        wordCounter.setText(null);
+        processAnswer(getView());
+    }
+
+    private String makeFractionString(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        return currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
     }
 
     public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
@@ -207,35 +229,54 @@ public class SprintFragment extends Fragment {
         marksContainer.removeAllViews();
     }
 
-    private void processAnswer(View view) {
-        Training currentTraining = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
-        TextView textView = (TextView) view;
-
-        if (textView.getId() == R.id.agreeButtonSprint) {
-            if (currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
-                addMark();
-            } else {
-                addCross();
-            }
-        } else {
-            if (!currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
-                addMark();
-            } else {
-                addCross();
-            }
-        }
-
-        disableButtons();
-        timer.cancel();
-        final Handler handler = new Handler();
+    private void showTraningWords(Handler handler, Integer timeout) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Do something after 2000ms
                 setNewTraining(sprintData);
                 enableButtons();
             }
-        }, getResources().getInteger(R.integer.delayNextTraining));
+        }, timeout);
+    }
+
+    private void finishTraningDelay(Handler handler, Integer timeout) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, timeout);
+    }
+
+    private void processAnswer(View view) {
+        disableButtons();
+        timer.cancel();
+        final Handler handler = new Handler();
+
+        if (sprintData.getCurrentTrainingNumber() + 1 <= sprintData.getTrainings().size()) {
+            Training currentTraining = sprintData.getTrainings().get(sprintData.getCurrentTrainingNumber());
+            TextView textView = (TextView) view;
+
+            if (textView.getId() == R.id.agreeButtonSprint) {
+                if (currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
+                    addMark();
+                    traningScore++;
+                } else {
+                    addCross();
+                }
+            } else {
+                if (!currentTraining.getNativeWord().equals(sprintData.getVisibleTranslation())) {
+                    addMark();
+                    traningScore++;
+                } else {
+                    addCross();
+                }
+            }
+
+            showTraningWords(handler, getResources().getInteger(R.integer.delayNextTraining));
+        } else {
+            finishTraningDelay(handler, getResources().getInteger(R.integer.delayFinishTraining));
+        }
     }
 
     private void disableButtons() {
