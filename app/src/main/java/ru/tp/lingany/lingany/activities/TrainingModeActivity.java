@@ -101,7 +101,7 @@ public class TrainingModeActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    // TODO refactor this shit
+    // TODO refactor this
     private void inflateTrainingMode() {
         Fragment fragment = null;
         TrainingModeTypes.Type type = mode.getType();
