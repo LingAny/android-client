@@ -2,7 +2,10 @@ package ru.tp.lingany.lingany.pages;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -65,7 +68,9 @@ public class TranslatorPage extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        readBundle(getArguments());
+        if (getArguments() != null) {
+            readBundle(getArguments());
+        }
 
         firstLanguage = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.firstLanguage);
         secondLanguage = (TextView) Objects.requireNonNull(getView()).findViewById(R.id.secondLanguage);
@@ -100,18 +105,31 @@ public class TranslatorPage extends Fragment {
         wordListener = ListenerHandler.wrap(ParsedRequestListener.class, new ParsedRequestListener<Word>() {
             @Override
             public void onResponse(Word response) {
-                System.out.println("Good");
-                translatorData.setWordTranslation(response.getTranslation());
-                wordTranslation.setText(response.getTranslation());
-//                loadingFragment.stopLoading();
+                if (!translatorData.isLanguageChanged()) {
+                    translatorData.setWordTranslation(response.getTranslation());
+                    wordTranslation.setText(response.getTranslation());
+                } else {
+                    translatorData.setWordToTranslate(response.getText());
+                    wordTranslation.setText(response.getText());
+                }
+
                 enableButtons();
             }
 
             @Override
             public void onError(ANError anError) {
-//                loadingFragment.showRefresh();
-                System.out.println("erorr");
-                enableButtons();
+                final ColorStateList oldColor =  wordTranslation.getTextColors();
+                wordTranslation.setText(R.string.badConnection);
+                wordTranslation.setTextColor(Color.RED);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        wordTranslation.setText(R.string.emptyString);
+                        wordTranslation.setTextColor(oldColor);
+                        enableButtons();
+                    }
+                }, getResources().getInteger(R.integer.delayBadConnection));
             }
         });
     }

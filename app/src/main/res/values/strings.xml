@@ -31,6 +31,7 @@
     <string name="changeLanguageButton">Change</string>
     <string name="translateButton">Translate</string>
 
-
+    <string name="badConnection">Bad network connection</string>
+    <string name="emptyString"> </string>
 
 </resources>
