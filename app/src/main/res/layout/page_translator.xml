@@ -26,16 +26,11 @@
                 android:textSize="24sp"
                 />
 
-            <Button
+            <ImageButton
                 android:id="@+id/changeLanguage"
                 android:layout_width="@dimen/fragmentButtonChangeLanguage"
                 android:layout_height="@dimen/fragmentButtonHeight"
-                android:background="@drawable/fragment_type_button_bg"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textAlignment="center"
-                android:text="@string/changeLanguageButton"
-                />
+                android:src="@android:drawable/changeLanguageIcon.png" />
 
             <TextView
                 android:id="@+id/secondLanguage"

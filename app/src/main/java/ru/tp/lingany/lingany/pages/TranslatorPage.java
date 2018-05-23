@@ -121,11 +121,17 @@ public class TranslatorPage extends Fragment {
 
     @SuppressWarnings("unchecked")
     private void processTranslate(View view) {
-//        disableButtons();
+        disableButtons();
         translatorData.setWordToTranslate(wordToTranslate.getText().toString());
         ParsedRequestListener<Word> listener = (ParsedRequestListener<Word>) wordListener.asListener();
-        Api.getInstance().word().getTranslationByText(translatorData.getReflectionId().toString(),
-                translatorData.getWordToTranslate(), listener);
+
+        if (!translatorData.isLanguageChanged()) {
+            Api.getInstance().word().getTranslationByText(translatorData.getReflectionId().toString(),
+                    translatorData.getWordToTranslate(), listener);
+        } else {
+            Api.getInstance().word().getTextByTranslation(translatorData.getReflectionId().toString(),
+                    translatorData.getWordToTranslate(), listener);
+        }
     }
 
     @Override
@@ -188,13 +194,6 @@ public class TranslatorPage extends Fragment {
 
     @SuppressWarnings("unchecked")
     private void readBundle(Bundle bundle) {
-//        String reflection_id = bundle.getString(REFLECTION_ID_TRANSLATOR);
-//        UUID ref_uuid = UUID.fromString(reflection_id);
-//        String nativeLanguage = bundle.getString(NATIVE_LANGUAGE_TRANSLATOR);
-//        String foreignLanguage = bundle.getString(FOREIGN_LANGUAGE_TRANSLATOR);
-//
-//        translatorData = new TranslatorData(ref_uuid);
-//        translatorData.setForeignLanguage(foreignLanguage);
-//        translatorData.setNativeLanguage(nativeLanguage);
+        translatorData = (TranslatorData) bundle.getSerializable(TRANSLATOR_DATA);
     }
 }

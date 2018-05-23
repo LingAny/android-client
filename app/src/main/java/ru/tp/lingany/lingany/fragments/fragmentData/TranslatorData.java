@@ -51,6 +51,7 @@ public class TranslatorData {
 
     public void setWordToTranslate(String wordToTranslate) {
         this.wordToTranslate = wordToTranslate;
+        this.isFilled = true;
     }
 
     public String getWordTranslation() {
