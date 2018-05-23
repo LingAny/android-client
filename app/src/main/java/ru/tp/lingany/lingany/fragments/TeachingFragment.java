@@ -99,14 +99,7 @@ public class TeachingFragment extends Fragment {
         teachingData.setTrainingNumber(teachingData.getTrainingNumber() + 1);
 
         if (teachingData.getTrainingNumber() >= teachingData.getTrainings().size()) {
-            wordToTranslate.setText("Score");
-            wordTranslation.setText("10/20");
-            setWordCounter(currentTrainingNumber, maxTrainingNumber);
-
-            if(teachingData.getTrainingNumber() > teachingData.getTrainings().size()) {
-                finish();
-            }
-
+            finish();
             return;
         }
 
@@ -120,28 +113,19 @@ public class TeachingFragment extends Fragment {
         wordCounter.setText(resultString);
     }
 
-    private void runPostDelayed(Handler handler, Integer timeout) {
+
+    private void processAnswer(View view) {
+        TextView textView = (TextView) view;
+
+        disableButtons();
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 setNewWords(teachingData);
                 enableButtons();
             }
-        }, timeout);
-    }
-
-
-    private void processAnswer(View view) {
-        TextView textView = (TextView) view;
-        Integer timeout = getResources().getInteger(R.integer.delayNextTraining);
-
-        if (teachingData.getTrainingNumber() >= teachingData.getTrainings().size()) {
-            timeout = getResources().getInteger(R.integer.delayFinishTraining);
-        }
-
-        disableButtons();
-        final Handler handler = new Handler();
-        runPostDelayed(handler, timeout);
+        }, getResources().getInteger(R.integer.delayNextTraining));
     }
 
     private void disableButtons() {
