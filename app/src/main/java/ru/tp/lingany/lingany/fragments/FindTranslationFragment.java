@@ -23,6 +23,8 @@ import ru.tp.lingany.lingany.fragments.fragmentData.TranslationData;
 import ru.tp.lingany.lingany.sdk.api.trainings.Training;
 import ru.tp.lingany.lingany.utils.RandArray;
 
+import static android.view.View.INVISIBLE;
+
 public class FindTranslationFragment extends Fragment {
     private List<TextView> buttons = new ArrayList<>();
 
@@ -39,6 +41,8 @@ public class FindTranslationFragment extends Fragment {
 
     private Integer currentTrainingNumber;
     private Integer maxTrainingNumber;
+    private Integer traningScore = 0;
+
 
     private static final String TRANSLATION_DATA = "TRANSLATION_DATA";
 
@@ -113,6 +117,11 @@ public class FindTranslationFragment extends Fragment {
         currentTrainingNumber = translationData.getCurrentTrainingNumber() + 1;
         maxTrainingNumber = translationData.getTrainings().size();
 
+        if (currentTrainingNumber.equals(maxTrainingNumber)) {
+            setScore();
+            return;
+        }
+
         translationData.clearRandomWords();
         translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
         if (translationData.getCurrentTrainingNumber() >= translationData.getTrainings().size()) {
@@ -126,6 +135,24 @@ public class FindTranslationFragment extends Fragment {
         setTranslationButtons(translationData);
         setWordCounter(currentTrainingNumber + 1, maxTrainingNumber);
         translationData.setFilled(true);
+    }
+
+    private void setScore() {
+        Integer maxTrainingNumber = translationData.getTrainings().size();
+        translationData.setCurrentTrainingNumber(translationData.getCurrentTrainingNumber() + 1);
+
+        for (View button:buttons) {
+            button.setVisibility(INVISIBLE);
+        }
+
+        String scoreData = getResources().getString(R.string.scoreString) + makeFractionString(traningScore, maxTrainingNumber);
+        wordToTranslate.setText(scoreData);
+        wordCounter.setText(null);
+        processAnswer(getView());
+    }
+
+    private String makeFractionString(Integer currentTrainingNumber, Integer maxTrainingNumber) {
+        return currentTrainingNumber.toString() + "/" + maxTrainingNumber.toString();
     }
 
     public void setWordCounter(Integer currentTrainingNumber, Integer maxTrainingNumber) {
@@ -182,26 +209,44 @@ public class FindTranslationFragment extends Fragment {
         markCrossContainer.removeAllViews();
     }
 
-    private void processAnswer(View view) {
-        Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
-        TextView textView = (TextView) view;
-
-        if (currentTraining != null && currentTraining.getNativeWord() == textView.getText()) {
-            setMark();
-        } else {
-            setCross();
-        }
-
-        disableButtons();
-        final Handler handler = new Handler();
+    private void showTraningWords(Handler handler, Integer timeout) {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Do something after 2000ms
                 setNewTraining(translationData);
                 enableButtons();
             }
-        }, getResources().getInteger(R.integer.delayNextTraining));
+        }, timeout);
+    }
+
+    private void finishTraningDelay(Handler handler, Integer timeout) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, timeout);
+    }
+
+    private void processAnswer(View view) {
+        disableButtons();
+        final Handler handler = new Handler();
+
+        if (translationData.getCurrentTrainingNumber() + 1 <= translationData.getTrainings().size()) {
+            Training currentTraining = translationData.getTrainings().get(translationData.getCurrentTrainingNumber());
+            TextView textView = (TextView) view;
+
+            if (currentTraining != null && currentTraining.getNativeWord() == textView.getText()) {
+                setMark();
+                traningScore++;
+            } else {
+                setCross();
+            }
+
+            showTraningWords(handler, getResources().getInteger(R.integer.delayNextTraining));
+        } else {
+            finishTraningDelay(handler, getResources().getInteger(R.integer.delayFinishTraining));
+        }
     }
 
     private void disableButtons() {
