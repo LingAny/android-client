@@ -31,8 +31,7 @@
                 android:id="@+id/changeLanguage"
                 android:layout_width="@dimen/fragmentButtonChangeLanguage"
                 android:layout_height="@dimen/fragmentButtonHeight"
-                android:background="@drawable/fragment_content_bg"
-                android:src="@drawable/followme"/>
+                android:background="@drawable/chang_lang1"/>
 
             <TextView
                 android:id="@+id/secondLanguage"
