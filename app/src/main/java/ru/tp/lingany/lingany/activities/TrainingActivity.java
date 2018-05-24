@@ -62,6 +62,7 @@ public class TrainingActivity extends AppCompatActivity implements
                 case TEACHING:
                     TeachingData teachingData = teachingFragment.getTeachingData();
                     savedInstanceState.putSerializable(TEACHING_DATA, teachingData);
+                    break;
                 case FIND_TRANSLATION:
                     TranslationData translationData =  translationFragment.getTranslationData();
                     savedInstanceState.putSerializable(TRAINING_DATA, translationData);
