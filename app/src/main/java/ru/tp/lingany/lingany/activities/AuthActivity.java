@@ -39,12 +39,12 @@ public class AuthActivity extends AppCompatActivity {
         inflateAuthFragment();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
         authFragment.checkIntent(getIntent());
     }
+
     private void inflateAuthFragment() {
         getSupportFragmentManager()
                 .beginTransaction()

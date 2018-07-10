@@ -25,5 +25,10 @@
     <string name="confirmButton">Confirm</string>
     <string name="writeTranslation">write translation</string>
 
-
+    <!-- tools -->
+    <string name="toolsGivenMame">Some FirstName</string>
+    <string name="toolsFamilyName">LastName</string>
+    <string name="toolsFullName">Some FirstName LastName</string>
+    <string name="requestComplete">API Call Successful.</string>
+    <string name="requestFailed">API Call Failed.</string>
 </resources>

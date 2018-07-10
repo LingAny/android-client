@@ -1,22 +1,27 @@
 package ru.tp.lingany.lingany.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -28,7 +33,11 @@ import net.openid.appauth.TokenResponse;
 import net.orange_box.storebox.StoreBox;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.Settings;
 
@@ -36,17 +45,22 @@ import ru.tp.lingany.lingany.Settings;
 public class AuthFragment extends Fragment {
 
     private Button googleButton;
-    private LayoutInflater inflater;
+
     Settings settings;
-    // state
-    AuthState mAuthState;
+    AuthorizationService authorizationService;
+    AuthState authState;
+
+    AppCompatTextView mGivenName;
+    AppCompatTextView mFamilyName;
+    AppCompatTextView mFullName;
+    ImageView mProfileView;
+
     private static final String USED_INTENT = "USED_INTENT";
     public static final String LOG_TAG = "AppAuthSample";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
         return inflater.inflate(R.layout.fragment_auth, container, false);
     }
 
@@ -61,7 +75,14 @@ public class AuthFragment extends Fragment {
                         processGoogleAuthorization(v);
                     }
                 });
+
+        mGivenName = (AppCompatTextView) getView().findViewById(R.id.givenName);
+        mFamilyName = (AppCompatTextView) getView().findViewById(R.id.familyName);
+        mFullName = (AppCompatTextView) getView().findViewById(R.id.fullName);
+        mProfileView = (ImageView) getView().findViewById(R.id.profileImage);
+
         settings = StoreBox.create(this.getActivity(), Settings.class);
+        authorizationService = new AuthorizationService(view.getContext());
     }
 
     private void processGoogleAuthorization(View view) {
@@ -84,8 +105,6 @@ public class AuthFragment extends Fragment {
 
         AuthorizationRequest request = builder.build();
 
-        AuthorizationService authorizationService = new AuthorizationService(view.getContext());
-
         String action = "com.google.codelabs.appauth.HANDLE_AUTHORIZATION_RESPONSE";
         Intent postAuthorizationIntent = new Intent(action);
         PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), request.hashCode(), postAuthorizationIntent, 0);
@@ -93,9 +112,9 @@ public class AuthFragment extends Fragment {
     }
 
     private void enablePostAuthorizationFlows() {
-        mAuthState = restoreAuthState();
-        if (mAuthState != null && mAuthState.isAuthorized()) {
-            Integer i = 1;
+        authState = restoreAuthState();
+        if (authState != null && authState.isAuthorized()) {
+            makeApiCall(authState);
         }
     }
 
@@ -160,6 +179,68 @@ public class AuthFragment extends Fragment {
     private void persistAuthState(@NonNull AuthState authState) {
         settings.setAuthIdentityString(authState.toJsonString());
         enablePostAuthorizationFlows();
+    }
+
+    private void makeApiCall(@NonNull AuthState authState) {
+        final Context context = this.getActivity();
+        authState.performActionWithFreshTokens(authorizationService, new AuthState.AuthStateAction() {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            public void execute(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                new AsyncTask<String, Void, JSONObject>() {
+                    @Override
+                    protected JSONObject doInBackground(String... tokens) {
+                        OkHttpClient client = new OkHttpClient();
+                        Request request = new Request.Builder()
+                                .url("https://www.googleapis.com/oauth2/v3/userinfo")
+                                .addHeader("Authorization", String.format("Bearer %s", tokens[0]))
+                                .build();
+
+                        try {
+                            Response response = client.newCall(request).execute();
+                            String jsonBody = response.body().string();
+                            Log.i(LOG_TAG, String.format("User Info Response %s", jsonBody));
+                            return new JSONObject(jsonBody);
+                        } catch (Exception exception) {
+                            Log.w(LOG_TAG, exception);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(JSONObject userInfo) {
+                        if (userInfo != null) {
+                            String fullName = userInfo.optString("name", null);
+                            String givenName = userInfo.optString("given_name", null);
+                            String familyName = userInfo.optString("family_name", null);
+                            String imageUrl = userInfo.optString("picture", null);
+                            if (!TextUtils.isEmpty(imageUrl)) {
+                                Picasso.get().load(imageUrl).placeholder(R.drawable.ic_account_circle_black_48dp).into(mProfileView);
+                            }
+                            if (!TextUtils.isEmpty(fullName)) {
+                                mFullName.setText(fullName);
+                            }
+                            if (!TextUtils.isEmpty(givenName)) {
+                                mGivenName.setText(givenName);
+                            }
+                            if (!TextUtils.isEmpty(familyName)) {
+                                mFamilyName.setText(familyName);
+                            }
+
+                            String message;
+                            if (userInfo.has("error")) {
+                                message = String.format("%s [%s]", context.getString(R.string.requestFailed), userInfo.optString("error_description", "No description"));
+                            } else {
+                                message = context.getString(R.string.requestComplete);
+                            }
+                            Snackbar.make(mProfileView, message, Snackbar.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                }.execute(accessToken);
+            }
+        });
+        clearAuthState();
     }
 
     private void clearAuthState() {
