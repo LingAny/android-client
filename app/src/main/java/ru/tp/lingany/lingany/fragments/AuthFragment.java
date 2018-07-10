@@ -195,7 +195,6 @@ public class AuthFragment extends Fragment {
                                 .url("https://www.googleapis.com/oauth2/v3/userinfo")
                                 .addHeader("Authorization", String.format("Bearer %s", tokens[0]))
                                 .build();
-
                         try {
                             Response response = client.newCall(request).execute();
                             String jsonBody = response.body().string();
