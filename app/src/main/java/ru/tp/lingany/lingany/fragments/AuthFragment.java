@@ -4,11 +4,9 @@ package ru.tp.lingany.lingany.fragments;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.RestrictionsManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.UserManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -19,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -32,9 +29,6 @@ import net.orange_box.storebox.StoreBox;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.Settings;
 
@@ -43,6 +37,7 @@ public class AuthFragment extends Fragment {
 
     private Button googleButton;
     private LayoutInflater inflater;
+    Settings settings;
     // state
     AuthState mAuthState;
     private static final String USED_INTENT = "USED_INTENT";
@@ -55,7 +50,6 @@ public class AuthFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_auth, container, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
@@ -67,6 +61,7 @@ public class AuthFragment extends Fragment {
                         processGoogleAuthorization(v);
                     }
                 });
+        settings = StoreBox.create(this.getActivity(), Settings.class);
     }
 
     private void processGoogleAuthorization(View view) {
@@ -91,10 +86,6 @@ public class AuthFragment extends Fragment {
 
         AuthorizationService authorizationService = new AuthorizationService(view.getContext());
 
-        Log.i(LOG_TAG, "DOING REQUEST");
-        Log.i(LOG_TAG, "DOING REQUEST");
-        Log.i(LOG_TAG, "DOING REQUEST");
-        Log.i(LOG_TAG, "DOING REQUEST");
         String action = "com.google.codelabs.appauth.HANDLE_AUTHORIZATION_RESPONSE";
         Intent postAuthorizationIntent = new Intent(action);
         PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), request.hashCode(), postAuthorizationIntent, 0);
@@ -103,24 +94,13 @@ public class AuthFragment extends Fragment {
 
     private void enablePostAuthorizationFlows() {
         mAuthState = restoreAuthState();
-//        if (mAuthState != null && mAuthState.isAuthorized()) {
-//            if (mMakeApiCall.getVisibility() == View.GONE) {
-//                mMakeApiCall.setVisibility(View.VISIBLE);
-//                mMakeApiCall.setOnClickListener(new MakeApiCallListener(this, mAuthState, new AuthorizationService(this)));
-//            }
-//            if (mSignOut.getVisibility() == View.GONE) {
-//                mSignOut.setVisibility(View.VISIBLE);
-//                mSignOut.setOnClickListener(new SignOutListener(this));
-//            }
-//        } else {
-//            mMakeApiCall.setVisibility(View.GONE);
-//            mSignOut.setVisibility(View.GONE);
-//        }
+        if (mAuthState != null && mAuthState.isAuthorized()) {
+            Integer i = 1;
+        }
     }
 
     @Nullable
     private AuthState restoreAuthState() {
-        Settings settings = StoreBox.create(this.getActivity(), Settings.class);
         String authIdentityString = settings.getAuthIdentityString();
 
         if (!TextUtils.isEmpty(authIdentityString)) {
@@ -178,9 +158,11 @@ public class AuthFragment extends Fragment {
     }
 
     private void persistAuthState(@NonNull AuthState authState) {
-//        getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
-//                .putString(AUTH_STATE, authState.toJsonString())
-//                .commit();
+        settings.setAuthIdentityString(authState.toJsonString());
         enablePostAuthorizationFlows();
+    }
+
+    private void clearAuthState() {
+        settings.setAuthIdentityString(null);
     }
 }

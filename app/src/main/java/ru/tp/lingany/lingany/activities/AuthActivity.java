@@ -1,18 +1,9 @@
 package ru.tp.lingany.lingany.activities;
 
 
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-
-import net.openid.appauth.AuthorizationRequest;
-import net.openid.appauth.AuthorizationService;
-import net.openid.appauth.AuthorizationServiceConfiguration;
-
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.fragments.AuthFragment;
 
@@ -20,7 +11,7 @@ import ru.tp.lingany.lingany.fragments.AuthFragment;
 public class AuthActivity extends AppCompatActivity {
 
     private AuthFragment authFragment;
-    public static final String LOG_TAG = "AppAuthSample";
+
 //    @Override
 //    public void onSaveInstanceState(Bundle savedInstanceState) {
 //        if (supportedLanguages != null) {
@@ -63,13 +54,6 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        System.out.println("NEW INTENT");
-        System.out.println("NEW INTENT");
-        System.out.println("NEW INTENT");
-        System.out.println("NEW INTENT");
-        System.out.println("NEW INTENT");
         authFragment.checkIntent(intent);
     }
-
-
 }
