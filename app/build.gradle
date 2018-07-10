@@ -22,10 +22,16 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'net.orange-box.storebox:storebox-lib:1.4.0'
     implementation 'com.amitshekhar.android:android-networking:1.0.1'
     implementation 'com.victor:lib:1.0.4'
     implementation 'com.github.satyan:sugar:1.5'
+    implementation 'net.orange-box.storebox:storebox-lib:1.4.0'
+
+//    for oauth
+    implementation 'com.android.support:design:23.3.0'
+    implementation 'net.openid:appauth:0.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testCompile 'junit:junit:4.12'
 

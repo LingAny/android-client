@@ -11,6 +11,6 @@
         android:layout_marginEnd="@dimen/contentMargin"
         android:layout_marginStart="@dimen/contentMargin"
         android:layout_marginTop="@dimen/contentMargin"
-        android:background="@drawable/icon-google" />
+        android:background="@drawable/icon_google" />
 
 </LinearLayout>

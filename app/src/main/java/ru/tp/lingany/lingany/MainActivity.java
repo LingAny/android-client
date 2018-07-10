@@ -37,18 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
         String authIdentityString = settings.getAuthIdentityString();
         if (authIdentityString == null) {
-            startActivity(new Intent(MainActivity.this, AuthActivity.class));
+            startActivity(new Intent(this, AuthActivity.class));
         }
 
-        if (!isInitRef) {
-            startActivity(new Intent(MainActivity.this, SelectReflectionActivity.class));
-        } else {
-            String refIdKey = getString(R.string.reflectionId);
-            String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            intent.putExtra(MenuActivity.EXTRA_REFLECTION, reflectionId);
-            startActivity(intent);
-        }
+//        if (!isInitRef) {
+//            startActivity(new Intent(MainActivity.this, SelectReflectionActivity.class));
+//        } else {
+//            String refIdKey = getString(R.string.reflectionId);
+//            String reflectionId = prefs.getString(refIdKey, UUID.randomUUID().toString());
+//            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+//            intent.putExtra(MenuActivity.EXTRA_REFLECTION, reflectionId);
+//            startActivity(intent);
+//        }
 
         Log.i(TAG, "onStart");
     }
