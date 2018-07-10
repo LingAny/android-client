@@ -7,8 +7,11 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import net.orange_box.storebox.StoreBox;
+
 import java.util.UUID;
 
+import ru.tp.lingany.lingany.activities.AuthActivity;
 import ru.tp.lingany.lingany.activities.MenuActivity;
 import ru.tp.lingany.lingany.activities.SelectReflectionActivity;
 
@@ -29,7 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Settings settings = StoreBox.create(this, Settings.class);
         boolean isInitRef = prefs.getBoolean(getString(R.string.isInitRef), false);
+
+        String authIdentityString = settings.getAuthIdentityString();
+        if (authIdentityString == null) {
+            startActivity(new Intent(MainActivity.this, AuthActivity.class));
+        }
 
         if (!isInitRef) {
             startActivity(new Intent(MainActivity.this, SelectReflectionActivity.class));
