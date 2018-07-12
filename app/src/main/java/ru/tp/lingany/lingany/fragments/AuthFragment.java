@@ -40,20 +40,22 @@ import okhttp3.Request;
 import okhttp3.Response;
 import ru.tp.lingany.lingany.R;
 import ru.tp.lingany.lingany.Settings;
+import ru.tp.lingany.lingany.models.OauthConfig;
 
 
 public class AuthFragment extends Fragment {
 
     private Button googleButton;
 
-    Settings settings;
-    AuthorizationService authorizationService;
-    AuthState authState;
+    private Settings settings;
+    private AuthorizationService authorizationService;
+    private AuthState authState;
 
-    AppCompatTextView mGivenName;
-    AppCompatTextView mFamilyName;
-    AppCompatTextView mFullName;
-    ImageView mProfileView;
+    private AppCompatTextView mGivenName;
+    private AppCompatTextView mFamilyName;
+    private AppCompatTextView mFullName;
+    private ImageView mProfileView;
+    private OauthConfig config;
 
     private static final String USED_INTENT = "USED_INTENT";
     public static final String LOG_TAG = "AppAuthSample";
@@ -83,6 +85,7 @@ public class AuthFragment extends Fragment {
 
         settings = StoreBox.create(this.getActivity(), Settings.class);
         authorizationService = new AuthorizationService(view.getContext());
+        config = new OauthConfig();
     }
 
     private void processGoogleAuthorization(View view) {
