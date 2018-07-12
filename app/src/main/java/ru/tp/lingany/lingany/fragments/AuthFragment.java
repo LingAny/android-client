@@ -76,10 +76,10 @@ public class AuthFragment extends Fragment {
                     }
                 });
 
-        mGivenName = (AppCompatTextView) getView().findViewById(R.id.givenName);
-        mFamilyName = (AppCompatTextView) getView().findViewById(R.id.familyName);
-        mFullName = (AppCompatTextView) getView().findViewById(R.id.fullName);
-        mProfileView = (ImageView) getView().findViewById(R.id.profileImage);
+        mGivenName = getView().findViewById(R.id.givenName);
+        mFamilyName = getView().findViewById(R.id.familyName);
+        mFullName = getView().findViewById(R.id.fullName);
+        mProfileView = getView().findViewById(R.id.profileImage);
 
         settings = StoreBox.create(this.getActivity(), Settings.class);
         authorizationService = new AuthorizationService(view.getContext());
@@ -93,18 +93,8 @@ public class AuthFragment extends Fragment {
                 Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
                 Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
         );
-//        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-//                Uri.parse("https://accounts.google.com/o/oauth2/auth") /* new auth endpoint */,
-//                Uri.parse("https://accounts.google.com/o/oauth2/token") /* new token endpoint */
-//        );
-//        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-//                Uri.parse("https://www.googleapis.com/oauth2/v2/userinfo") /* new2 auth endpoint */,
-//                Uri.parse("https://accounts.google.com/o/oauth2/token") /* new2 token endpoint */
-//        );
-        String clientId = "289270915788-vgh2qsrn5aqrlpk9esb57nn2f276g820.apps.googleusercontent.com";
-//        Uri redirectUri = Uri.parse("urn:ietf:wg:oauth:2.0:oob");
-        Uri redirectUri = Uri.parse("com.google.codelabs.appauth:/oauth2callback");
-//        Uri redirectUri = Uri.parse("https://www.googleapis.com/plus/v1/people/me");
+        String clientId = "289270915788-o0fpcfjdofn305bt1lpntlu37433mkpt.apps.googleusercontent.com";
+        Uri redirectUri = Uri.parse("ru.tp.lingany.lingany:/oauth2callback");
         AuthorizationRequest.Builder builder = new AuthorizationRequest.Builder(
                 serviceConfiguration,
                 clientId,
